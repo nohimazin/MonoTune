@@ -16,7 +16,8 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.dd3boh.outertune.db.MusicDatabase.Companion.MUSIC_DATABASE_VERSION
-import com.dd3boh.outertune.db.entities.AlbumArtistMap
+import com.dd3boh.outertune.db.entities.ManualCorrection
+import com.dd3boh.outertune.db.entities.MonochromeTrackMatch
 import com.dd3boh.outertune.db.entities.AlbumEntity
 import com.dd3boh.outertune.db.entities.ArtistEntity
 import com.dd3boh.outertune.db.entities.Event
@@ -39,6 +40,7 @@ import com.dd3boh.outertune.db.entities.SongEntity
 import com.dd3boh.outertune.db.entities.SongGenreMap
 import com.dd3boh.outertune.db.entities.SortedSongAlbumMap
 import com.dd3boh.outertune.db.entities.SortedSongArtistMap
+import com.dd3boh.outertune.db.entities.YtmScrobbleQueue
 import com.dd3boh.outertune.extensions.toSQLiteQuery
 import java.time.Instant
 import java.time.LocalDateTime
@@ -68,7 +70,7 @@ class MusicDatabase(
     fun close() = delegate.close()
 
     companion object {
-        const val MUSIC_DATABASE_VERSION = 20
+        const val MUSIC_DATABASE_VERSION = 21
     }
 }
 
@@ -92,7 +94,10 @@ class MusicDatabase(
         PlayCountEntity::class,
         Event::class,
         RelatedSongMap::class,
-        RecentActivityEntity::class
+        RecentActivityEntity::class,
+        MonochromeTrackMatch::class,
+        ManualCorrection::class,
+        YtmScrobbleQueue::class
     ],
     views = [
         SortedSongArtistMap::class,
@@ -117,6 +122,7 @@ class MusicDatabase(
         AutoMigration(from = 17, to = 18, spec = Migration17To18::class), // Fix Room nonsense
         AutoMigration(from = 18, to = 19), // Recent activity
         AutoMigration(from = 19, to = 20, spec = Migration19To20::class), // Db optimization, remove totalplaytime, local media fields
+        AutoMigration(from = 20, to = 21), // MonoTune: add MonochromeTrackMatch, ManualCorrection, YtmScrobbleQueue
     ]
 )
 @TypeConverters(Converters::class)

@@ -22,11 +22,14 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.dd3boh.outertune"
+    // Namespace and applicationId updated to com.nohimazin.monotune for MonoTune.
+    // Note: Kotlin source package declarations (com.dd3boh.outertune.*) are intentionally
+    // not renamed here; that is a separate incremental refactoring task.
+    namespace = "com.nohimazin.monotune"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.dd3boh.outertune"
+        applicationId = "com.nohimazin.monotune"
         minSdk = 24
         targetSdk = 36
         versionCode = 71
@@ -36,7 +39,7 @@ android {
 
     signingConfigs {
         if (!keystoreProperties.isEmpty) {
-            create("ot_release") {
+            create("mt_release") {
                 storeFile = file(keystoreProperties["storeFile"] as String)
                 (keystoreProperties["keyAlias"] as? String)?.let {
                     keyAlias = it
@@ -49,7 +52,7 @@ android {
                 }
             }
         } else {
-            create("ot_release") { }
+            create("mt_release") { }
         }
     }
 
@@ -59,7 +62,7 @@ android {
             isShrinkResources = true
             isCrunchPngs = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("ot_release")
+            signingConfig = signingConfigs.getByName("mt_release")
         }
         debug {
             applicationIdSuffix = ".debug"
@@ -112,7 +115,7 @@ android {
         variant.outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                var outputFileName = "OuterTune-${variant.versionName}-${output.baseName}-${output.versionCode}.apk"
+                var outputFileName = "MonoTune-${variant.versionName}-${output.baseName}-${output.versionCode}.apk"
                 output.outputFileName = outputFileName
             }
     }

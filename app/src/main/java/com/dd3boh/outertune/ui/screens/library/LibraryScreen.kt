@@ -143,7 +143,6 @@ fun LibraryScreen(
         LibraryFilter.ARTISTS -> stringResource(R.string.artists)
         LibraryFilter.PLAYLISTS -> stringResource(R.string.playlists)
         LibraryFilter.SONGS -> stringResource(R.string.songs)
-        LibraryFilter.FOLDERS -> stringResource(R.string.folders)
         LibraryFilter.ALL -> ""
     }
 
@@ -153,7 +152,6 @@ fun LibraryScreen(
             LibraryFilter.ARTISTS -> LibraryFilter.ARTISTS to stringResource(R.string.artists)
             LibraryFilter.PLAYLISTS -> LibraryFilter.PLAYLISTS to stringResource(R.string.playlists)
             LibraryFilter.SONGS -> LibraryFilter.SONGS to stringResource(R.string.songs)
-            LibraryFilter.FOLDERS -> LibraryFilter.FOLDERS to stringResource(R.string.folders)
             else -> LibraryFilter.ALL to stringResource(R.string.home) // there is no all filter, use as null value
         }
     }.filterNot { it.first == LibraryFilter.ALL }
@@ -231,7 +229,7 @@ fun LibraryScreen(
                     }
                 )
 
-                if (filter != LibraryFilter.SONGS && filter != LibraryFilter.FOLDERS) {
+                if (filter != LibraryFilter.SONGS) {
                     IconButton(
                         onClick = {
                             viewType = viewType.toggle()
@@ -320,13 +318,6 @@ fun LibraryScreen(
                 LibrarySongsScreen(
                     navController,
                     libraryFilterContent = filterContent
-                )
-
-            LibraryFilter.FOLDERS ->
-                LibraryFoldersScreen(
-                    navController,
-                    scrollBehavior,
-                    filterContent = filterContent
                 )
 
             LibraryFilter.ALL -> {

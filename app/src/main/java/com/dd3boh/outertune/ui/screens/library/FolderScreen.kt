@@ -108,7 +108,6 @@ import com.dd3boh.outertune.ui.component.items.SongListItem
 import com.dd3boh.outertune.ui.component.shimmer.ListItemPlaceHolder
 import com.dd3boh.outertune.ui.component.shimmer.ShimmerHost
 import com.dd3boh.outertune.ui.menu.FolderMenu
-import com.dd3boh.outertune.ui.screens.Screens
 import com.dd3boh.outertune.ui.utils.MEDIA_PERMISSION_LEVEL
 import com.dd3boh.outertune.ui.utils.STORAGE_ROOT
 import com.dd3boh.outertune.ui.utils.backToMain
@@ -466,7 +465,7 @@ fun FolderScreen(
                             modifier = Modifier
                                 .combinedClickable {
                                     val route =
-                                        Screens.Folders.route + "/" + folder.getFullSquashedDir().replace('/', ';')
+                                        "folders/" + folder.getFullSquashedDir().replace('/', ';')
                                     navController.navigate(route)
                                 }
                                 .animateItem(),
