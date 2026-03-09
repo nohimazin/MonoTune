@@ -13,7 +13,6 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.QueueMusic
 import androidx.compose.material.icons.rounded.Album
-import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.MusicNote
@@ -31,7 +30,6 @@ sealed class Screens(
 ) {
     data object Home : Screens(R.string.home, Icons.Rounded.Home, "home")
     data object Songs : Screens(R.string.songs, Icons.Rounded.MusicNote, "songs")
-    data object Folders : Screens(R.string.folders, Icons.Rounded.Folder, "folders")
     data object Artists : Screens(R.string.artists, Icons.Rounded.Person, "artists")
     data object Albums : Screens(R.string.albums, Icons.Rounded.Album, "albums")
     data object Playlists : Screens(R.string.playlists, Icons.AutoMirrored.Rounded.QueueMusic, "playlists")
@@ -39,7 +37,7 @@ sealed class Screens(
     data object Player : Screens(R.string.player, Icons.Rounded.PlayCircle, "player")
 
     enum class LibraryFilter {
-        ALL, ALBUMS, ARTISTS, PLAYLISTS, SONGS, FOLDERS
+        ALL, ALBUMS, ARTISTS, PLAYLISTS, SONGS
     }
 
     companion object {
@@ -50,7 +48,6 @@ sealed class Screens(
         /**
          * H: Home
          * S: Songs
-         * F: Folders
          * A: Artists
          * B: Albums
          * L: Playlists
@@ -64,7 +61,6 @@ sealed class Screens(
         val screenPairs = listOf(
             Home to 'H',
             Songs to 'S',
-            Folders to 'F',
             Artists to 'A',
             Albums to 'B',
             Playlists to 'L',
@@ -97,7 +93,6 @@ sealed class Screens(
          * R: Artists
          * P: Playlists
          * S: Songs
-         * F: Folders
          * L: All
          */
         val filterPairs = listOf(
@@ -105,7 +100,6 @@ sealed class Screens(
             LibraryFilter.ARTISTS to 'R',
             LibraryFilter.PLAYLISTS to 'P',
             LibraryFilter.SONGS to 'S',
-            LibraryFilter.FOLDERS to 'F',
             LibraryFilter.ALL to 'L'
         )
 

@@ -151,10 +151,8 @@ import com.dd3boh.outertune.ui.screens.artist.ArtistAlbumsScreen
 import com.dd3boh.outertune.ui.screens.artist.ArtistItemsScreen
 import com.dd3boh.outertune.ui.screens.artist.ArtistScreen
 import com.dd3boh.outertune.ui.screens.artist.ArtistSongsScreen
-import com.dd3boh.outertune.ui.screens.library.FolderScreen
 import com.dd3boh.outertune.ui.screens.library.LibraryAlbumsScreen
 import com.dd3boh.outertune.ui.screens.library.LibraryArtistsScreen
-import com.dd3boh.outertune.ui.screens.library.LibraryFoldersScreen
 import com.dd3boh.outertune.ui.screens.library.LibraryPlaylistsScreen
 import com.dd3boh.outertune.ui.screens.library.LibraryScreen
 import com.dd3boh.outertune.ui.screens.library.LibrarySongsScreen
@@ -511,19 +509,6 @@ class MainActivity : ComponentActivity() {
                                     }
                                     composable(Screens.Songs.route) {
                                         LibrarySongsScreen(navController)
-                                    }
-                                    composable(Screens.Folders.route) {
-                                        LibraryFoldersScreen(navController, scrollBehavior)
-                                    }
-                                    composable(
-                                        route = "${Screens.Folders.route}/{path}",
-                                        arguments = listOf(
-                                            navArgument("path") {
-                                                type = NavType.StringType
-                                            }
-                                        )
-                                    ) {
-                                        FolderScreen(navController, scrollBehavior)
                                     }
                                     composable(Screens.Artists.route) {
                                         LibraryArtistsScreen(navController)

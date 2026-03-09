@@ -25,7 +25,6 @@ import androidx.compose.material.icons.rounded.Interests
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Restore
-import androidx.compose.material.icons.rounded.SdCard
 import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.ElevatedCard
@@ -90,11 +89,6 @@ fun SettingsScreen(
                 title = { Text(stringResource(R.string.grp_library_and_content)) },
                 icon = { Icon(Icons.AutoMirrored.Rounded.LibraryBooks, null) },
                 onClick = { navController.navigate("settings/library") }
-            )
-            PreferenceEntry(
-                title = { Text(stringResource(R.string.local_player_settings_title)) },
-                icon = { Icon(Icons.Rounded.SdCard, null) },
-                onClick = { navController.navigate("settings/local") }
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
