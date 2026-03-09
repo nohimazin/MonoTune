@@ -18,6 +18,7 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.dd3boh.outertune.db.MusicDatabase.Companion.MUSIC_DATABASE_VERSION
 import com.dd3boh.outertune.db.entities.ManualCorrection
 import com.dd3boh.outertune.db.entities.MonochromeTrackMatch
+import com.dd3boh.outertune.db.entities.AlbumArtistMap
 import com.dd3boh.outertune.db.entities.AlbumEntity
 import com.dd3boh.outertune.db.entities.ArtistEntity
 import com.dd3boh.outertune.db.entities.Event
