@@ -679,6 +679,7 @@ fun LocalPlaylistHeader(
     val isNetworkConnected = LocalNetworkConnected.current
     val scope = rememberCoroutineScope()
     val syncUtils = LocalSyncUtils.current
+    val strPlaylistSynced = stringResource(R.string.playlist_synced)
 
     val playlistLength = remember(songs) {
         songs.fastSumBy { it.song.song.duration }
@@ -766,7 +767,7 @@ fun LocalPlaylistHeader(
                                 scope.launch {
                                     syncUtils.syncPlaylist(playlist.playlist.browseId, playlist.id)
                                     snackbarHostState.showSnackbar(
-                                        message = context.getString(R.string.playlist_synced),
+                                        message = strPlaylistSynced,
                                         withDismissAction = true
                                     )
                                 }

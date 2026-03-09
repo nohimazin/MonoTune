@@ -29,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -74,7 +73,6 @@ fun LocalSearchScreen(
     onDismiss: () -> Unit,
     viewModel: LocalSearchViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
     val density = LocalDensity.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val playerConnection = LocalPlayerConnection.current ?: return
@@ -89,6 +87,7 @@ fun LocalSearchScreen(
 
     val lazyListState = rememberLazyListState()
     val snackbarHostState = LocalSnackbarHostState.current
+    val strQueueSearchedSongsOt = stringResource(R.string.queue_searched_songs_ot)
 
     LaunchedEffect(Unit) {
         snapshotFlow { lazyListState.firstVisibleItemScrollOffset }
@@ -189,7 +188,7 @@ fun LocalSearchScreen(
                                         .map { it.toMediaMetadata() }
                                     playerConnection.playQueue(
                                         ListQueue(
-                                            title = "${context.getString(R.string.queue_searched_songs_ot)} $query",
+                                            title = "${strQueueSearchedSongsOt} $query",
                                             items = songs,
                                             startIndex = songs.indexOfFirst { it.id == item.id }
                                         ))
