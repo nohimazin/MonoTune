@@ -65,6 +65,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.Clipboard
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -496,6 +497,7 @@ fun DetailsDialog(
     clipboardManager: Clipboard,
     setVisibility: (newState: Boolean) -> Unit,
 ) {
+    val context = LocalContext.current
     val msgCopied = stringResource(R.string.copied)
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = LocalSnackbarHostState.current
