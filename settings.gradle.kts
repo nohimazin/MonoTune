@@ -16,7 +16,9 @@ include(":kugou")
 include(":lrclib")
 include(":material-color-utilities")
 include(":ffMetadataEx")
+project(":ffMetadataEx").buildFileName = "../ffMetadataEx-build.gradle.kts"
 include(":taglib")
+project(":taglib").buildFileName = "../taglib-build.gradle.kts"
 
 // Use a local copy of NewPipe Extractor by uncommenting the lines below.
 // We assume, that MonoTune and NewPipe Extractor have the same parent directory.
