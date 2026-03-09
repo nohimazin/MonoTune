@@ -186,19 +186,6 @@ android {
     }
 }
 
-androidComponents {
-    onVariants(selector().all()) { variant ->
-        variant.outputs.forEach { output ->
-            val versionName = variant.versionName.orNull ?: "0.0.0"
-            val versionCode = variant.versionCode.orNull ?: 0
-            val flavorPart = variant.productFlavors.joinToString("-") { it.second }
-            val variantLabel = listOfNotNull(flavorPart.ifBlank { null }, variant.buildType)
-                .joinToString("-")
-            output.outputFileName.set("MonoTune-$versionName-$variantLabel-$versionCode.apk")
-        }
-    }
-}
-
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
