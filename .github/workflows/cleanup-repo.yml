@@ -1,0 +1,78 @@
+name: Repo cleanup – delete stale branches and normalize tags
+
+# Run once manually after this PR is merged into dev.
+# The workflow deletes every OuterTune-era branch that is no longer
+# relevant to MonoTune and renames the inconsistently-named tags
+# (pre_rel-* and *-final suffixes) to the standard v-prefix scheme.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Delete stale OuterTune-era branches ─────────────────────────────
+      - name: Delete stale branches
+        run: |
+          stale_branches=(
+            canary
+            fdroid
+            lite
+            weblate-staging
+            feature/library-manager
+            release/0.6.x
+            release/0.7.x
+            release/0.8.x
+            release/0.9.x
+          )
+          for branch in "${stale_branches[@]}"; do
+            if git ls-remote --exit-code --heads origin "$branch" > /dev/null 2>&1; then
+              git push origin --delete "$branch"
+              echo "Deleted branch: $branch"
+            else
+              echo "Branch not found (already deleted?): $branch"
+            fi
+          done
+
+      # ── Normalize pre_rel- tags and -final suffix tags ──────────────────
+      - name: Normalize tags
+        run: |
+          git fetch --tags --force
+
+          normalize_tag() {
+            local old_tag="$1"
+            local new_tag="$2"
+            if git rev-parse --verify "refs/tags/$old_tag" > /dev/null 2>&1; then
+              if git rev-parse --verify "refs/tags/$new_tag" > /dev/null 2>&1; then
+                echo "Target tag $new_tag already exists, skipping rename of $old_tag"
+              else
+                local commit
+                commit=$(git rev-list -n 1 "refs/tags/$old_tag")
+                git tag "$new_tag" "$commit"
+                git push origin "refs/tags/$new_tag"
+                git push origin --delete "$old_tag"
+                echo "Renamed tag: $old_tag -> $new_tag (commit $commit)"
+              fi
+            else
+              echo "Source tag not found (already renamed?): $old_tag"
+            fi
+          }
+
+          # pre_rel- prefix → v prefix
+          normalize_tag "pre_rel-0.10.0-rc1" "v0.10.0-rc1"
+          normalize_tag "pre_rel-0.10.1-b1"  "v0.10.1-b1"
+          normalize_tag "pre_rel-0.10.2-b1"  "v0.10.2-b1"
+
+          # -final suffix → plain stable tag
+          normalize_tag "v0.8.0-final" "v0.8.0"
+          normalize_tag "v0.9.0-final" "v0.9.0"
