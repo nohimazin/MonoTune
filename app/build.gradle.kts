@@ -109,16 +109,6 @@ android {
         }
     }
 
-    applicationVariants.all {
-        val variant = this
-        variant.outputs
-            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
-            .forEach { output ->
-                var outputFileName = "MonoTune-${variant.versionName}-${output.baseName}-${output.versionCode}.apk"
-                output.outputFileName = outputFileName
-            }
-    }
-
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_21
@@ -193,6 +183,19 @@ android {
 
     androidResources {
         generateLocaleConfig = true
+    }
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.outputs.forEach { output ->
+            val versionName = variant.versionName.orNull ?: "0.0.0"
+            val versionCode = variant.versionCode.orNull ?: 0
+            val flavorPart = variant.productFlavors.joinToString("-") { it.second }
+            val variantLabel = listOfNotNull(flavorPart.ifBlank { null }, variant.buildType)
+                .joinToString("-")
+            output.outputFileName.set("MonoTune-$versionName-$variantLabel-$versionCode.apk")
+        }
     }
 }
 
