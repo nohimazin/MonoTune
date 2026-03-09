@@ -81,6 +81,7 @@ fun AboutScreen(
 ) {
     val clipboardManager = LocalClipboard.current
     val uriHandler = LocalUriHandler.current
+    val appName = stringResource(R.string.app_name)
 
     val showDebugInfo = BuildConfig.DEBUG || BuildConfig.BUILD_TYPE == "userdebug"
 
@@ -205,7 +206,7 @@ fun AboutScreen(
                     title = { Text(stringResource(R.string.help_contact_email_inquiries)) },
                     onClick = {
                         val clipData = ClipData.newPlainText(
-                            stringResource(R.string.app_name),
+                            appName,
                             AnnotatedString("outertune@protonmail.com")
                         )
                         clipboardManager.nativeClipboard.setPrimaryClip(clipData)
