@@ -38,8 +38,8 @@ see https://github.com/OuterTune/ffMetadataEx/blob/main/README.md#building
 
 ## Translations
 
-We use Weblate to translate MonoTune (inherited from the OuterTune upstream). For more details or to get started,
-visit [our Weblate page](https://hosted.weblate.org/projects/outertune/).
+MonoTune shares the Weblate translation project with the OuterTune upstream.
+For more details or to get started, visit [the Weblate page](https://hosted.weblate.org/projects/outertune/).
 Thank you for the libre tier!
 
 ### Important
@@ -115,8 +115,8 @@ To make everyone's life easier, there are a set of guidelines that are to be fol
 | monochrome     | Monochrome integration work |
 
 > **Note:** The `lm` (local library) and `scanner` tags from the OuterTune upstream are
-> **deprecated** for MonoTune.  New commits should not use them; local-media removal work
-> should use the `cleanup` or `monotune` tag as appropriate.
+> **removed** for MonoTune.  Local-media scanning has been fully stripped from the codebase.
+> New commits should not use `lm` or `scanner` tags.
 
 | Tag (Misc)    | Description                                                                                      |
 |---------------|--------------------------------------------------------------------------------------------------|

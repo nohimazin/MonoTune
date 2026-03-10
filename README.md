@@ -28,9 +28,6 @@ A Material 3 YouTube Music client for Android, powered by [Monochrome](https://g
 > The local-media scanner inherited from OuterTune is still present in the codebase but is
 > scheduled for removal — see [BRANCHES.md](./BRANCHES.md) for the current migration status.
 
-> [!NOTE]
-> Android 8 (Oreo) and higher is supported.
-
 > [!WARNING]
 >
 > If you're in a region where YouTube Music is not supported, you won't be able to use this app
