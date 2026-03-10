@@ -28,9 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.dd3boh.outertune.BuildConfig
-import com.dd3boh.outertune.LocalDatabase
 import com.dd3boh.outertune.LocalDownloadUtil
 import com.dd3boh.outertune.LocalMenuState
 import com.dd3boh.outertune.LocalPlayerConnection
@@ -58,18 +55,13 @@ import com.dd3boh.outertune.db.entities.PlaylistSong
 import com.dd3boh.outertune.db.entities.Song
 import com.dd3boh.outertune.extensions.toMediaItem
 import com.dd3boh.outertune.extensions.togglePlayPause
-import com.dd3boh.outertune.models.DirectoryTree
 import com.dd3boh.outertune.ui.component.PlayingIndicatorBox
 import com.dd3boh.outertune.ui.component.SwipeToQueueBox
 import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.menu.FolderMenu
 import com.dd3boh.outertune.ui.menu.MenuState
 import com.dd3boh.outertune.ui.menu.SongMenu
 import com.dd3boh.outertune.utils.joinByBullet
 import com.dd3boh.outertune.utils.makeTimeString
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -116,12 +108,10 @@ fun SongListItem(
                 if (showLikedIcon && song.song.liked) {
                     Icon.Favorite()
                 }
-                if (showInLibraryIcon && song.song.isLocal) {
-                    Icon.FolderCopy()
-                } else if (showInLibraryIcon && song.song.inLibrary != null) {
+                if (showInLibraryIcon && song.song.inLibrary != null) {
                     Icon.Library()
                 }
-                if (showDownloadIcon && !song.song.isLocal) {
+                if (showDownloadIcon) {
                     val download by LocalDownloadUtil.current.getDownload(song.id).collectAsState(initial = null)
                     Icon.Download(download)
                 }
@@ -250,64 +240,6 @@ fun SongFolderItem(
     },
     modifier = modifier
 )
-
-@Composable
-fun SongFolderItem(
-    folder: DirectoryTree,
-    modifier: Modifier = Modifier,
-    folderTitle: String? = null,
-    menuState: MenuState,
-    navController: NavController,
-    subtitle: String?,
-) {
-    val coroutineScope = rememberCoroutineScope()
-    val database = LocalDatabase.current
-    var subDirSongCount by remember {
-        mutableIntStateOf(0)
-    }
-    LaunchedEffect(Unit) {
-        if (subtitle == null) {
-            CoroutineScope(Dispatchers.IO).launch {
-                database.localSongCountInPath(folder.getFullSquashedDir()).first()
-                subDirSongCount = database.localSongCountInPath(folder.getFullSquashedDir()).first()
-            }
-        }
-    }
-
-    ListItem(
-        title = folderTitle ?: folder.currentDir,
-        subtitle = subtitle ?: pluralStringResource(R.plurals.n_song, subDirSongCount, subDirSongCount),
-        thumbnailContent = {
-            Icon(
-                Icons.Rounded.Folder,
-                contentDescription = null,
-                modifier = modifier.size(48.dp)
-            )
-        },
-        trailingContent = {
-            val haptic = LocalHapticFeedback.current
-            IconButton(
-                onClick = {
-                    menuState.show {
-                        FolderMenu(
-                            folder = folder,
-                            coroutineScope = coroutineScope,
-                            navController = navController,
-                            onDismiss = menuState::dismiss
-                        )
-                    }
-                    haptic.performHapticFeedback(HapticFeedbackType.Companion.ContextClick)
-                }
-            ) {
-                Icon(
-                    Icons.Rounded.MoreVert,
-                    contentDescription = null
-                )
-            }
-        },
-        modifier = modifier
-    )
-}
 
 @Composable
 fun SongGridItem(

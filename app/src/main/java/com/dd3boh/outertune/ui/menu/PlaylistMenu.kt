@@ -66,7 +66,7 @@ import com.dd3boh.outertune.ui.dialog.AddToQueueDialog
 import com.dd3boh.outertune.ui.dialog.DefaultDialog
 import com.dd3boh.outertune.ui.dialog.TextFieldDialog
 import com.dd3boh.outertune.utils.getDownloadState
-import com.dd3boh.outertune.utils.lmScannerCoroutine
+
 import com.dd3boh.outertune.utils.reportException
 import com.dd3boh.outertune.utils.syncCoroutine
 import com.zionhuang.innertube.YouTube
@@ -97,13 +97,13 @@ fun PlaylistMenu(
         contract = ActivityResultContracts.CreateDocument("audio/x-mpegurl")
     ) { uri: Uri? ->
         uri?.let {
-            CoroutineScope(lmScannerCoroutine).launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 try {
                     var result = "#EXTM3U\n"
                     songs.forEach { s ->
                         val se = s.song
                         result += "#EXTINF:${se.duration},${s.artists.joinToString(";") { it.name }} - ${s.title}\n"
-                        result += if (se.isLocal) "${se.id}, ${se.localPath}" else "https://youtube.com/watch?v=${se.id}"
+                        result += "https://youtube.com/watch?v=${se.id}"
                         result += "\n"
                     }
                     context.contentResolver.openOutputStream(uri)?.use { outputStream ->
@@ -145,7 +145,7 @@ fun PlaylistMenu(
     }
 
     LaunchedEffect(songs) {
-        val songs = songs.filterNot { it.song.isLocal }
+        val songs = songs
         if (songs.isEmpty()) return@LaunchedEffect
         downloadUtil.downloads.collect { downloads ->
             downloadState = getDownloadState(songs.map { downloads[it.id] })
@@ -259,11 +259,10 @@ fun PlaylistMenu(
             showChoosePlaylistDialog = true
         }
 
-        if (songs.fastAny { !it.song.isLocal }) {
-            DownloadGridMenu(
+        DownloadGridMenu(
                 state = downloadState,
                 onDownload = {
-                    val _songs = songs.filterNot { it.song.isLocal }.map { it.toMediaMetadata() }
+                    val _songs = songs.map { it.toMediaMetadata() }
                     downloadUtil.download(_songs)
                 },
                 onRemoveDownload = {
@@ -402,10 +401,8 @@ fun PlaylistMenu(
                             delete(playlist.playlist)
                         }
 
-                        if (!playlist.playlist.isLocal) {
-                            coroutineScope.launch(syncCoroutine) {
-                                playlist.playlist.browseId?.let { YouTube.deletePlaylist(it) }
-                            }
+                        coroutineScope.launch(syncCoroutine) {
+                            playlist.playlist.browseId?.let { YouTube.deletePlaylist(it) }
                         }
                     }
                 ) {

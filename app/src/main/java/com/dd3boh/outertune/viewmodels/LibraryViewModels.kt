@@ -12,8 +12,6 @@
 package com.dd3boh.outertune.viewmodels
 
 import android.content.Context
-import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -49,14 +47,9 @@ import com.dd3boh.outertune.db.entities.Artist
 import com.dd3boh.outertune.db.entities.Playlist
 import com.dd3boh.outertune.db.entities.Song
 import com.dd3boh.outertune.extensions.toEnum
-import com.dd3boh.outertune.models.DirectoryTree
-import com.dd3boh.outertune.ui.utils.STORAGE_ROOT
-import com.dd3boh.outertune.ui.utils.cacheDirectoryTree
-import com.dd3boh.outertune.ui.utils.getDirectoryTree
 import com.dd3boh.outertune.utils.SyncUtils
 import com.dd3boh.outertune.utils.dataStore
 import com.dd3boh.outertune.utils.reportException
-import com.dd3boh.outertune.utils.scanners.LocalMediaScanner.Companion.refreshLocal
 import com.zionhuang.innertube.YouTube
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -112,55 +105,6 @@ class LibrarySongsViewModel @Inject constructor(
                     SongFilter.DOWNLOADED -> database.downloadSongs(sortType, descending)
                 }
             }.stateIn(viewModelScope, SharingStarted.Lazily, null)
-    }
-}
-
-@HiltViewModel
-class LibraryFoldersViewModel @Inject constructor(
-    @ApplicationContext val context: Context,
-    private val database: MusicDatabase,
-    savedStateHandle: SavedStateHandle,
-) : ViewModel() {
-    val TAG = LibraryFoldersViewModel::class.simpleName.toString()
-    val path = savedStateHandle.get<String>("path")?.replace(';', '/') ?: STORAGE_ROOT
-
-    val localSongDirectoryTree: MutableStateFlow<DirectoryTree> = MutableStateFlow(getDirectoryTree(path))
-    val localSongDtSongCount = MutableStateFlow(0)
-    val filteredSongs = mutableStateListOf<Song>()
-
-    var uiInit = false
-    var lastLocalScan = 0L
-
-    /**
-     * Trigger a scan of local directory
-     */
-    suspend fun getLocalSongs(dir: String? = null) {
-        Log.d(TAG, "Loading folders page: ${dir ?: path}")
-        val dt = refreshLocal(database, dir ?: path)
-        dt.isSkeleton = false
-        cacheDirectoryTree(dt)
-        localSongDirectoryTree.value = dt
-    }
-
-    /**
-     * Get total number of songs in directory
-     */
-    suspend fun getSongCount(dir: String? = null) {
-        Log.d(TAG, "Loading folder song count: ${dir ?: path}")
-        localSongDtSongCount.value = database.localSongCountInPath(dir ?: path).first()
-    }
-
-    /**
-     * Update filteredSongs with search query
-     */
-    fun searchInDir(query: String, dir: String = path) {
-        if (query.isNotBlank()) {
-            viewModelScope.launch(Dispatchers.IO) {
-                val dbSongs = database.searchSongsAllLocalInDir(dir, query).first()
-                filteredSongs.clear()
-                filteredSongs.addAll(dbSongs)
-            }
-        }
     }
 }
 

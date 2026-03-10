@@ -15,10 +15,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -170,7 +168,6 @@ import com.dd3boh.outertune.ui.screens.settings.ExperimentalSettings
 import com.dd3boh.outertune.ui.screens.settings.InterfaceSettings
 import com.dd3boh.outertune.ui.screens.settings.LibrariesScreen
 import com.dd3boh.outertune.ui.screens.settings.LibrarySettings
-import com.dd3boh.outertune.ui.screens.settings.LocalPlayerSettings
 import com.dd3boh.outertune.ui.screens.settings.LyricsSettings
 import com.dd3boh.outertune.ui.screens.settings.PlayerSettings
 import com.dd3boh.outertune.ui.screens.settings.SettingsScreen
@@ -180,7 +177,6 @@ import com.dd3boh.outertune.ui.utils.appBarScrollBehavior
 import com.dd3boh.outertune.utils.ActivityLauncherHelper
 import com.dd3boh.outertune.utils.NetworkConnectivityObserver
 import com.dd3boh.outertune.utils.SyncUtils
-import com.dd3boh.outertune.utils.lmScannerCoroutine
 import com.dd3boh.outertune.utils.rememberEnumPreference
 import com.dd3boh.outertune.utils.rememberPreference
 import com.valentinilk.shimmer.LocalShimmerTheme
@@ -208,15 +204,6 @@ class MainActivity : ComponentActivity() {
 
     val controllerViewModel: MediaControllerViewModel by viewModels()
 
-    // storage permission helpers
-    val permissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-//                Toast.makeText(this, "Granted", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, getString(R.string.scanner_missing_storage_perm), Toast.LENGTH_SHORT).show()
-            }
-        }
 
     override fun onDestroy() {
         Log.i(MAIN_TAG, "onDestroy() called. isFinishing = $isFinishing")
@@ -289,8 +276,8 @@ class MainActivity : ComponentActivity() {
 
 
             LaunchedEffect(Unit) {
-                // local media & download folders auto scan
-                coroutineScope.launch(lmScannerCoroutine) {
+                // download folders auto scan
+                coroutineScope.launch {
                     scanInit(
                         this@MainActivity, database, downloadUtil, coroutineScope, playerConnection,
                         snackbarHostState
@@ -696,9 +683,6 @@ class MainActivity : ComponentActivity() {
                                     }
                                     composable("settings/backup_restore") {
                                         BackupAndRestore(navController, scrollBehavior)
-                                    }
-                                    composable("settings/local") {
-                                        LocalPlayerSettings(navController, scrollBehavior)
                                     }
                                     composable("settings/experimental") {
                                         ExperimentalSettings(navController, scrollBehavior)

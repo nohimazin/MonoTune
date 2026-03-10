@@ -19,9 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
-import androidx.compose.material.icons.rounded.FolderCopy
 import androidx.compose.material.icons.rounded.Lyrics
-import androidx.compose.material.icons.rounded.SdCard
 import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.FlatSubfoldersKey
 import com.dd3boh.outertune.constants.ProxyEnabledKey
 import com.dd3boh.outertune.constants.ProxyTypeKey
 import com.dd3boh.outertune.constants.ProxyUrlKey
@@ -67,8 +64,6 @@ fun LibrarySettings(
         key = ShowLikedAndDownloadedPlaylist,
         defaultValue = true
     )
-    val (flatSubfolders, onFlatSubfoldersChange) = rememberPreference(FlatSubfoldersKey, defaultValue = true)
-
     val (proxyEnabled, onProxyEnabledChange) = rememberPreference(key = ProxyEnabledKey, defaultValue = false)
     val (proxyType, onProxyTypeChange) = rememberEnumPreference(key = ProxyTypeKey, defaultValue = Proxy.Type.HTTP)
     val (proxyUrl, onProxyUrlChange) = rememberPreference(key = ProxyUrlKey, defaultValue = "host:port")
@@ -87,11 +82,6 @@ fun LibrarySettings(
         ElevatedCard(
             modifier = Modifier.fillMaxWidth()
         ) {
-            PreferenceEntry(
-                title = { Text(stringResource(R.string.local_player_settings_title)) },
-                icon = { Icon(Icons.Rounded.SdCard, null) },
-                onClick = { navController.navigate("settings/local") }
-            )
             PreferenceEntry(
                 title = { Text(stringResource(R.string.lyrics_settings_title)) },
                 icon = { Icon(Icons.Rounded.Lyrics, null) },
@@ -141,19 +131,6 @@ fun LibrarySettings(
                     icon = { Icon(Icons.AutoMirrored.Rounded.PlaylistPlay, null) },
                     checked = showLikedAndDownloadedPlaylist,
                     onCheckedChange = onShowLikedAndDownloadedPlaylistChange
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ElevatedCard(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SwitchPreference(
-                    title = { Text(stringResource(R.string.flat_subfolders_title)) },
-                    description = stringResource(R.string.flat_subfolders_description),
-                    icon = { Icon(Icons.Rounded.FolderCopy, null) },
-                    checked = flatSubfolders,
-                    onCheckedChange = onFlatSubfoldersChange
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))

@@ -36,7 +36,6 @@ import coil3.request.allowHardware
 import coil3.toBitmap
 import coil3.toUri
 import com.dd3boh.outertune.playback.PlayerConnection
-import com.dd3boh.outertune.utils.LocalArtworkPath
 import com.dd3boh.outertune.utils.coilCoroutine
 import com.google.material.color.dynamiccolor.DynamicScheme
 import com.google.material.color.hct.Hct
@@ -75,17 +74,11 @@ fun OuterTuneTheme(
                     coroutineScope.launch(coilCoroutine) {
                         var ret = DefaultThemeColor
                         if (song != null) {
-                            val uri = (if (song.isLocal) song.localPath else song.thumbnailUrl)?.toUri()
+                            val uri = song.thumbnailUrl?.toUri()
                             if (uri != null) {
-                                val model = if (uri.toString().startsWith("/storage/")) {
-                                    LocalArtworkPath(uri.toString(), 100, 100)
-                                } else {
-                                    uri
-                                }
-
                                 val result = context.imageLoader.execute(
                                     ImageRequest.Builder(context)
-                                        .data(model)
+                                        .data(uri)
                                         .allowHardware(false)
                                         .build()
                                 )

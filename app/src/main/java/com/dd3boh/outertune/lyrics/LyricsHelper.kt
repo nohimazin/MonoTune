@@ -2,7 +2,6 @@ package com.dd3boh.outertune.lyrics
 
 import android.content.Context
 import android.util.LruCache
-import com.dd3boh.outertune.constants.LyricSourcePrefKey
 import com.dd3boh.outertune.constants.LyricTrimKey
 import com.dd3boh.outertune.constants.MultilineLrcKey
 import com.dd3boh.outertune.db.MusicDatabase
@@ -44,59 +43,26 @@ class LyricsHelper @Inject constructor(
         val trim = context.dataStore.get(LyricTrimKey, defaultValue = false)
         val multiline = context.dataStore.get(MultilineLrcKey, defaultValue = true)
 
-        val prefLocal = context.dataStore.get(LyricSourcePrefKey, true)
-
         val cached = cache.get(mediaMetadata.id)?.firstOrNull()
         if (cached != null) {
             return parseLrc(cached.lyrics, trim, multiline)
         }
         val dbLyrics = database.lyrics(mediaMetadata.id).let { it.first()?.lyrics }
-        if (dbLyrics != null && !prefLocal) {
+        if (dbLyrics != null) {
             return parseLrc(dbLyrics, trim, multiline)
         }
 
-        val localLyrics: SemanticLyrics? =
-            getLocalLyrics(mediaMetadata, LrcUtils.LrcParserOptions(trim, multiline, "Unable to parse lyrics"))
-        val remoteLyrics: String?
-
-        // fallback to secondary provider when primary is unavailable
-        if (prefLocal) {
-            if (localLyrics != null) {
-                return localLyrics
-            }
-            if (dbLyrics != null) {
-                return parseLrc(dbLyrics, trim, multiline)
-            }
-
-            // "lazy eval" the remote lyrics cuz it is laughably slow
-            remoteLyrics = getRemoteLyrics(mediaMetadata)
-            if (remoteLyrics != null) {
-                database.query {
-                    upsert(
-                        LyricsEntity(
-                            id = mediaMetadata.id,
-                            lyrics = remoteLyrics
-                        )
+        val remoteLyrics = getRemoteLyrics(mediaMetadata)
+        if (remoteLyrics != null) {
+            database.query {
+                upsert(
+                    LyricsEntity(
+                        id = mediaMetadata.id,
+                        lyrics = remoteLyrics
                     )
-                }
-                return parseLrc(remoteLyrics, trim, multiline)
+                )
             }
-        } else {
-            remoteLyrics = getRemoteLyrics(mediaMetadata)
-            if (remoteLyrics != null) {
-                database.query {
-                    upsert(
-                        LyricsEntity(
-                            id = mediaMetadata.id,
-                            lyrics = remoteLyrics
-                        )
-                    )
-                }
-                return parseLrc(remoteLyrics, trim, multiline)
-            } else if (localLyrics != null) {
-                return localLyrics
-            }
-
+            return parseLrc(remoteLyrics, trim, multiline)
         }
 
         database.query {
@@ -128,23 +94,6 @@ class LyricsHelper @Inject constructor(
                 }
             }
         }
-        return null
-    }
-
-    /**
-     * Lookup lyrics from local disk (.lrc) file
-     */
-    private fun getLocalLyrics(
-        mediaMetadata: MediaMetadata,
-        parserOptions: LrcUtils.LrcParserOptions
-    ): SemanticLyrics? {
-        if (LocalLyricsProvider.isEnabled(context) && mediaMetadata.localPath != null) {
-            return LocalLyricsProvider.getLyricsNew(
-                mediaMetadata.localPath,
-                parserOptions
-            )
-        }
-
         return null
     }
 
