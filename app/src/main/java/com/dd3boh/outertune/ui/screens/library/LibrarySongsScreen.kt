@@ -64,7 +64,6 @@ import com.dd3boh.outertune.R
 import com.dd3boh.outertune.constants.CONTENT_TYPE_HEADER
 import com.dd3boh.outertune.constants.CONTENT_TYPE_SONG
 import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.LocalLibraryEnableKey
 import com.dd3boh.outertune.constants.SongFilter
 import com.dd3boh.outertune.constants.SongFilterKey
 import com.dd3boh.outertune.constants.SongSortDescendingKey
@@ -84,7 +83,6 @@ import com.dd3boh.outertune.ui.component.SortHeader
 import com.dd3boh.outertune.ui.component.items.SongListItem
 import com.dd3boh.outertune.ui.menu.ActionDropdown
 import com.dd3boh.outertune.ui.menu.DropdownItem
-import com.dd3boh.outertune.ui.utils.MEDIA_PERMISSION_LEVEL
 import com.dd3boh.outertune.utils.rememberEnumPreference
 import com.dd3boh.outertune.utils.rememberPreference
 import com.dd3boh.outertune.viewmodels.LibrarySongsViewModel
@@ -108,7 +106,6 @@ fun LibrarySongsScreen(
     val strQueueAllSongs = stringResource(R.string.queue_all_songs)
 
     var filter by rememberEnumPreference(SongFilterKey, SongFilter.LIKED)
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
     val (sortType, onSortTypeChange) = rememberEnumPreference(SongSortTypeKey, SongSortType.CREATE_DATE)
     val (sortDescending, onSortDescendingChange) = rememberPreference(SongSortDescendingKey, true)
     val swipeEnabled by rememberPreference(SwipeToQueueKey, true)
@@ -293,27 +290,6 @@ fun LibrarySongsScreen(
                 Column(
                     modifier = Modifier.background(MaterialTheme.colorScheme.background)
                 ) {
-                    var showStoragePerm by remember {
-                        mutableStateOf(context.checkSelfPermission(MEDIA_PERMISSION_LEVEL) != PackageManager.PERMISSION_GRANTED)
-                    }
-                    if (localLibEnable && showStoragePerm) {
-                        TextButton(
-                            onClick = {
-                                showStoragePerm =
-                                    false // allow user to hide error when clicked. This also makes the code a lot nicer too...
-                                (context as MainActivity).permissionLauncher.launch(MEDIA_PERMISSION_LEVEL)
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.error)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.missing_media_permission_warning),
-                                color = Color.White,
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                        }
-                    }
                     libraryFilterContent?.let { it() } ?: filterContent()
                 }
             }

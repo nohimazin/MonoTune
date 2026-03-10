@@ -104,33 +104,6 @@ fun encodeSyncString(list: List<SyncContent>): String {
 }
 
 
-/*
----------------------------
-Local scanner
----------------------------
- */
-
-enum class ScannerImpl {
-    MEDIASTORE,
-    TAGLIB,
-    FFMPEG_EXT,
-}
-
-/**
- * Specify how strict the metadata scanner should be
- */
-enum class ScannerMatchCriteria {
-    LEVEL_1, // Title only
-    LEVEL_2, // Title and artists
-    LEVEL_3, // Title, artists, albums
-}
-
-enum class ScannerM3uMatchCriteria {
-    LEVEL_1, // Title only
-    LEVEL_2, // Title and artists
-    LEVEL_0, // Do not compare, assume it is a match
-    // TODO: Do albums for m3u if that even is a thing
-}
 
 
 /*
@@ -176,13 +149,7 @@ enum class SongSortType {
     CREATE_DATE, MODIFIED_DATE, RELEASE_DATE, NAME, ARTIST, PLAY_COUNT
 }
 
-enum class FolderSortType {
-    NAME, // TODO: support CREATE_DATE, MODIFIED_DATE
-}
 
-enum class FolderSongSortType {
-    CREATE_DATE, MODIFIED_DATE, RELEASE_DATE, NAME, ARTIST, PLAY_COUNT, TRACK_NUMBER
-}
 
 enum class PlaylistSongSortType {
     CUSTOM, NAME, ARTIST, ADDED_DATE, MODIFIED_DATE, RELEASE_DATE

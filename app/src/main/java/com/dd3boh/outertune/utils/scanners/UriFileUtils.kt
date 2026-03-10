@@ -98,3 +98,25 @@ private fun customDocFileFromTreeTreeUri(context: Context, uri: Uri) = TreeDocum
         uri, DocumentsContract.getTreeDocumentId(uri)
     )
 )
+
+/**
+ * Recursively scan a DocumentFile directory, collecting all files matching the validator.
+ */
+fun scanDfRecursive(
+    dir: DocumentFile,
+    result: ArrayList<DocumentFile>,
+    scanHidden: Boolean = false,
+    validator: ((DocumentFile) -> Boolean)? = null
+) {
+    val files = dir.listFiles()
+    for (file in files) {
+        if (!scanHidden && file.name?.startsWith(".") == true) continue
+        if (file.isDirectory && (scanHidden || !file.listFiles().any { it.name == ".nomedia" })) {
+            scanDfRecursive(file, result, scanHidden, validator)
+        } else {
+            if (validator == null || validator(file)) {
+                result.add(file)
+            }
+        }
+    }
+}

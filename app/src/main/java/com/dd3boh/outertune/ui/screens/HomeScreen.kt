@@ -68,7 +68,6 @@ import com.dd3boh.outertune.R
 import com.dd3boh.outertune.constants.GridThumbnailHeight
 import com.dd3boh.outertune.constants.ListItemHeight
 import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.LocalLibraryEnableKey
 import com.dd3boh.outertune.constants.ThumbnailCornerRadius
 import com.dd3boh.outertune.db.entities.Album
 import com.dd3boh.outertune.db.entities.Artist
@@ -153,7 +152,6 @@ fun HomeScreen(
     val quickPicksLazyGridState = rememberLazyGridState()
     val forgottenFavoritesLazyGridState = rememberLazyGridState()
 
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
 
     val scope = rememberCoroutineScope()
     val lazylistState = rememberLazyListState()
@@ -392,17 +390,6 @@ fun HomeScreen(
                         onClick = { navController.navigate("stats") },
                         modifier = Modifier.weight(1f)
                     )
-
-                    if (localLibEnable) {
-                        NavigationTile(
-                            title = stringResource(R.string.scanner_local_title),
-                            icon = Icons.Rounded.SdCard,
-                            onClick = {
-                                navController.navigate("settings/local")
-                            },
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
 
                     NavigationTile(
                         title = stringResource(R.string.account),

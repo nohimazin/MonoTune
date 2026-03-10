@@ -35,7 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.FlatSubfoldersKey
 import com.dd3boh.outertune.constants.ProxyEnabledKey
 import com.dd3boh.outertune.constants.ProxyTypeKey
 import com.dd3boh.outertune.constants.ProxyUrlKey
@@ -67,8 +66,6 @@ fun LibrarySettings(
         key = ShowLikedAndDownloadedPlaylist,
         defaultValue = true
     )
-    val (flatSubfolders, onFlatSubfoldersChange) = rememberPreference(FlatSubfoldersKey, defaultValue = true)
-
     val (proxyEnabled, onProxyEnabledChange) = rememberPreference(key = ProxyEnabledKey, defaultValue = false)
     val (proxyType, onProxyTypeChange) = rememberEnumPreference(key = ProxyTypeKey, defaultValue = Proxy.Type.HTTP)
     val (proxyUrl, onProxyUrlChange) = rememberPreference(key = ProxyUrlKey, defaultValue = "host:port")
@@ -141,19 +138,6 @@ fun LibrarySettings(
                     icon = { Icon(Icons.AutoMirrored.Rounded.PlaylistPlay, null) },
                     checked = showLikedAndDownloadedPlaylist,
                     onCheckedChange = onShowLikedAndDownloadedPlaylistChange
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ElevatedCard(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SwitchPreference(
-                    title = { Text(stringResource(R.string.flat_subfolders_title)) },
-                    description = stringResource(R.string.flat_subfolders_description),
-                    icon = { Icon(Icons.Rounded.FolderCopy, null) },
-                    checked = flatSubfolders,
-                    onCheckedChange = onFlatSubfoldersChange
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))

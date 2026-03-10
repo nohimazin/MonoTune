@@ -170,7 +170,6 @@ import com.dd3boh.outertune.ui.screens.settings.ExperimentalSettings
 import com.dd3boh.outertune.ui.screens.settings.InterfaceSettings
 import com.dd3boh.outertune.ui.screens.settings.LibrariesScreen
 import com.dd3boh.outertune.ui.screens.settings.LibrarySettings
-import com.dd3boh.outertune.ui.screens.settings.LocalPlayerSettings
 import com.dd3boh.outertune.ui.screens.settings.LyricsSettings
 import com.dd3boh.outertune.ui.screens.settings.PlayerSettings
 import com.dd3boh.outertune.ui.screens.settings.SettingsScreen
@@ -208,15 +207,9 @@ class MainActivity : ComponentActivity() {
 
     val controllerViewModel: MediaControllerViewModel by viewModels()
 
-    // storage permission helpers
+    // storage permission helper (kept for potential future use)
     val permissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-//                Toast.makeText(this, "Granted", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, getString(R.string.scanner_missing_storage_perm), Toast.LENGTH_SHORT).show()
-            }
-        }
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ -> }
 
     override fun onDestroy() {
         Log.i(MAIN_TAG, "onDestroy() called. isFinishing = $isFinishing")
@@ -696,9 +689,6 @@ class MainActivity : ComponentActivity() {
                                     }
                                     composable("settings/backup_restore") {
                                         BackupAndRestore(navController, scrollBehavior)
-                                    }
-                                    composable("settings/local") {
-                                        LocalPlayerSettings(navController, scrollBehavior)
                                     }
                                     composable("settings/experimental") {
                                         ExperimentalSettings(navController, scrollBehavior)
