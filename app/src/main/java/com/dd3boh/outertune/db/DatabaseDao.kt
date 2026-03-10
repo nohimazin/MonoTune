@@ -115,25 +115,15 @@ interface DatabaseDao : SongsDao, AlbumsDao, ArtistsDao, PlaylistsDao, QueueDao 
     )
     fun relatedSongs(songId: String): List<Song>
 
-    @Query("""
-        SELECT * FROM genre
-        WHERE genre.isLocal = 1
-        ORDER BY genre.title ASC
-    LIMIT :previewSize""")
-    fun allLocalGenresByName(previewSize: Int = Int.MAX_VALUE): List<GenreEntity>
+    @Transaction
+    @Query("UPDATE song_genre_map SET genreId = :newId WHERE genreId = :oldId")
+    fun updateSongGenreMap(oldId: String, newId: String)
 
     @Query("SELECT * FROM genre WHERE id = :id")
     fun genreById(id: String): GenreEntity?
 
     @Query("SELECT * FROM genre WHERE title = :name")
     fun genreByName(name: String): GenreEntity?
-
-    @Query("SELECT * FROM genre WHERE isLocal = 1 AND title LIKE '%' || :query || '%' LIMIT :previewSize")
-    fun localGenreByNameFuzzy(query: String, previewSize: Int = Int.MAX_VALUE): List<GenreEntity>
-
-    @Transaction
-    @Query("UPDATE song_genre_map SET genreId = :newId WHERE genreId = :oldId")
-    fun updateSongGenreMap(oldId: String, newId: String)
 
     @Query(
         """
@@ -172,7 +162,6 @@ interface DatabaseDao : SongsDao, AlbumsDao, ArtistsDao, PlaylistsDao, QueueDao 
                 ArtistEntity(
                     id = artistId,
                     name = artist.name,
-                    isLocal = artist.isLocal
                 )
             )
             insert(
@@ -189,7 +178,6 @@ interface DatabaseDao : SongsDao, AlbumsDao, ArtistsDao, PlaylistsDao, QueueDao 
                 GenreEntity(
                     id = genreId,
                     title = genre.title,
-                    isLocal = genre.isLocal
                 )
             )
             insert(
@@ -211,7 +199,6 @@ interface DatabaseDao : SongsDao, AlbumsDao, ArtistsDao, PlaylistsDao, QueueDao 
                     thumbnailUrl = album?.thumbnailUrl?: mediaMetadata.thumbnailUrl,
                     songCount = 1,
                     duration = (album?.duration ?: 0) + mediaMetadata.duration,
-                    isLocal = it.isLocal
                 )
             )
             insert(
@@ -438,10 +425,6 @@ interface DatabaseDao : SongsDao, AlbumsDao, ArtistsDao, PlaylistsDao, QueueDao 
      */
 
     @Transaction
-    @Query("DELETE FROM genre WHERE isLocal = 1")
-    fun nukeLocalGenre()
-
-    @Transaction
     @Query("""
 DELETE FROM format 
 WHERE format.id IS NOT NULL 
@@ -452,24 +435,12 @@ AND NOT EXISTS (
     fun nukeDanglingFormatEntities()
 
     @Transaction
-    @Query("DELETE FROM lyrics WHERE lyrics.id IN (SELECT song.id FROM song WHERE song.isLocal)")
-    fun nukeLocalLyrics()
-
-    @Transaction
     @Query("DELETE FROM lyrics WHERE lyrics.id NOT IN (SELECT song.id FROM song)")
     fun nukeDanglingLyrics()
 
     @Transaction
     @Query("DELETE FROM playlist WHERE isLocal = 0")
     fun nukeRemotePlaylists()
-
-    @Transaction
-    fun nukeLocalData() {
-        nukeLocalSongs()
-        nukeLocalArtists()
-        nukeLocalAlbums()
-        nukeLocalGenre()
-    }
 
     @RawQuery
     fun raw(supportSQLiteQuery: SupportSQLiteQuery): Int

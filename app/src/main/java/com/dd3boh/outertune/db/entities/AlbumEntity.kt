@@ -1,7 +1,6 @@
 package com.dd3boh.outertune.db.entities
 
 import androidx.compose.runtime.Immutable
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.dd3boh.outertune.utils.syncCoroutine
@@ -25,8 +24,6 @@ data class AlbumEntity(
     val duration: Int,
     val lastUpdateTime: LocalDateTime = LocalDateTime.now(),
     val bookmarkedAt: LocalDateTime? = null,
-    @ColumnInfo(name = "isLocal", defaultValue = false.toString())
-    val isLocal: Boolean = false // TODO(MonoTune): remove with local-media scanner
 ) {
 
     fun localToggleLike() = copy(

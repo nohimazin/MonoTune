@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import com.dd3boh.outertune.db.entities.Song
 import com.dd3boh.outertune.db.entities.SongEntity
 import com.dd3boh.outertune.ui.utils.resize
-import com.dd3boh.outertune.utils.LocalArtworkPath
 import com.zionhuang.innertube.models.SongItem
 import java.io.Serializable
 import java.time.LocalDateTime
@@ -26,7 +25,6 @@ data class MediaMetadata(
     private val dateModified: LocalDateTime? = null, // file property
     val inLibrary: LocalDateTime? = null, // doubles as "date added"
     val setVideoId: String? = null,
-    val isLocal: Boolean = false,
     val localPath: String? = null,
     val liked: Boolean = false,
     val composeUidWorkaround: Double = Math.random(), // compose will crash without this hax
@@ -36,19 +34,16 @@ data class MediaMetadata(
     data class Artist(
         val id: String?,
         val name: String,
-        val isLocal: Boolean = false,
     ) : Serializable
 
     data class Album(
         val id: String,
         val title: String,
-        val isLocal: Boolean = false,
     ) : Serializable
 
     data class Genre(
         val id: String?,
         val title: String,
-        val isLocal: Boolean = false,
     ) : Serializable
 
     fun toSongEntity() = SongEntity(
@@ -64,8 +59,7 @@ data class MediaMetadata(
         date = date,
         dateModified = dateModified,
         liked = liked,
-        isLocal = isLocal,
-        inLibrary = if (isLocal) LocalDateTime.now() else null,
+        inLibrary = inLibrary,
         localPath = localPath
     )
 
@@ -100,11 +94,7 @@ data class MediaMetadata(
     fun getDateModifiedLong(): Long? = dateModified?.toEpochSecond(ZoneOffset.UTC)
 
     fun getThumbnailModel(sizeX: Int = -1, sizeY: Int = -1): Any? {
-        return if (isLocal) {
-            LocalArtworkPath(thumbnailUrl ?: localPath, sizeX, sizeY)
-        } else {
-            thumbnailUrl
-        }
+        return thumbnailUrl
     }
 }
 
@@ -115,7 +105,6 @@ fun Song.toMediaMetadata() = MediaMetadata(
         MediaMetadata.Artist(
             id = it.id,
             name = it.name,
-            isLocal = it.isLocal
         )
     },
     duration = song.duration,
@@ -126,20 +115,17 @@ fun Song.toMediaMetadata() = MediaMetadata(
         MediaMetadata.Album(
             id = it.id,
             title = it.title,
-            isLocal = it.isLocal
         )
     } ?: song.albumId?.let { albumId ->
         MediaMetadata.Album(
             id = albumId,
             title = song.albumName.orEmpty(),
-            // no possible local albums somehow
         )
     },
     genre = genre?.map {
         MediaMetadata.Genre(
             id = it.id,
             title = it.title,
-            isLocal = it.isLocal
         )
     },
     year = song.year,
@@ -147,7 +133,6 @@ fun Song.toMediaMetadata() = MediaMetadata(
     dateModified = song.dateModified,
     inLibrary = song.inLibrary,
     liked = song.liked,
-    isLocal = song.isLocal,
     localPath = song.localPath
 )
 

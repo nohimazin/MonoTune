@@ -108,32 +108,6 @@ val EnableLrcLibKey = booleanPreferencesKey("enableLrcLib")
 val UseLoginForBrowse = booleanPreferencesKey("useLoginForBrowse")
 
 
-/**
- * Local library
- *
- * TODO(MonoTune): Local media scanning is not a MonoTune goal and is scheduled for removal.
- *   Defaulting to false so that fresh installs do not enable local scanning.
- *   See BRANCHES.md § "Migration Status" for details.
- */
-val LocalLibraryEnableKey = booleanPreferencesKey("localLibraryEnable")
-
-
-/**
- * Local media scanner
- *
- * TODO(MonoTune): All keys in this block are scheduled for removal once the local-media
- *   scanning feature is fully stripped. Do not introduce new callers.
- */
-val AutomaticScannerKey = booleanPreferencesKey("autoLocalScanner")
-val ScannerSensitivityKey = stringPreferencesKey("scannerSensitivity")
-val ScannerImplKey = stringPreferencesKey("scannerImpl")
-val ScannerStrictFilePathsKey = booleanPreferencesKey("scannerStrictFilePaths")
-val ScannerStrictExtKey = booleanPreferencesKey("scannerStrictExt")
-//val LookupYtmArtistsKey = booleanPreferencesKey("lookupYtmArtists") // removed key
-
-val ScanPathsKey = stringPreferencesKey("inclScanPaths") // previously "scanPaths"
-val ExcludedScanPathsKey = stringPreferencesKey("exclScanPaths") // previously "excludedScanPaths"
-val LastLocalScanKey = longPreferencesKey("lastLocalScan")
 
 /**
  * Experimental settings

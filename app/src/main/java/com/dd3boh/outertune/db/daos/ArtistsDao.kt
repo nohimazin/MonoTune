@@ -51,9 +51,6 @@ interface ArtistsDao {
     @Query("SELECT * FROM artist WHERE name = :name")
     fun artistByName(name: String): ArtistEntity?
 
-    @Query("SELECT * FROM artist WHERE isLocal = 1 AND name LIKE '%' || :name || '%'")
-    fun localArtistsByNameFuzzy(name: String): List<ArtistEntity>
-
     @Query("""
         SELECT 
             artist.*,
@@ -70,22 +67,6 @@ interface ArtistsDao {
     """)
     fun searchArtists(query: String, previewSize: Int = Int.MAX_VALUE): Flow<List<Artist>>
 
-    @Query("""
-        SELECT 
-            artist.*,
-            COUNT(song.id) AS songCount,
-            SUM(CASE WHEN song.dateDownload IS NOT NULL THEN 1 ELSE 0 END) AS downloadCount
-        FROM artist
-            LEFT JOIN song_artist_map sam ON artist.id = sam.artistId
-            LEFT JOIN song ON sam.songId = song.id
-        WHERE artist.name LIKE '%' || :query || '%' AND song.inLibrary IS NOT NULL AND song.isLocal
-        GROUP BY artist.id
-        HAVING songCount > 0
-        LIMIT :previewSize
-    """)
-    fun searchLocalArtists(query: String, previewSize: Int = Int.MAX_VALUE): Flow<List<Artist>>
-
-
     @Transaction
     @Query("""
         SELECT song.* 
@@ -98,11 +79,8 @@ interface ArtistsDao {
     @Query("SELECT * FROM artist WHERE name LIKE '%' || :query || '%' LIMIT :previewSize")
     fun artistsByNameFuzzy(query: String, previewSize: Int = Int.MAX_VALUE): Flow<List<ArtistEntity>>
 
-    @Query("SELECT * FROM artist WHERE isLocal != 1")
+    @Query("SELECT * FROM artist")
     fun allRemoteArtists(): Flow<List<ArtistEntity>>
-
-    @Query("SELECT * FROM artist WHERE isLocal = 1")
-    fun allLocalArtists(): List<ArtistEntity>
 
     @Query("""
         SELECT 
@@ -130,7 +108,7 @@ interface ArtistsDao {
     @RawQuery(observedEntities = [ArtistEntity::class])
     fun _getArtists(query: SupportSQLiteQuery): Flow<List<Artist>>
 
-    fun artists(filter: ArtistFilter, sortType: ArtistSortType, descending: Boolean, localOnly: Boolean? = null): Flow<List<Artist>> {
+    fun artists(filter: ArtistFilter, sortType: ArtistSortType, descending: Boolean): Flow<List<Artist>> {
         val orderBy = when (sortType) {
             ArtistSortType.CREATE_DATE -> "artist.rowId ASC"
             ArtistSortType.NAME -> "artist.name COLLATE NOCASE ASC"
@@ -141,12 +119,6 @@ interface ArtistsDao {
             ArtistFilter.DOWNLOADED -> "song.dateDownload IS NOT NULL"
             ArtistFilter.LIBRARY -> "song.inLibrary IS NOT NULL"
             ArtistFilter.LIKED -> "artist.bookmarkedAt IS NOT NULL"
-        } + if (localOnly == null) {
-            ""
-        } else if (localOnly) {
-            "artist.isLocal = 1"
-        } else {
-            "artist.isLocal = 0"
         }
 
         val having = when (filter) {
@@ -170,30 +142,14 @@ interface ArtistsDao {
 
         return _getArtists(query).map { artists ->
             artists
-                .filter { it.artist.isYouTubeArtist || it.artist.isLocal } // TODO: add ui to filter by local or remote or something idk
+                .filter { it.artist.isYouTubeArtist }
                 .reversed(descending)
         }
     }
 
     fun artistsInLibraryAsc() = artists(ArtistFilter.LIBRARY, ArtistSortType.CREATE_DATE, false)
     fun artistsBookmarkedAsc() = artists(ArtistFilter.LIKED, ArtistSortType.CREATE_DATE, false)
-    fun artistsLocalBookmarkedAsc() = artists(ArtistFilter.LIKED, ArtistSortType.CREATE_DATE, false, true)
 
-    @Transaction
-    @Query("""
-        SELECT 
-            artist.*,
-            COUNT(song.id) AS songCount,
-            SUM(CASE WHEN song.dateDownload IS NOT NULL THEN 1 ELSE 0 END) AS downloadCount
-        FROM artist
-            LEFT JOIN song_artist_map sam ON artist.id = sam.artistId
-            LEFT JOIN song ON sam.songId = song.id
-        WHERE artist.isLocal = 1
-        GROUP BY artist.id
-        ORDER BY artist.name ASC
-    """)
-    fun localArtistsByName(): List<Artist>
-    // endregion
 
     // region Artist Songs Sort
     @Transaction
@@ -254,9 +210,5 @@ interface ArtistsDao {
         AND id = :artistId
     """)
     fun safeDeleteArtist(artistId: String)
-
-    @Transaction
-    @Query("DELETE FROM artist WHERE isLocal = 1")
-    fun nukeLocalArtists()
     // endregion
 }
