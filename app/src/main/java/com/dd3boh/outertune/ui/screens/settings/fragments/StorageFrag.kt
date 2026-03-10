@@ -386,6 +386,8 @@ fun ColumnScope.DownloadsFrag() {
                 }
             }
 
+            val valid = true
+
             Text(
                 text = stringResource(R.string.dl_main_path_description),
                 style = MaterialTheme.typography.bodySmall,
@@ -570,11 +572,10 @@ fun ColumnScope.DownloadsFrag() {
                     )
             ) {
                 tempScanPaths.forEach { tmpPath ->
-            val valid = true
                     Row(
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
-                            .background(if (valid) Color.Transparent else MaterialTheme.colorScheme.errorContainer)
+                            .background(Color.Transparent)
                             .clickable { }) {
                         Text(
                             text = absoluteFilePathFromUri(context, tmpPath) ?: tmpPath.toString(),
@@ -606,13 +607,7 @@ fun ColumnScope.DownloadsFrag() {
                 InfoLabel(
                     text = stringResource(R.string.scan_paths_tooltip),
                     modifier = Modifier.padding(top = 8.dp)
-                )) {
-                    InfoLabel(
-                        text = stringResource(R.string.scanner_rejected_dir),
-                        isError = true,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
+                )
             }
         }
     }

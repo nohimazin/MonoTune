@@ -3,6 +3,7 @@ package com.dd3boh.outertune
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.navigation.NavController
 import com.dd3boh.outertune.constants.LastVersionKey
