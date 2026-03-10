@@ -68,7 +68,6 @@ import com.dd3boh.outertune.constants.LibrarySortType
 import com.dd3boh.outertune.constants.LibrarySortTypeKey
 import com.dd3boh.outertune.constants.LibraryViewType
 import com.dd3boh.outertune.constants.LibraryViewTypeKey
-import com.dd3boh.outertune.constants.LocalLibraryEnableKey
 import com.dd3boh.outertune.constants.ShowLikedAndDownloadedPlaylist
 import com.dd3boh.outertune.db.entities.Album
 import com.dd3boh.outertune.db.entities.Artist
@@ -91,7 +90,6 @@ import com.dd3boh.outertune.ui.component.items.AutoPlaylistGridItem
 import com.dd3boh.outertune.ui.component.items.AutoPlaylistListItem
 import com.dd3boh.outertune.ui.screens.Screens
 import com.dd3boh.outertune.ui.screens.Screens.LibraryFilter
-import com.dd3boh.outertune.ui.utils.MEDIA_PERMISSION_LEVEL
 import com.dd3boh.outertune.utils.rememberEnumPreference
 import com.dd3boh.outertune.utils.rememberPreference
 import com.dd3boh.outertune.viewmodels.LibraryViewModel
@@ -115,7 +113,6 @@ fun LibraryScreen(
     var viewType by rememberEnumPreference(LibraryViewTypeKey, LibraryViewType.GRID)
     val enabledFilters by rememberPreference(EnabledFiltersKey, defaultValue = DEFAULT_ENABLED_FILTERS)
     var filter by rememberEnumPreference(LibraryFilterKey, LibraryFilter.ALL)
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
 
     val (sortType, onSortTypeChange) = rememberEnumPreference(LibrarySortTypeKey, LibrarySortType.CREATE_DATE)
     val (sortDescending, onSortDescendingChange) = rememberPreference(LibrarySortDescendingKey, true)
@@ -185,30 +182,8 @@ fun LibraryScreen(
     }
 
     val filterContent = @Composable {
-        var showStoragePerm by remember {
-            mutableStateOf(context.checkSelfPermission(MEDIA_PERMISSION_LEVEL) != PackageManager.PERMISSION_GRANTED)
-        }
 
         Column {
-            if (localLibEnable && showStoragePerm
-            ) {
-                TextButton(
-                    onClick = {
-                        showStoragePerm =
-                            false // allow user to hide error when clicked. This also makes the code a lot nicer too...
-                        (context as MainActivity).permissionLauncher.launch(MEDIA_PERMISSION_LEVEL)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.error)
-                ) {
-                    Text(
-                        text = stringResource(R.string.missing_media_permission_warning),
-                        color = Color.White,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-            }
             Row {
                 ChipsLazyRow(
                     chips = chips,

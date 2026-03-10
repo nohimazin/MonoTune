@@ -58,11 +58,9 @@ import com.dd3boh.outertune.db.entities.PlaylistSong
 import com.dd3boh.outertune.db.entities.Song
 import com.dd3boh.outertune.extensions.toMediaItem
 import com.dd3boh.outertune.extensions.togglePlayPause
-import com.dd3boh.outertune.models.DirectoryTree
 import com.dd3boh.outertune.ui.component.PlayingIndicatorBox
 import com.dd3boh.outertune.ui.component.SwipeToQueueBox
 import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.menu.FolderMenu
 import com.dd3boh.outertune.ui.menu.MenuState
 import com.dd3boh.outertune.ui.menu.SongMenu
 import com.dd3boh.outertune.utils.joinByBullet
@@ -215,97 +213,6 @@ fun SongListItem(
         content = { listItem() },
         snackbarHostState = snackbarHostState,
         swipeEnabled = swipeEnabled
-    )
-}
-
-@Composable
-fun SongFolderItem(
-    folderTitle: String,
-    modifier: Modifier = Modifier,
-) = ListItem(
-    title = folderTitle, thumbnailContent = {
-        Icon(
-            Icons.Rounded.Folder,
-            contentDescription = null,
-            modifier = modifier.size(48.dp)
-        )
-    },
-    modifier = modifier
-)
-
-@Composable
-fun SongFolderItem(
-    folderTitle: String,
-    subtitle: String?,
-    modifier: Modifier = Modifier,
-) = ListItem(
-    title = folderTitle,
-    subtitle = subtitle,
-    thumbnailContent = {
-        Icon(
-            Icons.Rounded.Folder,
-            contentDescription = null,
-            modifier = modifier.size(48.dp)
-        )
-    },
-    modifier = modifier
-)
-
-@Composable
-fun SongFolderItem(
-    folder: DirectoryTree,
-    modifier: Modifier = Modifier,
-    folderTitle: String? = null,
-    menuState: MenuState,
-    navController: NavController,
-    subtitle: String?,
-) {
-    val coroutineScope = rememberCoroutineScope()
-    val database = LocalDatabase.current
-    var subDirSongCount by remember {
-        mutableIntStateOf(0)
-    }
-    LaunchedEffect(Unit) {
-        if (subtitle == null) {
-            CoroutineScope(Dispatchers.IO).launch {
-                database.localSongCountInPath(folder.getFullSquashedDir()).first()
-                subDirSongCount = database.localSongCountInPath(folder.getFullSquashedDir()).first()
-            }
-        }
-    }
-
-    ListItem(
-        title = folderTitle ?: folder.currentDir,
-        subtitle = subtitle ?: pluralStringResource(R.plurals.n_song, subDirSongCount, subDirSongCount),
-        thumbnailContent = {
-            Icon(
-                Icons.Rounded.Folder,
-                contentDescription = null,
-                modifier = modifier.size(48.dp)
-            )
-        },
-        trailingContent = {
-            val haptic = LocalHapticFeedback.current
-            IconButton(
-                onClick = {
-                    menuState.show {
-                        FolderMenu(
-                            folder = folder,
-                            coroutineScope = coroutineScope,
-                            navController = navController,
-                            onDismiss = menuState::dismiss
-                        )
-                    }
-                    haptic.performHapticFeedback(HapticFeedbackType.Companion.ContextClick)
-                }
-            ) {
-                Icon(
-                    Icons.Rounded.MoreVert,
-                    contentDescription = null
-                )
-            }
-        },
-        modifier = modifier
     )
 }
 

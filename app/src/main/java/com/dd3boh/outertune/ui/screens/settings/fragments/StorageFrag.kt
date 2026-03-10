@@ -62,7 +62,6 @@ import com.dd3boh.outertune.constants.DownloadExtraPathKey
 import com.dd3boh.outertune.constants.DownloadPathKey
 import com.dd3boh.outertune.constants.MaxImageCacheSizeKey
 import com.dd3boh.outertune.constants.MaxSongCacheSizeKey
-import com.dd3boh.outertune.constants.ScanPathsKey
 import com.dd3boh.outertune.constants.ThumbnailCornerRadius
 import com.dd3boh.outertune.db.MusicDatabase
 import com.dd3boh.outertune.extensions.tryOrNull
@@ -143,7 +142,6 @@ fun ColumnScope.DownloadsFrag() {
     val downloadUtil = LocalDownloadUtil.current
 
     val (downloadPath, onDownloadPathChange) = rememberPreference(DownloadPathKey, "")
-    val (scanPaths, onScanPathsChange) = rememberPreference(ScanPathsKey, defaultValue = "")
 
     // size stats
     var downloadCacheSize by remember {
@@ -370,11 +368,6 @@ fun ColumnScope.DownloadsFrag() {
                 showDlPathDialog = false
                 tempFilePath = null
             },
-            isInputValid = uriListFromString(scanPaths).none {
-                // download path cannot a scan path, or a subdir of a scan path
-                tempFilePath.toString().length <= it.toString().length && tempFilePath.toString()
-                    .contains(it.toString())
-            },
             modifier = Modifier
                 .verticalScroll(rememberScrollState()),
         ) {
@@ -391,12 +384,6 @@ fun ColumnScope.DownloadsFrag() {
 
                     tempFilePath = uri
                 }
-            }
-
-            val valid = uriListFromString(scanPaths).none {
-                // download path cannot a scan path, or a subdir of a scan path
-                tempFilePath.toString().length <= it.toString().length && tempFilePath.toString()
-                    .contains(it.toString())
             }
 
             Text(
@@ -557,10 +544,7 @@ fun ColumnScope.DownloadsFrag() {
                 showPathsDialog = false
                 tempScanPaths.clear()
             },
-            isInputValid = uriListFromString(scanPaths).toList().none { scanPath ->
-                // scan path cannot be contain any dl extras path
-                tempScanPaths.toList().any { it.toString().contains(scanPath.toString()) }
-            },
+            isInputValid = true,
             modifier = Modifier
                 .verticalScroll(rememberScrollState()),
         ) {
@@ -586,9 +570,7 @@ fun ColumnScope.DownloadsFrag() {
                     )
             ) {
                 tempScanPaths.forEach { tmpPath ->
-                    val valid = uriListFromString(scanPaths).toList().none {
-                        tmpPath.toString().contains(it.toString())
-                    }
+            val valid = true
                     Row(
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
@@ -624,12 +606,7 @@ fun ColumnScope.DownloadsFrag() {
                 InfoLabel(
                     text = stringResource(R.string.scan_paths_tooltip),
                     modifier = Modifier.padding(top = 8.dp)
-                )
-
-                if (uriListFromString(scanPaths).toList().any { scanPath ->
-                        // scan path cannot be contain any dl extras path
-                        tempScanPaths.toList().any { it.toString().contains(scanPath.toString()) }
-                    }) {
+                )) {
                     InfoLabel(
                         text = stringResource(R.string.scanner_rejected_dir),
                         isError = true,

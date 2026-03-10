@@ -65,7 +65,6 @@ import com.dd3boh.outertune.constants.CONTENT_TYPE_PLAYLIST
 import com.dd3boh.outertune.constants.GridThumbnailHeight
 import com.dd3boh.outertune.constants.LibraryViewType
 import com.dd3boh.outertune.constants.LibraryViewTypeKey
-import com.dd3boh.outertune.constants.LocalLibraryEnableKey
 import com.dd3boh.outertune.constants.PlaylistFilter
 import com.dd3boh.outertune.constants.PlaylistFilterKey
 import com.dd3boh.outertune.constants.PlaylistSortDescendingKey
@@ -85,10 +84,8 @@ import com.dd3boh.outertune.ui.component.SortHeader
 import com.dd3boh.outertune.ui.component.items.AutoPlaylistGridItem
 import com.dd3boh.outertune.ui.component.items.AutoPlaylistListItem
 import com.dd3boh.outertune.ui.dialog.CreatePlaylistDialog
-import com.dd3boh.outertune.ui.dialog.ImportM3uDialog
 import com.dd3boh.outertune.ui.menu.ActionDropdown
 import com.dd3boh.outertune.ui.menu.DropdownItem
-import com.dd3boh.outertune.ui.utils.MEDIA_PERMISSION_LEVEL
 import com.dd3boh.outertune.utils.rememberEnumPreference
 import com.dd3boh.outertune.utils.rememberPreference
 import com.dd3boh.outertune.viewmodels.LibraryPlaylistsViewModel
@@ -107,7 +104,6 @@ fun LibraryPlaylistsScreen(
 
     var filter by rememberEnumPreference(PlaylistFilterKey, PlaylistFilter.LIBRARY)
     libraryFilterContent?.let { filter = PlaylistFilter.LIBRARY }
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
 
     var playlistViewType by rememberEnumPreference(PlaylistViewTypeKey, LibraryViewType.GRID)
     val libraryViewType by rememberEnumPreference(LibraryViewTypeKey, LibraryViewType.GRID)
@@ -126,8 +122,6 @@ fun LibraryPlaylistsScreen(
 
     val lazyListState = rememberLazyListState()
     val lazyGridState = rememberLazyGridState()
-
-    var showImportM3uDialog by rememberSaveable { mutableStateOf(false) }
     var showCreatePlaylistDialog by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) { viewModel.syncPlaylists() }
@@ -139,29 +133,7 @@ fun LibraryPlaylistsScreen(
     }
 
     val filterContent = @Composable {
-        var showStoragePerm by remember {
-            mutableStateOf(context.checkSelfPermission(MEDIA_PERMISSION_LEVEL) != PackageManager.PERMISSION_GRANTED)
-        }
         Column {
-            if (localLibEnable && showStoragePerm) {
-                TextButton(
-                    onClick = {
-                        showStoragePerm =
-                            false // allow user to hide error when clicked. This also makes the code a lot nicer too...
-                        (context as MainActivity).permissionLauncher.launch(MEDIA_PERMISSION_LEVEL)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.error)
-                ) {
-                    Text(
-                        text = stringResource(R.string.missing_media_permission_warning),
-                        color = Color.White,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-            }
-
             Row {
                 ChipsRow(
                     chips = listOf(
@@ -243,7 +215,6 @@ fun LibraryPlaylistsScreen(
                         DropdownItem(
                             title = stringResource(R.string.import_playlist),
                             leadingIcon = { Icon(Icons.AutoMirrored.Rounded.Input, null) },
-                            action = { showImportM3uDialog = true }
                         ),
                     ),
                 )
@@ -439,13 +410,6 @@ fun LibraryPlaylistsScreen(
         /**
          * Dialog
          */
-
-        if (showImportM3uDialog) {
-            ImportM3uDialog(
-                navController = navController,
-                onDismiss = { showImportM3uDialog = false }
-            )
-        }
 
         Indicator(
             isRefreshing = isSyncingRemotePlaylists,

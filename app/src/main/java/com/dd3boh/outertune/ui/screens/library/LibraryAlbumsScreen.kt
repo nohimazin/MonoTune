@@ -64,7 +64,6 @@ import com.dd3boh.outertune.constants.CONTENT_TYPE_HEADER
 import com.dd3boh.outertune.constants.GridThumbnailHeight
 import com.dd3boh.outertune.constants.LibraryViewType
 import com.dd3boh.outertune.constants.LibraryViewTypeKey
-import com.dd3boh.outertune.constants.LocalLibraryEnableKey
 import com.dd3boh.outertune.ui.component.ChipsRow
 import com.dd3boh.outertune.ui.component.EmptyPlaceholder
 import com.dd3boh.outertune.ui.component.LazyColumnScrollbar
@@ -76,7 +75,6 @@ import com.dd3boh.outertune.ui.component.SortHeader
 import com.dd3boh.outertune.ui.component.button.IconButton
 import com.dd3boh.outertune.ui.menu.ActionDropdown
 import com.dd3boh.outertune.ui.menu.DropdownItem
-import com.dd3boh.outertune.ui.utils.MEDIA_PERMISSION_LEVEL
 import com.dd3boh.outertune.utils.rememberEnumPreference
 import com.dd3boh.outertune.utils.rememberPreference
 import com.dd3boh.outertune.viewmodels.LibraryAlbumsViewModel
@@ -103,7 +101,6 @@ fun LibraryAlbumsScreen(
 
     val (sortType, onSortTypeChange) = rememberEnumPreference(AlbumSortTypeKey, AlbumSortType.CREATE_DATE)
     val (sortDescending, onSortDescendingChange) = rememberPreference(AlbumSortDescendingKey, true)
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
 
     val albums by viewModel.allAlbums.collectAsState()
     val isSyncingLibraryAlbums by viewModel.isSyncingRemoteAlbums.collectAsState()
@@ -115,28 +112,7 @@ fun LibraryAlbumsScreen(
     LaunchedEffect(Unit) { viewModel.syncAlbums() }
 
     val filterContent = @Composable {
-        var showStoragePerm by remember {
-            mutableStateOf(context.checkSelfPermission(MEDIA_PERMISSION_LEVEL) != PackageManager.PERMISSION_GRANTED)
-        }
         Column {
-            if (localLibEnable && showStoragePerm) {
-                TextButton(
-                    onClick = {
-                        showStoragePerm =
-                            false // allow user to hide error when clicked. This also makes the code a lot nicer too...
-                        (context as MainActivity).permissionLauncher.launch(MEDIA_PERMISSION_LEVEL)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.error)
-                ) {
-                    Text(
-                        text = stringResource(R.string.missing_media_permission_warning),
-                        color = Color.White,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-            }
             Row {
                 ChipsRow(
                     chips = listOf(

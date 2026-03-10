@@ -101,7 +101,6 @@ import androidx.navigation.NavController
 import com.dd3boh.outertune.BuildConfig
 import com.dd3boh.outertune.LocalDownloadUtil
 import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.AutomaticScannerKey
 import com.dd3boh.outertune.constants.DEFAULT_ENABLED_FILTERS
 import com.dd3boh.outertune.constants.DEFAULT_ENABLED_TABS
 import com.dd3boh.outertune.constants.DownloadPathKey
@@ -109,13 +108,11 @@ import com.dd3boh.outertune.constants.EnabledFiltersKey
 import com.dd3boh.outertune.constants.EnabledTabsKey
 import com.dd3boh.outertune.constants.InnerTubeCookieKey
 import com.dd3boh.outertune.constants.LibraryFilterKey
-import com.dd3boh.outertune.constants.LocalLibraryEnableKey
 import com.dd3boh.outertune.constants.LyricTrimKey
 import com.dd3boh.outertune.constants.MaxSongCacheSizeKey
 import com.dd3boh.outertune.constants.NavigationBarHeight
 import com.dd3boh.outertune.constants.OOBE_VERSION
 import com.dd3boh.outertune.constants.OobeStatusKey
-import com.dd3boh.outertune.constants.ScanPathsKey
 import com.dd3boh.outertune.constants.ThumbnailCornerRadius
 import com.dd3boh.outertune.ui.component.ListPreference
 import com.dd3boh.outertune.ui.component.PreferenceEntry
@@ -126,7 +123,6 @@ import com.dd3boh.outertune.ui.dialog.ActionPromptDialog
 import com.dd3boh.outertune.ui.dialog.InfoLabel
 import com.dd3boh.outertune.ui.screens.Screens.LibraryFilter
 import com.dd3boh.outertune.ui.screens.settings.fragments.AccountFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.LocalScannerFrag
 import com.dd3boh.outertune.ui.screens.settings.fragments.LocalizationFrag
 import com.dd3boh.outertune.ui.screens.settings.fragments.ThemeAppFrag
 import com.dd3boh.outertune.utils.dlCoroutine
@@ -162,25 +158,6 @@ fun SetupWizard(
     }
     val (ytmSync, onYtmSyncChange) = rememberPreference(LyricTrimKey, defaultValue = true)
 
-    // local media prefs
-    val (localLibEnable, onLocalLibEnableChange) = rememberPreference(LocalLibraryEnableKey, defaultValue = false)
-    val (autoScan, onAutoScanChange) = rememberPreference(AutomaticScannerKey, defaultValue = true)
-    val (enabledTabs, onEnabledTabsChange) = rememberPreference(EnabledTabsKey, defaultValue = DEFAULT_ENABLED_TABS)
-    val (enabledFilters, onEnabledFiltersChange) = rememberPreference(EnabledFiltersKey, defaultValue = DEFAULT_ENABLED_FILTERS)
-
-    LaunchedEffect(localLibEnable) {
-        var containsFolders = enabledTabs.contains('F')
-        if (localLibEnable && !containsFolders) {
-            onEnabledTabsChange(enabledTabs + "F")
-        } else if (!localLibEnable && containsFolders) {
-            onEnabledTabsChange(enabledTabs.filterNot { it == 'F' })
-        }
-
-        containsFolders = enabledFilters.contains('F')
-        if (!localLibEnable && containsFolders) {
-            onEnabledFiltersChange(enabledFilters.filterNot { it == 'F' })
-        }
-    }
 
     BackHandler {
         if (oobeStatus > 0) {
@@ -489,84 +466,14 @@ fun SetupWizard(
                         }
                     }
 
-                    // local media
-                    3 -> {
-                        Icon(
-                            imageVector = Icons.Rounded.LibraryMusic,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(80.dp)
-                                .padding(16.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-
-                        Text(
-                            text = stringResource(R.string.oobe_local_media_title),
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
-                        )
-
-                        Text(
-                            text = stringResource(R.string.oobe_local_media_subtitle),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 32.dp)
-                        )
-
-                        ElevatedCard(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            SwitchPreference(
-                                title = { Text(stringResource(R.string.local_library_enable_title)) },
-                                description = stringResource(R.string.local_library_enable_description),
-                                icon = { Icon(Icons.Rounded.SdCard, null) },
-                                checked = localLibEnable,
-                                onCheckedChange = onLocalLibEnableChange
-                            )
-                        }
-
-                        AnimatedVisibility(localLibEnable) {
-                            Column {
-                                Spacer(modifier = Modifier.height(16.dp))
-                                ElevatedCard(
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    SwitchPreference(
-                                        title = { Text(stringResource(R.string.auto_scanner_title)) },
-                                        description = stringResource(R.string.auto_scanner_description),
-                                        icon = { Icon(Icons.Rounded.Autorenew, null) },
-                                        checked = autoScan,
-                                        onCheckedChange = onAutoScanChange
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
-                                ElevatedCard(
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    PreferenceGroupTitle(
-                                        title = stringResource(R.string.grp_manual_scanner)
-                                    )
-
-
-                                    LocalScannerFrag()
-                                }
-                            }
-
-                        }
-                    }
-
                     // downloads
-                    4 -> {
+                    3 -> {
                         val downloadUtil = LocalDownloadUtil.current
                         val (downloadPath, onDownloadPathChange) = rememberPreference(DownloadPathKey, "")
                         val (maxSongCacheSize, onMaxSongCacheSizeChange) = rememberPreference(
                             key = MaxSongCacheSizeKey,
                             defaultValue = 0
                         )
-                        val (scanPaths, onScanPathsChange) = rememberPreference(ScanPathsKey, defaultValue = "")
 
                         var showDlPathDialog: Boolean by remember {
                             mutableStateOf(false)
@@ -696,35 +603,7 @@ fun SetupWizard(
                                     showDlPathDialog = false
                                     tempFilePath = null
                                 },
-                                isInputValid = uriListFromString(scanPaths).none {
-                                    // download path cannot a scan path, or a subdir of a scan path
-                                    tempFilePath.toString().length <= it.toString().length && tempFilePath.toString()
-                                        .contains(it.toString())
-                                },
-                                modifier = Modifier
-                                    .verticalScroll(rememberScrollState()),
-                            ) {
 
-                                val dirPickerLauncher = rememberLauncherForActivityResult(
-                                    ActivityResultContracts.OpenDocumentTree()
-                                ) { uri ->
-                                    if (tempFilePath.toString() == uri.toString()) return@rememberLauncherForActivityResult
-                                    if (uri?.path != null) {
-                                        // Take persistable URI permission
-                                        val contentResolver = context.contentResolver
-                                        val takeFlags: Int =
-                                            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                                        contentResolver.takePersistableUriPermission(uri, takeFlags)
-
-                                        tempFilePath = uri
-                                    }
-                                }
-
-                                val valid = uriListFromString(scanPaths).none {
-                                    // download path cannot a scan path, or a subdir of a scan path
-                                    tempFilePath.toString().length <= it.toString().length && tempFilePath.toString()
-                                        .contains(it.toString())
-                                }
 
                                 Text(
                                     text = stringResource(R.string.dl_main_path_description),
@@ -777,7 +656,7 @@ fun SetupWizard(
                     }
 
                     // exit page
-                    5 -> {
+                    4 -> {
                         Column(
                             modifier = Modifier.fillMaxSize(),
                             horizontalAlignment = Alignment.CenterHorizontally,
