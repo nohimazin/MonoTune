@@ -69,7 +69,6 @@ import com.dd3boh.outertune.ui.component.SettingsClickToReveal
 import com.dd3boh.outertune.ui.component.button.IconButton
 import com.dd3boh.outertune.ui.component.button.IconLabelButton
 import com.dd3boh.outertune.ui.utils.backToMain
-import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.FfmpegLibrary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
