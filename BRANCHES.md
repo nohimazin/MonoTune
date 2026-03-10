@@ -52,7 +52,7 @@ All historical `v0.6.x`–`v0.9.x` tags and `v0.10.0`, `v0.10.1` are kept unchan
 |------|--------|
 | App rebrand (MonoTune name, namespace) | ✅ Done |
 | Local audio scanning / playback — **UI default** | ✅ `LocalLibraryEnableKey` now defaults to `false`; new installs do not enable scanning |
-| Local audio scanning / playback — **code removal** | 🔲 Pending — scanner classes (`utils/scanners/`), `LocalMediaSettingsFrag`, `LocalPlayerSettings`, DB fields (`isLocal`, `localPath`), and storage permissions in `AndroidManifest.xml` are still in-tree |
+| Local audio scanning / playback — **code removal** | ✅ Done — scanner classes, settings fragments, `LocalPlayerSettings`, storage permissions, `DirectoryTree`, `FolderScreen`, OOBE page removed; DB fields (`isLocal`, `localPath`) retained for downloaded-song tracking |
 | YouTube Music search, playlists, likes, history | ✅ Retained |
 | Monochrome integration layer (`MonochromeClient`, DB entities) | ✅ Stub in place |
 | Monochrome API connection | 🔲 Pending (backend spec not yet finalised) |

@@ -115,8 +115,8 @@ To make everyone's life easier, there are a set of guidelines that are to be fol
 | monochrome     | Monochrome integration work |
 
 > **Note:** The `lm` (local library) and `scanner` tags from the OuterTune upstream are
-> **deprecated** for MonoTune.  New commits should not use them; local-media removal work
-> should use the `cleanup` or `monotune` tag as appropriate.
+> **removed** for MonoTune.  Local-media scanning has been fully stripped from the codebase.
+> New commits should not use `lm` or `scanner` tags.
 
 | Tag (Misc)    | Description                                                                                      |
 |---------------|--------------------------------------------------------------------------------------------------|

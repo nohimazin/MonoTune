@@ -603,7 +603,24 @@ fun SetupWizard(
                                     showDlPathDialog = false
                                     tempFilePath = null
                                 },
+                                isInputValid = true,
+                                modifier = Modifier
+                                    .verticalScroll(rememberScrollState()),
+                            ) {
+                                val dirPickerLauncher = rememberLauncherForActivityResult(
+                                    ActivityResultContracts.OpenDocumentTree()
+                                ) { uri ->
+                                    if (tempFilePath.toString() == uri.toString()) return@rememberLauncherForActivityResult
+                                    if (uri?.path != null) {
+                                        val contentResolver = context.contentResolver
+                                        val takeFlags: Int =
+                                            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                                        contentResolver.takePersistableUriPermission(uri, takeFlags)
+                                        tempFilePath = uri
+                                    }
+                                }
 
+                                val valid = true
 
                                 Text(
                                     text = stringResource(R.string.dl_main_path_description),

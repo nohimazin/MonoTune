@@ -107,7 +107,7 @@ fun scanDfRecursive(
     result: ArrayList<DocumentFile>,
     scanHidden: Boolean = false,
     validator: ((DocumentFile) -> Boolean)? = null
-): DocumentFile? {
+) {
     val files = dir.listFiles()
     for (file in files) {
         if (!scanHidden && file.name?.startsWith(".") == true) continue
@@ -119,5 +119,4 @@ fun scanDfRecursive(
             }
         }
     }
-    return null
 }

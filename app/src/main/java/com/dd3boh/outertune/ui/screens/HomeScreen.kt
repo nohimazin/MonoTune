@@ -391,6 +391,17 @@ fun HomeScreen(
                         modifier = Modifier.weight(1f)
                     )
 
+                    NavigationTile(
+                        title = stringResource(R.string.account),
+                        icon = Icons.Rounded.Person,
+                        onClick = {
+                            navController.navigate("account")
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
             item {
                 ChipsRow(
                     chips = homePage?.chips?.mapNotNull { it to it.title } ?: emptyList(),
