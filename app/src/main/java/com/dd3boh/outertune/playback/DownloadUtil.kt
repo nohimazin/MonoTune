@@ -40,7 +40,6 @@ import com.dd3boh.outertune.utils.dlCoroutine
 import com.dd3boh.outertune.utils.enumPreference
 import com.dd3boh.outertune.utils.get
 import com.dd3boh.outertune.utils.reportException
-import com.dd3boh.outertune.utils.scanners.InvalidAudioFileException
 import com.dd3boh.outertune.utils.scanners.fileFromUri
 import com.dd3boh.outertune.utils.scanners.uriListFromString
 import com.zionhuang.innertube.YouTube
@@ -389,7 +388,7 @@ class DownloadUtil @Inject constructor(
             availableFiles.forEach { f ->
                 try {
                     val file = fileFromUri(context, f.value)
-                    if (file == null) throw (InvalidAudioFileException("Hello darkness my old friend"))
+                    if (file == null) throw (IOException("Cannot resolve download file path"))
                     // TODO: validate files in download folder
 //                        val format: FormatEntity? = scanner.advancedScan(f.value).format
 //                        if (format != null) {
@@ -397,7 +396,7 @@ class DownloadUtil @Inject constructor(
 //                        }
                     registerDownloadSong(f.key, timeNow, file.absolutePath)
 
-                } catch (e: InvalidAudioFileException) {
+                } catch (e: IOException) {
                     reportException(e)
                 }
             }
