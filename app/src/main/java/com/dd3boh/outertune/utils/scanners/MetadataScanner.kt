@@ -14,7 +14,11 @@ import java.io.File
 
 
 /**
- * Returns metadata information
+ * Returns metadata information.
+ *
+ * **MonoTune deprecation notice:** This interface and all its implementations
+ * ([TagLibScanner], [FFmpegScanner], [MediaStoreExtractor]) are part of the local-media
+ * scanner that is scheduled for removal. See [LocalMediaScanner] for details.
  */
 interface MetadataScanner {
 

@@ -103,7 +103,7 @@ fun LibraryAlbumsScreen(
 
     val (sortType, onSortTypeChange) = rememberEnumPreference(AlbumSortTypeKey, AlbumSortType.CREATE_DATE)
     val (sortDescending, onSortDescendingChange) = rememberPreference(AlbumSortDescendingKey, true)
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = true)
+    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
 
     val albums by viewModel.allAlbums.collectAsState()
     val isSyncingLibraryAlbums by viewModel.isSyncingRemoteAlbums.collectAsState()

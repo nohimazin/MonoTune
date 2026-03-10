@@ -145,7 +145,7 @@ fun FolderScreen(
 
     val (flatSubfolders, onFlatSubfoldersChange) = rememberPreference(FlatSubfoldersKey, defaultValue = true)
     val lastLocalScan by rememberPreference(LastLocalScanKey, 0L)
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = true)
+    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
 
     val (sortType, onSortTypeChange) = rememberEnumPreference(FolderSongSortTypeKey, FolderSongSortType.NAME)
     val (sortDescending, onSortDescendingChange) = rememberPreference(FolderSongSortDescendingKey, true)

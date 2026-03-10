@@ -107,7 +107,7 @@ fun LibraryPlaylistsScreen(
 
     var filter by rememberEnumPreference(PlaylistFilterKey, PlaylistFilter.LIBRARY)
     libraryFilterContent?.let { filter = PlaylistFilter.LIBRARY }
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = true)
+    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
 
     var playlistViewType by rememberEnumPreference(PlaylistViewTypeKey, LibraryViewType.GRID)
     val libraryViewType by rememberEnumPreference(LibraryViewTypeKey, LibraryViewType.GRID)

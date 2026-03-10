@@ -32,9 +32,9 @@ data class SongEntity(
     val thumbnailUrl: String? = null,
     val inLibrary: LocalDateTime? = null, // doubles as "date added"
     @ColumnInfo(name = "isLocal", defaultValue = false.toString())
-    val isLocal: Boolean = false,
+    val isLocal: Boolean = false, // TODO(MonoTune): remove with local-media scanner
     @ColumnInfo(index = true)
-    val localPath: String?,
+    val localPath: String?, // TODO(MonoTune): remove with local-media scanner
     val dateDownload: LocalDateTime? = null, // doubles as "isDownloaded" for new downloader system
     val liked: Boolean = false,
     val likedDate: LocalDateTime? = null,

@@ -153,7 +153,7 @@ fun HomeScreen(
     val quickPicksLazyGridState = rememberLazyGridState()
     val forgottenFavoritesLazyGridState = rememberLazyGridState()
 
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = true)
+    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
 
     val scope = rememberCoroutineScope()
     val lazylistState = rememberLazyListState()

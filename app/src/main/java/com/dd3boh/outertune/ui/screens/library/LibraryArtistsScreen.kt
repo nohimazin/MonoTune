@@ -93,7 +93,7 @@ fun LibraryArtistsScreen(
     val coroutineScope = rememberCoroutineScope()
 
     var filter by rememberEnumPreference(ArtistFilterKey, ArtistFilter.LIKED)
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = true)
+    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
 
     var artistViewType by rememberEnumPreference(ArtistViewTypeKey, LibraryViewType.GRID)
     val libraryViewType by rememberEnumPreference(LibraryViewTypeKey, LibraryViewType.GRID)

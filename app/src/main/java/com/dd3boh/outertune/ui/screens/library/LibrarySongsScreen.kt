@@ -108,7 +108,7 @@ fun LibrarySongsScreen(
     val strQueueAllSongs = stringResource(R.string.queue_all_songs)
 
     var filter by rememberEnumPreference(SongFilterKey, SongFilter.LIKED)
-    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = true)
+    val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = false)
     val (sortType, onSortTypeChange) = rememberEnumPreference(SongSortTypeKey, SongSortType.CREATE_DATE)
     val (sortDescending, onSortDescendingChange) = rememberPreference(SongSortDescendingKey, true)
     val swipeEnabled by rememberPreference(SwipeToQueueKey, true)
