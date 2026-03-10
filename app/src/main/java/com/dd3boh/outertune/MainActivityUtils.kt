@@ -119,6 +119,15 @@ fun youtubeNavigator(
     return true
 }
 
+/**
+ * Initialises the local-media and downloads scanner on app startup.
+ *
+ * TODO(MonoTune): The local-media scan path (everything gated on [localLibEnable]) is
+ *   scheduled for removal once the scanner is stripped.  [localLibEnable] now defaults to
+ *   `false` so new installs do not trigger a scan.  Only the download-folder path
+ *   ([DownloadUtil.scanDownloads]) is a long-term requirement for MonoTune.
+ *   See BRANCHES.md § "Migration Status" for the removal plan.
+ */
 suspend fun scanInit(
     context: Context,
     database: MusicDatabase,
@@ -129,7 +138,7 @@ suspend fun scanInit(
 ) {
     val MAIN_TAG = "MainOtActivity"
     val oobeStatus = context.dataStore.get(OobeStatusKey, defaultValue = 0)
-    val localLibEnable = context.dataStore.get(LocalLibraryEnableKey, defaultValue = true)
+    val localLibEnable = context.dataStore.get(LocalLibraryEnableKey, defaultValue = false)
     val ds = context.dataStore.data.first()[ScannerSensitivityKey]
 //        .map { it[SkipSilenceKey] ?: false }
     // auto scanner

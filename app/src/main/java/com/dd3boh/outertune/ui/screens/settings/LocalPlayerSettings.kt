@@ -68,7 +68,7 @@ fun LocalPlayerSettings(
     val (autoScan, onAutoScanChange) = rememberPreference(AutomaticScannerKey, defaultValue = true)
     val (enabledFilters, onEnabledFiltersChange) = rememberPreference(EnabledFiltersKey, defaultValue = DEFAULT_ENABLED_FILTERS)
     val (enabledTabs, onEnabledTabsChange) = rememberPreference(EnabledTabsKey, defaultValue = DEFAULT_ENABLED_TABS)
-    val (localLibEnable, onLocalLibEnableChange) = rememberPreference(LocalLibraryEnableKey, defaultValue = true)
+    val (localLibEnable, onLocalLibEnableChange) = rememberPreference(LocalLibraryEnableKey, defaultValue = false)
 
     LaunchedEffect(localLibEnable) {
         var containsFolders = enabledTabs.contains('F')
@@ -92,6 +92,12 @@ fun LocalPlayerSettings(
             .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
+        InfoLabel(
+            text = stringResource(R.string.local_media_deprecation_notice),
+            isError = true,
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+        )
+
         SwitchPreference(
             title = { Text(stringResource(R.string.local_library_enable_title)) },
             description = stringResource(R.string.local_library_enable_description),

@@ -71,6 +71,17 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
+/**
+ * Local media scanner implementation inherited from OuterTune.
+ *
+ * **MonoTune deprecation notice:** Local audio scanning and offline local-file playback are
+ * not goals for MonoTune.  This class, and the entire `utils/scanners/` package, is scheduled
+ * for removal once the migration to Monochrome as the playback backend is complete.
+ * Do not add new callers or expand this class's functionality.
+ *
+ * See `BRANCHES.md` in the project root § "Migration Status" for the
+ * current removal status.
+ */
 class LocalMediaScanner(val context: Context, scannerImpl: ScannerImpl) {
     private val TAG = LocalMediaScanner::class.simpleName.toString()
     private var advancedScannerImpl: MetadataScanner = when (scannerImpl) {

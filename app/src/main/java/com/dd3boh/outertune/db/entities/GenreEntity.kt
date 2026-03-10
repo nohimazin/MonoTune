@@ -20,7 +20,7 @@ class GenreEntity(
     val shuffleEndpointParams: String? = null,
     val radioEndpointParams: String? = null,
     @ColumnInfo(name = "isLocal", defaultValue = false.toString())
-    val isLocal: Boolean = false,
+    val isLocal: Boolean = false, // TODO(MonoTune): remove with local-media scanner
     // In hopes of not having to modify the database again, I barf vals
 ) {
 

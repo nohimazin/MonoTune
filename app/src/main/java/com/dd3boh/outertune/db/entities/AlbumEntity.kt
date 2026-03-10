@@ -26,7 +26,7 @@ data class AlbumEntity(
     val lastUpdateTime: LocalDateTime = LocalDateTime.now(),
     val bookmarkedAt: LocalDateTime? = null,
     @ColumnInfo(name = "isLocal", defaultValue = false.toString())
-    val isLocal: Boolean = false
+    val isLocal: Boolean = false // TODO(MonoTune): remove with local-media scanner
 ) {
 
     fun localToggleLike() = copy(
