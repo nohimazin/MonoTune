@@ -38,8 +38,8 @@ see https://github.com/OuterTune/ffMetadataEx/blob/main/README.md#building
 
 ## Translations
 
-We use Weblate to translate MonoTune (inherited from the OuterTune upstream). For more details or to get started,
-visit [our Weblate page](https://hosted.weblate.org/projects/outertune/).
+MonoTune shares the Weblate translation project with the OuterTune upstream.
+For more details or to get started, visit [the Weblate page](https://hosted.weblate.org/projects/outertune/).
 Thank you for the libre tier!
 
 ### Important
