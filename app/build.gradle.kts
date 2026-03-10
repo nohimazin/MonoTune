@@ -8,7 +8,6 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
-    kotlin("android")
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.compose.compiler)
@@ -22,10 +21,10 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    // Namespace and applicationId updated to com.nohimazin.monotune for MonoTune.
-    // Note: Kotlin source package declarations (com.dd3boh.outertune.*) are intentionally
-    // not renamed here; that is a separate incremental refactoring task.
-    namespace = "com.nohimazin.monotune"
+    // namespace matches the source package so that the generated R and BuildConfig classes
+    // are importable as com.dd3boh.outertune.R / com.dd3boh.outertune.BuildConfig.
+    // applicationId (below) is the distinct MonoTune store/device identifier.
+    namespace = "com.dd3boh.outertune"
     compileSdk = 36
 
     defaultConfig {
@@ -108,16 +107,6 @@ android {
         create("full") {
             dimension = "abi"
         }
-    }
-
-    applicationVariants.all {
-        val variant = this
-        variant.outputs
-            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
-            .forEach { output ->
-                var outputFileName = "MonoTune-${variant.versionName}-${output.baseName}-${output.versionCode}.apk"
-                output.outputFileName = outputFileName
-            }
     }
 
     compileOptions {

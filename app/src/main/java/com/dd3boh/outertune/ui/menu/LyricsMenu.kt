@@ -85,6 +85,8 @@ fun LyricsMenu(
 
     val multilineLrc by rememberPreference(MultilineLrcKey, defaultValue = true)
     val lyricTrim by rememberPreference(LyricTrimKey, defaultValue = false)
+    val strErrorNoInternet = stringResource(R.string.error_no_internet)
+    val strLyricsNotFound = stringResource(R.string.lyrics_not_found)
 
     var showEditDialog by rememberSaveable {
         mutableStateOf(false)
@@ -295,9 +297,9 @@ fun LyricsMenu(
                 item {
                     Text(
                         text = if (!context.isInternetConnected()) {
-                            context.getString(R.string.error_no_internet)
+                            strErrorNoInternet
                         } else {
-                            context.getString(R.string.lyrics_not_found)
+                            strLyricsNotFound
                         },
                         textAlign = TextAlign.Center,
                         modifier = Modifier

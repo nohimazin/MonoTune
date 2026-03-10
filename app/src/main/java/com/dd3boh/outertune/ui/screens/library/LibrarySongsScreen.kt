@@ -105,6 +105,8 @@ fun LibrarySongsScreen(
     val playerConnection = LocalPlayerConnection.current ?: return
     val snackbarHostState = LocalSnackbarHostState.current
 
+    val strQueueAllSongs = stringResource(R.string.queue_all_songs)
+
     var filter by rememberEnumPreference(SongFilterKey, SongFilter.LIKED)
     val localLibEnable by rememberPreference(LocalLibraryEnableKey, defaultValue = true)
     val (sortType, onSortTypeChange) = rememberEnumPreference(SongSortTypeKey, SongSortType.CREATE_DATE)
@@ -236,7 +238,7 @@ fun LibrarySongsScreen(
                                 action = {
                                     playerConnection.playQueue(
                                         ListQueue(
-                                            title = context.getString(R.string.queue_all_songs),
+                                            title = strQueueAllSongs,
                                             items = songs.map { it.toMediaMetadata() },
                                             startShuffled = false,
                                         )
@@ -249,7 +251,7 @@ fun LibrarySongsScreen(
                                 action = {
                                     playerConnection.playQueue(
                                         ListQueue(
-                                            title = context.getString(R.string.queue_all_songs),
+                                            title = strQueueAllSongs,
                                             items = songs.map { it.toMediaMetadata() },
                                             startShuffled = true,
                                         )
@@ -362,7 +364,7 @@ fun LibrarySongsScreen(
                         onPlay = {
                             playerConnection.playQueue(
                                 ListQueue(
-                                    title = context.getString(R.string.queue_all_songs),
+                                    title = strQueueAllSongs,
                                     items = songs.map { it.toMediaMetadata() },
                                     startIndex = index
                                 )

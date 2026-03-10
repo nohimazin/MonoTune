@@ -498,6 +498,7 @@ fun DetailsDialog(
     setVisibility: (newState: Boolean) -> Unit,
 ) {
     val context = LocalContext.current
+    val msgCopied = stringResource(R.string.copied)
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = LocalSnackbarHostState.current
 
@@ -599,7 +600,7 @@ fun DetailsDialog(
                                 coroutineScope.launch {
                                     val job = launch {
                                         snackbarHostState.showSnackbar(
-                                            message = context.getString(R.string.copied),
+                                            message = msgCopied,
                                             withDismissAction = true,
                                             duration = SnackbarDuration.Indefinite
                                         )

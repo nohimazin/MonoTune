@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - canary
+      - dev
   pull_request:
     branches:
       - '**'

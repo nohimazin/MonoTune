@@ -90,7 +90,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun ColumnScope.BackupAndRestoreFrag(viewModel: BackupRestoreViewModel) {
-    val context = LocalContext.current
+    val strAppName = stringResource(R.string.app_name)
 
     val backupLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
@@ -113,7 +113,7 @@ fun ColumnScope.BackupAndRestoreFrag(viewModel: BackupRestoreViewModel) {
             onClick = {
                 val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
                 backupLauncher.launch(
-                    "${context.getString(R.string.app_name)}_${MusicDatabase.MUSIC_DATABASE_VERSION}_${
+                    "${strAppName}_${MusicDatabase.MUSIC_DATABASE_VERSION}_${
                         LocalDateTime.now().format(formatter)
                     }.backup"
                 )

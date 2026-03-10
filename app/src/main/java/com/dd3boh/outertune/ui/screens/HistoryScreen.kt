@@ -53,7 +53,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -109,7 +108,6 @@ fun HistoryScreen(
 ) {
     val database = LocalDatabase.current
     val density = LocalDensity.current
-    val context = LocalContext.current
     val menuState = LocalMenuState.current
     val playerConnection = LocalPlayerConnection.current ?: return
     val isPlaying by playerConnection.isPlaying.collectAsState()
@@ -118,6 +116,13 @@ fun HistoryScreen(
     val swipeEnabled by rememberPreference(SwipeToQueueKey, true)
 
     val snackbarHostState = LocalSnackbarHostState.current
+
+    val strToday = stringResource(R.string.today)
+    val strYesterday = stringResource(R.string.yesterday)
+    val strThisWeek = stringResource(R.string.this_week)
+    val strLastWeek = stringResource(R.string.last_week)
+    val strQueueRemoteHistory = stringResource(R.string.queue_remote_history)
+    val strQueueLocalHistory = stringResource(R.string.queue_local_history)
 
     val historySource by viewModel.historySource.collectAsState()
     var isSearching by rememberSaveable { mutableStateOf(false) }
@@ -171,10 +176,10 @@ fun HistoryScreen(
 
     fun dateAgoToString(dateAgo: DateAgo): String {
         return when (dateAgo) {
-            DateAgo.Today -> context.getString(R.string.today)
-            DateAgo.Yesterday -> context.getString(R.string.yesterday)
-            DateAgo.ThisWeek -> context.getString(R.string.this_week)
-            DateAgo.LastWeek -> context.getString(R.string.last_week)
+            DateAgo.Today -> strToday
+            DateAgo.Yesterday -> strYesterday
+            DateAgo.ThisWeek -> strThisWeek
+            DateAgo.LastWeek -> strLastWeek
             is DateAgo.Other -> dateAgo.date.format(DateTimeFormatter.ofPattern("yyyy/MM"))
         }
     }
@@ -330,7 +335,7 @@ fun HistoryScreen(
                                             } else {
                                                 playerConnection.playQueue(
                                                     ListQueue(
-                                                        title = context.getString(R.string.queue_remote_history),
+                                                        title = strQueueRemoteHistory,
                                                         items = section.songs.map { it.toMediaMetadata() }
                                                     )
                                                 )
@@ -404,7 +409,7 @@ fun HistoryScreen(
                                 } else {
                                     playerConnection.playQueue(
                                         ListQueue(
-                                            title = "${context.getString(R.string.queue_local_history)}: ${
+                                            title = "$strQueueLocalHistory: ${
                                                 dateAgoToString(
                                                     dateAgo
                                                 )
