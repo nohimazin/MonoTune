@@ -111,7 +111,6 @@ import com.dd3boh.outertune.ui.menu.AlbumMenu
 import com.dd3boh.outertune.ui.menu.YouTubeAlbumMenu
 import com.dd3boh.outertune.ui.utils.backToMain
 import com.dd3boh.outertune.ui.utils.getNSongsString
-import com.dd3boh.outertune.utils.LocalArtworkPath
 import com.dd3boh.outertune.utils.getDownloadState
 import com.dd3boh.outertune.utils.joinByBullet
 import com.dd3boh.outertune.utils.rememberPreference
@@ -167,8 +166,7 @@ fun AlbumScreen(
     }
 
     LaunchedEffect(albumWithSongs) {
-        if (albumWithSongs?.album?.isLocal != false) return@LaunchedEffect
-        val songs = albumWithSongs?.songs?.filterNot { it.song.isLocal }?.map { it.id }
+        val songs = albumWithSongs?.songs?.map { it.id }
         if (songs.isNullOrEmpty()) return@LaunchedEffect
         downloadUtil.downloads.collect { downloads ->
             downloadState = getDownloadState(songs.map { downloads[it] })
@@ -191,13 +189,8 @@ fun AlbumScreen(
                     ) {
                         val thumbnailUrl = albumWithSongsLocal.album.thumbnailUrl
                         if (thumbnailUrl != null) {
-                            val px = (AlbumThumbnailSize.value * density.density).roundToInt()
                             AsyncImage(
-                                model = if (thumbnailUrl.startsWith("/storage")) LocalArtworkPath(
-                                    thumbnailUrl,
-                                    px,
-                                    px
-                                ) else thumbnailUrl,
+                                model = thumbnailUrl,
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(AlbumThumbnailSize)
@@ -283,8 +276,7 @@ fun AlbumScreen(
                                     )
                                 }
 
-                                if (albumWithSongsLocal.album.isLocal == false) {
-                                    when (downloadState) {
+                                when (downloadState) {
                                         Download.STATE_COMPLETED -> {
                                             IconButton(
                                                 onClick = {
@@ -340,7 +332,6 @@ fun AlbumScreen(
                                             }
                                         }
                                     }
-                                }
 
                                 IconButton(
                                     onClick = {

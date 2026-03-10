@@ -179,7 +179,6 @@ import com.dd3boh.outertune.ui.utils.appBarScrollBehavior
 import com.dd3boh.outertune.utils.ActivityLauncherHelper
 import com.dd3boh.outertune.utils.NetworkConnectivityObserver
 import com.dd3boh.outertune.utils.SyncUtils
-import com.dd3boh.outertune.utils.lmScannerCoroutine
 import com.dd3boh.outertune.utils.rememberEnumPreference
 import com.dd3boh.outertune.utils.rememberPreference
 import com.valentinilk.shimmer.LocalShimmerTheme
@@ -283,7 +282,7 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(Unit) {
                 // local media & download folders auto scan
-                coroutineScope.launch(lmScannerCoroutine) {
+                coroutineScope.launch {
                     scanInit(
                         this@MainActivity, database, downloadUtil, coroutineScope, playerConnection,
                         snackbarHostState

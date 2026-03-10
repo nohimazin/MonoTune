@@ -147,10 +147,7 @@ fun SongMenu(
                     database.query {
                         update(s)
                     }
-
-                    if (!s.isLocal) {
-                        syncUtils.likeSong(s)
-                    }
+                    syncUtils.likeSong(s)
                 }
             ) {
                 Icon(
@@ -172,14 +169,13 @@ fun SongMenu(
             bottom = 8.dp + WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
         )
     ) {
-        if (!song.song.isLocal)
-            GridMenuItem(
-                icon = Icons.Rounded.Radio,
-                title = R.string.start_radio
-            ) {
-                onDismiss()
-                playerConnection.playQueue(YouTubeQueue.radio(song.toMediaMetadata()), isRadio = true)
-            }
+        GridMenuItem(
+            icon = Icons.Rounded.Radio,
+            title = R.string.start_radio
+        ) {
+            onDismiss()
+            playerConnection.playQueue(YouTubeQueue.radio(song.toMediaMetadata()), isRadio = true)
+        }
 
         GridMenuItem(
             icon = Icons.Rounded.PlayArrow,
@@ -219,9 +215,7 @@ fun SongMenu(
             showChoosePlaylistDialog = true
         }
 
-        if (playlistSong != null && (playlist?.playlist?.isLocal == true
-                    || (playlistSong.song.song.isLocal || syncMode == SyncMode.RW))
-        ) {
+        if (playlistSong != null && (playlist?.playlist?.isLocal == true || syncMode == SyncMode.RW)) {
             GridMenuItem(
                 icon = Icons.Rounded.PlaylistRemove,
                 title = R.string.remove_from_playlist
@@ -245,8 +239,7 @@ fun SongMenu(
             }
         }
 
-        if (!song.song.isLocal)
-            DownloadGridMenu(
+        DownloadGridMenu(
                 localDateTime = download,
                 onDownload = {
                     downloadUtil.download(song.toMediaMetadata())
@@ -277,7 +270,7 @@ fun SongMenu(
                 showSelectArtistDialog = true
             }
         }
-        if (song.song.albumId != null && !song.song.isLocal) {
+        if (song.song.albumId != null) {
             GridMenuItem(
                 icon = Icons.Rounded.Album,
                 title = R.string.view_album
@@ -286,43 +279,40 @@ fun SongMenu(
                 navController.navigate("album/${song.song.albumId}")
             }
         }
-        if (!song.song.isLocal)
-            GridMenuItem(
-                icon = Icons.Rounded.Share,
-                title = R.string.share
-            ) {
-                onDismiss()
-                val intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, "https://music.youtube.com/watch?v=${song.id}")
-                }
-                context.startActivity(Intent.createChooser(intent, null))
+        GridMenuItem(
+            icon = Icons.Rounded.Share,
+            title = R.string.share
+        ) {
+            onDismiss()
+            val intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, "https://music.youtube.com/watch?v=${song.id}")
             }
+            context.startActivity(Intent.createChooser(intent, null))
+        }
         GridMenuItem(
             icon = Icons.Rounded.Info,
             title = R.string.details
         ) {
             showDetailsDialog = true
         }
-        if (!song.song.isLocal) {
-            if (song.song.inLibrary == null) {
-                GridMenuItem(
-                    icon = Icons.Rounded.LibraryAdd,
-                    title = R.string.add_to_library
-                ) {
-                    database.query {
-                        update(song.song.toggleLibrary())
-                    }
+        if (song.song.inLibrary == null) {
+            GridMenuItem(
+                icon = Icons.Rounded.LibraryAdd,
+                title = R.string.add_to_library
+            ) {
+                database.query {
+                    update(song.song.toggleLibrary())
                 }
-            } else {
-                GridMenuItem(
-                    icon = Icons.Rounded.LibraryAddCheck,
-                    title = R.string.remove_from_library
-                ) {
-                    database.query {
-                        update(song.song.toggleLibrary())
-                    }
+            }
+        } else {
+            GridMenuItem(
+                icon = Icons.Rounded.LibraryAddCheck,
+                title = R.string.remove_from_library
+            ) {
+                database.query {
+                    update(song.song.toggleLibrary())
                 }
             }
         }

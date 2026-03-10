@@ -66,11 +66,8 @@ fun SelectionMediaMetadataMenu(
     val queueBoard by playerConnection.queueBoard.collectAsState()
     val syncUtils = LocalSyncUtils.current
 
-    val allInLibrary by remember(selection) { // exclude local songs
-        mutableStateOf(selection.isNotEmpty() && selection.all { !it.isLocal && it.inLibrary != null })
-    }
-    val allLocal by remember(selection) { // if only local songs in this selection
-        mutableStateOf(selection.isNotEmpty() && selection.all { it.isLocal })
+    val allInLibrary by remember(selection) {
+        mutableStateOf(selection.isNotEmpty() && selection.all { it.inLibrary != null })
     }
 
     val allLiked by remember(selection) {
@@ -95,7 +92,6 @@ fun SelectionMediaMetadataMenu(
         if (selection.isEmpty()) {
             onDismiss()
         } else {
-            val selection = selection.filterNot { it.isLocal }
             if (selection.isEmpty()) return@LaunchedEffect
             downloadUtil.downloads.collect { downloads ->
                 downloadState = getDownloadState(selection.map { downloads[it.id] })
@@ -164,8 +160,7 @@ fun SelectionMediaMetadataMenu(
             showChoosePlaylistDialog = true
         }
 
-        if (!allLocal) {
-            if (allInLibrary) {
+        if (allInLibrary) {
                 GridMenuItem(
                     icon = Icons.Rounded.LibraryAddCheck,
                     title = R.string.remove_all_from_library
@@ -183,14 +178,11 @@ fun SelectionMediaMetadataMenu(
                 ) {
                     database.transaction {
                         selection.forEach { song ->
-                            if (!song.isLocal) {
-                                toggleInLibrary(song.id, LocalDateTime.now())
-                            }
+                            toggleInLibrary(song.id, LocalDateTime.now())
                         }
                     }
                 }
             }
-        }
 
         GridMenuItem(
             icon = if (allLiked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
@@ -202,17 +194,13 @@ fun SelectionMediaMetadataMenu(
                     selection.forEach { song ->
                         val s = song.toSongEntity().toggleLike()
                         update(s)
-                        if (!s.isLocal) {
-                            syncUtils.likeSong(s)
-                        }
+                        syncUtils.likeSong(s)
                     }
                 } else {
                     selection.filter { !it.liked }.forEach { song ->
                         val s = song.toSongEntity().toggleLike()
                         update(s)
-                        if (!s.isLocal) {
-                            syncUtils.likeSong(s)
-                        }
+                        syncUtils.likeSong(s)
                     }
                 }
             }
@@ -221,8 +209,7 @@ fun SelectionMediaMetadataMenu(
         DownloadGridMenu(
             state = downloadState,
             onDownload = {
-                val songs = selection.filterNot { it.isLocal }
-                downloadUtil.download(songs)
+                downloadUtil.download(selection)
             },
             onRemoveDownload = {
                 showRemoveDownloadDialog = true

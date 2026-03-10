@@ -57,7 +57,6 @@ import com.dd3boh.outertune.BuildConfig
 import com.dd3boh.outertune.R
 import com.dd3boh.outertune.constants.ENABLE_FFMETADATAEX
 import com.dd3boh.outertune.constants.LYRIC_FETCH_TIMEOUT
-import com.dd3boh.outertune.constants.MAX_LM_SCANNER_JOBS
 import com.dd3boh.outertune.constants.OOBE_VERSION
 import com.dd3boh.outertune.constants.SNACKBAR_VERY_SHORT
 import com.dd3boh.outertune.constants.TopBarInsets
@@ -70,7 +69,6 @@ import com.dd3boh.outertune.ui.component.SettingsClickToReveal
 import com.dd3boh.outertune.ui.component.button.IconButton
 import com.dd3boh.outertune.ui.component.button.IconLabelButton
 import com.dd3boh.outertune.ui.utils.backToMain
-import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.FfmpegLibrary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

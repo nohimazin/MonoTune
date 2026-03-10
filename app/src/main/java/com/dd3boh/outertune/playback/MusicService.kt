@@ -144,7 +144,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
-import java.io.File
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -416,10 +415,7 @@ class MusicService : MediaLibraryService(),
             currentSong.value?.let {
                 val song = it.song.toggleLike()
                 update(song)
-
-                if (!song.isLocal) {
-                    syncUtils.likeSong(song)
-                }
+                syncUtils.likeSong(song)
             }
         }
     }
@@ -644,9 +640,8 @@ class MusicService : MediaLibraryService(),
                     )
                     .setCacheWriteDataSinkFactory(
                         HybridCacheDataSinkFactory(playerCache) { dataSpec ->
-                            val isLocal = queueBoard.value.getCurrentQueue()?.findSong(dataSpec.key ?: "")?.isLocal == true
-                            Log.d(TAG, "SONG CACHE: ${!isLocal}")
-                            !isLocal
+                            Log.d(TAG, "SONG CACHE: true")
+                            true
                         }
                     )
                     .setFlags(FLAG_IGNORE_CACHE_ON_ERROR)
@@ -665,26 +660,12 @@ class MusicService : MediaLibraryService(),
             if (song == null) { // in the case of resumption, queueBoard may not be ready yet
                 song = runBlocking { database.song(dataSpec.key).first()?.toMediaMetadata() }
             }
-            // local song
+            // downloaded song path
             if (song?.localPath != null) {
-                if (song.isLocal) {
-                    Log.d(TAG, "PLAYING: local song")
-                    val file = File(song.localPath)
-                    if (!file.exists()) {
-                        throw PlaybackException(
-                            "File not found",
-                            Throwable(),
-                            PlaybackException.ERROR_CODE_IO_FILE_NOT_FOUND
-                        )
-                    }
-
-                    return@Factory dataSpec.withUri(file.toUri())
-                } else {
-                    val isDownloadNew = downloadUtil.localMgr.getFilePathIfExists(mediaId)
-                    isDownloadNew?.let {
-                        Log.d(TAG, "PLAYING: Custom downloaded song")
-                        return@Factory dataSpec.withUri(it)
-                    }
+                val isDownloadNew = downloadUtil.localMgr.getFilePathIfExists(mediaId)
+                isDownloadNew?.let {
+                    Log.d(TAG, "PLAYING: Custom downloaded song")
+                    return@Factory dataSpec.withUri(it)
                 }
             }
 
@@ -1050,7 +1031,7 @@ class MusicService : MediaLibraryService(),
                 }
 
                 // TODO: support playlist id
-                val ytHist = mediaItem.metadata?.isLocal != true && !dataStore.get(PauseRemoteListenHistoryKey, false)
+                val ytHist = !dataStore.get(PauseRemoteListenHistoryKey, false)
                 Log.d(TAG, "Trying to register remote history: $ytHist")
                 if (ytHist) {
                     val playbackUrl = YTPlayerUtils.playerResponseForMetadata(mediaItem.mediaId, null)

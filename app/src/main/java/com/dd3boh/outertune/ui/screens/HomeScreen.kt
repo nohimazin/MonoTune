@@ -36,7 +36,6 @@ import androidx.compose.material.icons.automirrored.rounded.TrendingUp
 import androidx.compose.material.icons.rounded.Casino
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.SdCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
@@ -186,16 +185,7 @@ fun HomeScreen(
                                 playerConnection.player.togglePlayPause()
                             } else {
                                 val song = it.toMediaMetadata()
-                                if (song.isLocal) {
-                                    playerConnection.playQueue(
-                                        ListQueue(
-                                            title = source,
-                                            items = listOf(song)
-                                        )
-                                    )
-                                } else {
-                                    playerConnection.playQueue(YouTubeQueue.radio(song), isRadio = true)
-                                }
+                                playerConnection.playQueue(YouTubeQueue.radio(song), isRadio = true)
                             }
                         },
                         onLongClick = {

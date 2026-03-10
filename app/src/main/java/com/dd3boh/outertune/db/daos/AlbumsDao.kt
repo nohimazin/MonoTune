@@ -58,23 +58,6 @@ interface AlbumsDao : ArtistsDao {
     fun searchAlbums(query: String, previewSize: Int = Int.MAX_VALUE): Flow<List<Album>>
 
     @Transaction
-    @Query("""
-        SELECT *
-        FROM album
-        WHERE album.isLocal = 1 AND album.title LIKE '%' || :query || '%'
-        LIMIT :previewSize
-    """)
-    fun localAlbumsByNameFuzzy(query: String, previewSize: Int = Int.MAX_VALUE): List<AlbumEntity>
-
-    @Transaction
-    @Query("""
-        SELECT * FROM album
-        WHERE album.isLocal = 1
-        ORDER BY album.title ASC
-    LIMIT :previewSize""")
-    fun allLocalAlbumsByName(previewSize: Int = Int.MAX_VALUE): List<AlbumEntity>
-
-    @Transaction
     @Query("UPDATE song_album_map SET albumId = :newId WHERE albumId = :oldId")
     fun updateSongAlbumMap(oldId: String, newId: String)
 
@@ -293,9 +276,5 @@ interface AlbumsDao : ArtistsDao {
     // region Deletes
     @Delete
     fun delete(album: AlbumEntity)
-
-    @Transaction
-    @Query("DELETE FROM album WHERE isLocal = 1")
-    fun nukeLocalAlbums()
     // endregion
 }

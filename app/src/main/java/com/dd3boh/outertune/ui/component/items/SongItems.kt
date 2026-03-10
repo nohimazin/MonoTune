@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DragHandle
-import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
@@ -114,12 +113,10 @@ fun SongListItem(
                 if (showLikedIcon && song.song.liked) {
                     Icon.Favorite()
                 }
-                if (showInLibraryIcon && song.song.isLocal) {
-                    Icon.FolderCopy()
-                } else if (showInLibraryIcon && song.song.inLibrary != null) {
+                if (showInLibraryIcon && song.song.inLibrary != null) {
                     Icon.Library()
                 }
-                if (showDownloadIcon && !song.song.isLocal) {
+                if (showDownloadIcon) {
                     val download by LocalDownloadUtil.current.getDownload(song.id).collectAsState(initial = null)
                     Icon.Download(download)
                 }

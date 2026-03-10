@@ -12,7 +12,6 @@ import androidx.compose.ui.util.fastAny
 import androidx.media3.exoplayer.offline.Download
 import com.dd3boh.outertune.constants.MAX_COIL_JOBS
 import com.dd3boh.outertune.constants.MAX_DL_JOBS
-import com.dd3boh.outertune.constants.MAX_LM_SCANNER_JOBS
 import com.dd3boh.outertune.constants.MAX_YTM_CONTENT_JOBS
 import com.dd3boh.outertune.constants.MAX_YTM_SYNC_JOBS
 import com.dd3boh.outertune.playback.DownloadUtil
@@ -25,12 +24,10 @@ import java.time.LocalDateTime
 /**
  *
  * coilCoroutine: Coil image resolution
- * lmScannerCoroutine: Heave processing tasks such as local media scan/extraction and downloads processing
+ * dlCoroutine: Download processing tasks
  *
  */
 // This will go down to be the best idea I've had or this will crash and burn like the Hindenburg.
-
-val lmScannerCoroutine = Dispatchers.IO.limitedParallelism(MAX_LM_SCANNER_JOBS)
 
 val dlCoroutine = Dispatchers.IO.limitedParallelism(MAX_DL_JOBS)
 
@@ -86,9 +83,5 @@ fun getDownloadState(localDateTimes: List<LocalDateTime?>): Int {
 }
 
 fun getThumbnailModel(thumbnailUrl: String, sizeX: Int = -1, sizeY: Int = -1): Any? {
-    return if (thumbnailUrl.startsWith("/storage/")) {
-        LocalArtworkPath(thumbnailUrl, sizeX, sizeY)
-    } else {
-        thumbnailUrl
-    }
+    return thumbnailUrl
 }

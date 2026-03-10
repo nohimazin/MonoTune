@@ -71,7 +71,7 @@ class MusicDatabase(
     fun close() = delegate.close()
 
     companion object {
-        const val MUSIC_DATABASE_VERSION = 21
+        const val MUSIC_DATABASE_VERSION = 22
     }
 }
 
@@ -124,6 +124,7 @@ class MusicDatabase(
         AutoMigration(from = 18, to = 19), // Recent activity
         AutoMigration(from = 19, to = 20, spec = Migration19To20::class), // Db optimization, remove totalplaytime, local media fields
         AutoMigration(from = 20, to = 21), // MonoTune: add MonochromeTrackMatch, ManualCorrection, YtmScrobbleQueue
+        AutoMigration(from = 21, to = 22, spec = Migration21To22::class), // MonoTune: remove isLocal from song, artist, album, genre
     ]
 )
 @TypeConverters(Converters::class)
@@ -691,3 +692,11 @@ class Migration17To18 : AutoMigrationSpec
     DeleteColumn(tableName = "song", columnName = "totalPlayTime"),
 )
 class Migration19To20 : AutoMigrationSpec
+
+@DeleteColumn.Entries(
+    DeleteColumn(tableName = "song", columnName = "isLocal"),
+    DeleteColumn(tableName = "artist", columnName = "isLocal"),
+    DeleteColumn(tableName = "album", columnName = "isLocal"),
+    DeleteColumn(tableName = "genre", columnName = "isLocal"),
+)
+class Migration21To22 : AutoMigrationSpec

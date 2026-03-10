@@ -417,8 +417,7 @@ fun PlayerMenu(
             bottom = 8.dp + WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
         )
     ) {
-        if (!mediaMetadata.isLocal)
-            GridMenuItem(
+        GridMenuItem(
                 icon = Icons.Rounded.Radio,
                 title = R.string.start_radio
             ) {
@@ -437,8 +436,7 @@ fun PlayerMenu(
         ) {
             showChoosePlaylistDialog = true
         }
-        if (!mediaMetadata.isLocal)
-            DownloadGridMenu(
+        DownloadGridMenu(
                 localDateTime = download,
                 onDownload = {
                     database.transaction {
@@ -455,7 +453,7 @@ fun PlayerMenu(
                     )
                 }
             )
-        if (librarySong?.song?.inLibrary != null && !librarySong!!.song.isLocal) {
+        if (librarySong?.song?.inLibrary != null) {
             GridMenuItem(
                 icon = Icons.Rounded.LibraryAddCheck,
                 title = R.string.remove_from_library,
@@ -464,7 +462,7 @@ fun PlayerMenu(
                     toggleInLibrary(mediaMetadata.id, null)
                 }
             }
-        } else if (!mediaMetadata.isLocal) {
+        } else {
             GridMenuItem(
                 icon = Icons.Rounded.LibraryAdd,
                 title = R.string.add_to_library,
@@ -487,7 +485,7 @@ fun PlayerMenu(
                 showSelectArtistDialog = true
             }
         }
-        if (mediaMetadata.album != null && !mediaMetadata.isLocal) {
+        if (mediaMetadata.album != null) {
             GridMenuItem(
                 icon = R.drawable.album,
                 title = R.string.view_album
@@ -498,8 +496,7 @@ fun PlayerMenu(
             }
         }
 
-        if (!mediaMetadata.isLocal)
-            GridMenuItem(
+        GridMenuItem(
                 icon = Icons.Rounded.Share,
                 title = R.string.share
             ) {

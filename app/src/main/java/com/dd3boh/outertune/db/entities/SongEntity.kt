@@ -1,11 +1,9 @@
 package com.dd3boh.outertune.db.entities
 
 import androidx.compose.runtime.Immutable
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.dd3boh.outertune.utils.LocalArtworkPath
 import com.dd3boh.outertune.utils.syncCoroutine
 import com.zionhuang.innertube.YouTube
 import kotlinx.coroutines.CoroutineScope
@@ -31,10 +29,7 @@ data class SongEntity(
     val duration: Int = -1, // in seconds TODO: in milliseconds
     val thumbnailUrl: String? = null,
     val inLibrary: LocalDateTime? = null, // doubles as "date added"
-    @ColumnInfo(name = "isLocal", defaultValue = false.toString())
-    val isLocal: Boolean = false, // TODO(MonoTune): remove with local-media scanner
-    @ColumnInfo(index = true)
-    val localPath: String?, // TODO(MonoTune): remove with local-media scanner
+    val localPath: String?, // path to the downloaded audio file (null if not downloaded)
     val dateDownload: LocalDateTime? = null, // doubles as "isDownloaded" for new downloader system
     val liked: Boolean = false,
     val likedDate: LocalDateTime? = null,
@@ -103,11 +98,7 @@ data class SongEntity(
     fun getDateModifiedLong(): Long? = dateModified?.toEpochSecond(ZoneOffset.UTC)
 
     fun getThumbnailModel(sizeX: Int = -1, sizeY: Int = -1): Any? {
-        return if (isLocal) {
-            LocalArtworkPath(thumbnailUrl ?: localPath, sizeX, sizeY)
-        } else {
-            thumbnailUrl
-        }
+        return thumbnailUrl
     }
 
     companion object {

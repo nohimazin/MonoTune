@@ -527,26 +527,6 @@ fun ExperimentalSettings(
                 Spacer(Modifier.height(20.dp))
 
                 PreferenceEntry(
-                    title = { Text("DEBUG: Nuke local lib") },
-                    icon = { Icon(Icons.Rounded.ErrorOutline, null) },
-                    onClick = {
-                        Toast.makeText(context, "Nuking local files from database...", Toast.LENGTH_SHORT).show()
-                        coroutineScope.launch(Dispatchers.IO) {
-                            Log.i(SETTINGS_TAG, "Nuke database status:  ${database.nukeLocalData()}")
-                        }
-                    }
-                )
-                PreferenceEntry(
-                    title = { Text("DEBUG: Nuke local artists") },
-                    icon = { Icon(Icons.Rounded.WarningAmber, null) },
-                    onClick = {
-                        Toast.makeText(context, "Nuking local artists from database...", Toast.LENGTH_SHORT).show()
-                        coroutineScope.launch(Dispatchers.IO) {
-                            Log.i(SETTINGS_TAG, "Nuke database status:  ${database.nukeLocalArtists()}")
-                        }
-                    }
-                )
-                PreferenceEntry(
                     title = { Text("DEBUG: Nuke dangling format entities") },
                     icon = { Icon(Icons.Rounded.WarningAmber, null) },
                     onClick = {
@@ -554,16 +534,6 @@ fun ExperimentalSettings(
                             .show()
                         coroutineScope.launch(Dispatchers.IO) {
                             Log.i(SETTINGS_TAG, "Nuke database status:  ${database.nukeDanglingFormatEntities()}")
-                        }
-                    }
-                )
-                PreferenceEntry(
-                    title = { Text("DEBUG: Nuke local db lyrics") },
-                    icon = { Icon(Icons.Rounded.WarningAmber, null) },
-                    onClick = {
-                        Toast.makeText(context, "Nuking local lyrics from database...", Toast.LENGTH_SHORT).show()
-                        coroutineScope.launch(Dispatchers.IO) {
-                            Log.i(SETTINGS_TAG, "Nuke database status:  ${database.nukeLocalLyrics()}")
                         }
                     }
                 )

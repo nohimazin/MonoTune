@@ -93,7 +93,6 @@ import com.dd3boh.outertune.models.toMediaMetadata
 import com.dd3boh.outertune.playback.queues.ListQueue
 import com.dd3boh.outertune.ui.component.PlayingIndicator
 import com.dd3boh.outertune.ui.component.PlayingIndicatorBox
-import com.dd3boh.outertune.utils.LocalArtworkPath
 import com.dd3boh.outertune.utils.getDownloadState
 import com.dd3boh.outertune.utils.joinByBullet
 import com.dd3boh.outertune.utils.makeTimeString
@@ -339,12 +338,10 @@ fun MediaMetadataListItem(
         if (showLikedIcon && mediaMetadata.liked) {
             Icon.Favorite()
         }
-        if (showInLibraryIcon && mediaMetadata.isLocal) {
-            Icon.FolderCopy()
-        } else if (showInLibraryIcon && mediaMetadata.inLibrary != null) {
+        if (showInLibraryIcon && mediaMetadata.inLibrary != null) {
             Icon.Library()
         }
-        if (showDownloadIcon && !mediaMetadata.isLocal) {
+        if (showDownloadIcon) {
             val download by LocalDownloadUtil.current.getDownload(mediaMetadata.id).collectAsState(initial = null)
             Icon.Download(download)
         }
@@ -673,11 +670,7 @@ fun ItemThumbnail(
     ) {
         AsyncImage(
             imageLoader = context.imageLoader,
-            model = if (thumbnailUrl?.startsWith("/storage") == true) {
-                LocalArtworkPath(thumbnailUrl, preferredSize, preferredSize)
-            } else {
-                thumbnailUrl
-            },
+            model = thumbnailUrl,
 //            placeholder = rememberVectorPainter(placeholderIcon),
             contentDescription = null,
             modifier = Modifier
