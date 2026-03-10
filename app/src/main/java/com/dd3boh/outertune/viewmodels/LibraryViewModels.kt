@@ -12,6 +12,7 @@
 package com.dd3boh.outertune.viewmodels
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -188,7 +189,7 @@ class LibraryAlbumsViewModel @Inject constructor(
             allAlbums.collect { albums ->
                 albums
                     ?.filter {
-                        !it.album.isLocal && it.album.songCount == 0
+                        it.album.songCount == 0
                     }?.forEach { album ->
                         YouTube.album(album.id).onSuccess { albumPage ->
                             database.query {

@@ -2,9 +2,9 @@ package com.dd3boh.outertune
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
-import androidx.datastore.preferences.core.edit
 import androidx.navigation.NavController
 import com.dd3boh.outertune.constants.LastVersionKey
 import com.dd3boh.outertune.constants.OOBE_VERSION
@@ -21,6 +21,7 @@ import com.dd3boh.outertune.utils.reportException
 import com.zionhuang.innertube.YouTube
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -109,12 +110,13 @@ suspend fun scanInit(
     val oobeStatus = context.dataStore.get(OobeStatusKey, defaultValue = 0)
 
     if (oobeStatus < OOBE_VERSION) {
+        Log.i(MAIN_TAG, "User has not completed OOBE, skipping startup scan")
         return
     }
 
-    // scan download folders
+    Log.i(MAIN_TAG, "Starting downloads scan")
     downloadUtil.scanDownloads()
     downloadUtil.resumeDownloadsOnStart()
     playerConnection?.service?.initQueue()
-    android.util.Log.i(MAIN_TAG, "Downloads scan completed.")
+    Log.i(MAIN_TAG, "Downloads scan complete")
 }

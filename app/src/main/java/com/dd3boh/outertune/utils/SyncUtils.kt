@@ -185,7 +185,7 @@ class SyncUtils @Inject constructor(
 
                 // Identify local songs to unlike
                 val songsToUnlike = database.likedSongsByNameAsc().first()
-                    .filterNot { it.song.isLocal }
+                    
                     .filterNot { localSong -> remoteSongs.any { it.id == localSong.id } }
 
                 // Unlike local songs in the database
@@ -249,7 +249,7 @@ class SyncUtils @Inject constructor(
             if (checkOverwrite(SyncConflictResolution.OVERWRITE_WITH_REMOTE)) {
                 // Identify local songs to remove
                 val songsToRemoveFromLibrary = database.songsByNameAsc().first()
-                    .filterNot { it.song.isLocal }
+                    
                     .filterNot { localSong -> remoteSongs.any { it.id == localSong.id } }
 
                 // Remove local songs from the database
@@ -318,7 +318,7 @@ class SyncUtils @Inject constructor(
             if (checkOverwrite(SyncConflictResolution.OVERWRITE_WITH_REMOTE)) {
                 // Identify local albums to remove
                 val albumsToRemoveFromLibrary = database.albumsLikedAsc().first()
-                    .filterNot { it.album.isLocal }
+                    
                     .filterNot { localAlbum -> remoteAlbums.any { it.id == localAlbum.id } }
 
                 // Remove albums from local database
@@ -400,7 +400,7 @@ class SyncUtils @Inject constructor(
             if (checkOverwrite(SyncConflictResolution.OVERWRITE_WITH_REMOTE)) {
                 // Get local artists
                 val artistsToRemoveFromSubscriptions = database.artistsBookmarkedAsc().first()
-                    .filterNot { it.artist.isLocal }
+                    
                     .filterNot { localArtist -> likedArtists.any { it.id == localArtist.id } }
 
                 // Remove local artists from the database

@@ -99,8 +99,7 @@ fun AlbumMenu(
     }
 
     LaunchedEffect(songs) {
-        if (album.album.isLocal != false) return@LaunchedEffect
-        val songs = songs.filterNot { it.song.isLocal }
+        val songs = songs
         if (songs.isEmpty()) return@LaunchedEffect
         downloadUtil.downloads.collect { downloads ->
             downloadState = getDownloadState(songs.map { downloads[it.id] })
@@ -200,12 +199,10 @@ fun AlbumMenu(
                 }
             }
         }
-        if (album.album.isLocal == false) {
-            DownloadGridMenu(
+        DownloadGridMenu(
                 state = downloadState,
                 onDownload = {
                     val _songs = songs
-                        .filterNot { it.song.isLocal }
                         .map { it.toMediaMetadata() }
                     downloadUtil.download(_songs)
                 },
@@ -220,7 +217,6 @@ fun AlbumMenu(
                     }
                 }
             )
-        }
         GridMenuItem(
             icon = R.drawable.artist,
             title = R.string.view_artist

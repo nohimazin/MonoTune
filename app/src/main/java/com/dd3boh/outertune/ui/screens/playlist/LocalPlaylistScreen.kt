@@ -781,8 +781,7 @@ fun LocalPlaylistHeader(
                         }
                     }
 
-                    if (songs.any { !it.song.song.isLocal }) {
-                        when (downloadState) {
+                    when (downloadState) {
                             Download.STATE_COMPLETED -> {
                                 IconButton(
                                     onClick = onShowRemoveDownloadDialog

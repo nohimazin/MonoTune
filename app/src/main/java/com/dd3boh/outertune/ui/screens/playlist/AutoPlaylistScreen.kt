@@ -256,7 +256,6 @@ fun AutoPlaylistScreen(
             clear()
             addAll(songs)
         }
-        val songs = songs.filterNot { it.song.isLocal }
         if (songs.isEmpty()) return@LaunchedEffect
         downloadUtil.downloads.collect { downloads ->
             downloadState = getDownloadState(songs.map { downloads[it.id] })

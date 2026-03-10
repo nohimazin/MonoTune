@@ -166,8 +166,7 @@ fun AlbumScreen(
     }
 
     LaunchedEffect(albumWithSongs) {
-        if (albumWithSongs?.album?.isLocal != false) return@LaunchedEffect
-        val songs = albumWithSongs?.songs?.filterNot { it.song.isLocal }?.map { it.id }
+        val songs = albumWithSongs?.songs?.map { it.id }
         if (songs.isNullOrEmpty()) return@LaunchedEffect
         downloadUtil.downloads.collect { downloads ->
             downloadState = getDownloadState(songs.map { downloads[it] })
@@ -277,8 +276,7 @@ fun AlbumScreen(
                                     )
                                 }
 
-                                if (albumWithSongsLocal.album.isLocal == false) {
-                                    when (downloadState) {
+                                when (downloadState) {
                                         Download.STATE_COMPLETED -> {
                                             IconButton(
                                                 onClick = {
@@ -334,7 +332,6 @@ fun AlbumScreen(
                                             }
                                         }
                                     }
-                                }
 
                                 IconButton(
                                     onClick = {

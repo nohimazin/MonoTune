@@ -15,8 +15,10 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -204,6 +206,9 @@ class MainActivity : ComponentActivity() {
 
     val controllerViewModel: MediaControllerViewModel by viewModels()
 
+    // storage permission helper (kept for potential future use)
+    val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ -> }
 
     override fun onDestroy() {
         Log.i(MAIN_TAG, "onDestroy() called. isFinishing = $isFinishing")
@@ -276,7 +281,7 @@ class MainActivity : ComponentActivity() {
 
 
             LaunchedEffect(Unit) {
-                // download folders auto scan
+                // local media & download folders auto scan
                 coroutineScope.launch {
                     scanInit(
                         this@MainActivity, database, downloadUtil, coroutineScope, playerConnection,

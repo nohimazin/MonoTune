@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.OfflinePin
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,18 +33,6 @@ fun ArtistListItem(
     badges: @Composable RowScope.() -> Unit = {
         if (artist.artist.bookmarkedAt != null) {
             Icon.Favorite()
-        }
-
-        // assume if they have a non local artist ID, they are not local
-        if (artist.artist.isLocal) {
-            Icon(
-                Icons.Rounded.CloudOff,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier
-                    .size(18.dp)
-                    .padding(end = 2.dp)
-            )
         }
 
         if (artist.downloadCount > 0) {
@@ -83,18 +70,6 @@ fun ArtistGridItem(
     badges: @Composable RowScope.() -> Unit = {
         if (artist.artist.bookmarkedAt != null) {
             Icon.Favorite()
-        }
-
-        // assume if they have a non local artist ID, they are not local
-        if (artist.artist.isLocal) {
-            Icon(
-                Icons.Rounded.CloudOff,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier
-                    .size(18.dp)
-                    .padding(end = 2.dp)
-            )
         }
 
         if (artist.downloadCount > 0) {

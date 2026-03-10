@@ -31,7 +31,7 @@ class AlbumViewModel @Inject constructor(
         viewModelScope.launch {
             isLoading.value = true
             val album = database.album(albumId).first()
-            if (album?.album?.isLocal == true) return@launch
+            
             YouTube.album(albumId).onSuccess {
                 if (album == null || album.album.songCount == 0) {
                     database.transaction {

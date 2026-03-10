@@ -239,8 +239,7 @@ fun SongMenu(
             }
         }
 
-        if (!song.song.isLocal)
-            DownloadGridMenu(
+        DownloadGridMenu(
                 localDateTime = download,
                 onDownload = {
                     downloadUtil.download(song.toMediaMetadata())

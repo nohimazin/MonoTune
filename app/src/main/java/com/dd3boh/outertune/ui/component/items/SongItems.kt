@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DragHandle
-import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
@@ -28,7 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.dd3boh.outertune.BuildConfig
+import com.dd3boh.outertune.LocalDatabase
 import com.dd3boh.outertune.LocalDownloadUtil
 import com.dd3boh.outertune.LocalMenuState
 import com.dd3boh.outertune.LocalPlayerConnection
@@ -62,6 +64,9 @@ import com.dd3boh.outertune.ui.menu.MenuState
 import com.dd3boh.outertune.ui.menu.SongMenu
 import com.dd3boh.outertune.utils.joinByBullet
 import com.dd3boh.outertune.utils.makeTimeString
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -207,39 +212,6 @@ fun SongListItem(
         swipeEnabled = swipeEnabled
     )
 }
-
-@Composable
-fun SongFolderItem(
-    folderTitle: String,
-    modifier: Modifier = Modifier,
-) = ListItem(
-    title = folderTitle, thumbnailContent = {
-        Icon(
-            Icons.Rounded.Folder,
-            contentDescription = null,
-            modifier = modifier.size(48.dp)
-        )
-    },
-    modifier = modifier
-)
-
-@Composable
-fun SongFolderItem(
-    folderTitle: String,
-    subtitle: String?,
-    modifier: Modifier = Modifier,
-) = ListItem(
-    title = folderTitle,
-    subtitle = subtitle,
-    thumbnailContent = {
-        Icon(
-            Icons.Rounded.Folder,
-            contentDescription = null,
-            modifier = modifier.size(48.dp)
-        )
-    },
-    modifier = modifier
-)
 
 @Composable
 fun SongGridItem(

@@ -105,6 +105,7 @@ fun encodeSyncString(list: List<SyncContent>): String {
 
 
 
+
 /*
 ---------------------------
 Player & audio
@@ -148,13 +149,7 @@ enum class SongSortType {
     CREATE_DATE, MODIFIED_DATE, RELEASE_DATE, NAME, ARTIST, PLAY_COUNT
 }
 
-enum class FolderSortType {
-    NAME, // TODO: support CREATE_DATE, MODIFIED_DATE
-}
 
-enum class FolderSongSortType {
-    CREATE_DATE, MODIFIED_DATE, RELEASE_DATE, NAME, ARTIST, PLAY_COUNT, TRACK_NUMBER
-}
 
 enum class PlaylistSongSortType {
     CUSTOM, NAME, ARTIST, ADDED_DATE, MODIFIED_DATE, RELEASE_DATE

@@ -16,7 +16,6 @@ val DarkModeKey = stringPreferencesKey("darkMode")
 val PureBlackKey = booleanPreferencesKey("pureBlack")
 val ShowLikedAndDownloadedPlaylist = booleanPreferencesKey("showLikedAndDownloadedPlaylist")
 val SwipeToQueueKey = booleanPreferencesKey("swipeToQueue")
-
 val TabletUiKey = booleanPreferencesKey("tabletUi")
 
 val EnabledTabsKey = stringPreferencesKey("enabledTabs")
@@ -108,7 +107,6 @@ val EnableLrcLibKey = booleanPreferencesKey("enableLrcLib")
 val UseLoginForBrowse = booleanPreferencesKey("useLoginForBrowse")
 
 
-
 /**
  * Experimental settings
  */
@@ -122,9 +120,6 @@ val SwipeToSkipKey = booleanPreferencesKey("swipeToSkip")
  */
 val SongSortTypeKey = stringPreferencesKey("songSortType")
 val SongSortDescendingKey = booleanPreferencesKey("songSortDescending")
-val FolderSortTypeKey = stringPreferencesKey("folderSortType")
-val FolderSongSortTypeKey = stringPreferencesKey("folderSongSortType")
-val FolderSongSortDescendingKey = booleanPreferencesKey("folderSongSortDescending")
 val PlaylistSongSortTypeKey = stringPreferencesKey("playlistSongSortType")
 val PlaylistSongSortDescendingKey = booleanPreferencesKey("playlistSongSortDescending")
 val ArtistSortTypeKey = stringPreferencesKey("artistSortType")
