@@ -112,11 +112,11 @@ To make everyone's life easier, there are a set of guidelines that are to be fol
 | sync           | YouTube Music sync features |
 | downloads      | Offline song downloads      |
 | innertube      | Innertube module            |
+| monochrome     | Monochrome integration work |
 
-| Tag (Local Media) | Description                      |
-|-------------------|----------------------------------|
-| lm                | General local library components | 
-| scanner           | Local media scanner              |
+> **Note:** The `lm` (local library) and `scanner` tags from the OuterTune upstream are
+> **deprecated** for MonoTune.  New commits should not use them; local-media removal work
+> should use the `cleanup` or `monotune` tag as appropriate.
 
 | Tag (Misc)    | Description                                                                                      |
 |---------------|--------------------------------------------------------------------------------------------------|

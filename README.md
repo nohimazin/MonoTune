@@ -12,7 +12,6 @@ A Material 3 YouTube Music client for Android, powered by [Monochrome](https://g
 - YouTube Music client features
     - Seamless playback: no ADs & background playback
     - YouTube Music search, playlists, liked songs, and history
-    - Song downloading (offline playback)
     - Account synchronization
 - Monochrome playback backend integration (in progress)
     - Track matching and scrobbling queue for Monochrome
@@ -22,6 +21,12 @@ A Material 3 YouTube Music client for Android, powered by [Monochrome](https://g
 - Audio normalization, tempo/pitch adjustment, and various other audio effects
 - Android Auto support
 - Support for Android 8 (Oreo) and higher
+
+> [!NOTE]
+> Local device audio scanning and offline local file playback are **not** goals for MonoTune.
+> MonoTune streams from YouTube Music and will stream from the Monochrome backend once integrated.
+> The local-media scanner inherited from OuterTune is still present in the codebase but is
+> scheduled for removal — see [BRANCHES.md](./BRANCHES.md) for the current migration status.
 
 > [!NOTE]
 > Android 8 (Oreo) and higher is supported.

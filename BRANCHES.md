@@ -51,7 +51,7 @@ All historical `v0.6.x`–`v0.9.x` tags and `v0.10.0`, `v0.10.1` are kept unchan
 | Area | Status |
 |------|--------|
 | App rebrand (MonoTune name, namespace) | ✅ Done |
-| Local audio scanning / playback UI removed | ✅ Done |
+| Local audio scanning / playback removal | 🔲 Pending (scanner classes and UI remain in-tree; see `utils/scanners/` and `LocalMediaSettingsFrag`) |
 | YouTube Music search, playlists, likes, history | ✅ Retained |
 | Monochrome integration layer (`MonochromeClient`, DB entities) | ✅ Stub in place |
 | Monochrome API connection | 🔲 Pending (backend spec not yet finalised) |
