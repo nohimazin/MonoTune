@@ -154,6 +154,14 @@ val AccountNameKey = stringPreferencesKey("accountName")
 val AccountEmailKey = stringPreferencesKey("accountEmail")
 val AccountChannelHandleKey = stringPreferencesKey("accountChannelHandle")
 
+/**
+ * Monochrome account
+ */
+val MonochromeServerUrlKey = stringPreferencesKey("monochromeServerUrl")
+val MonochromeAuthTokenKey = stringPreferencesKey("monochromeAuthToken")
+val MonochromeEmailKey = stringPreferencesKey("monochromeEmail")
+val MonochromeDisplayNameKey = stringPreferencesKey("monochromeDisplayName")
+val MonochromeTokenExpiryKey = longPreferencesKey("monochromeTokenExpiry")
 
 /**
  * Misc
