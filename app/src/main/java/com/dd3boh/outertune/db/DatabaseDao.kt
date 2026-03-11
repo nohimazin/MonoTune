@@ -11,6 +11,7 @@ import androidx.room.Upsert
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.dd3boh.outertune.db.daos.AlbumsDao
 import com.dd3boh.outertune.db.daos.ArtistsDao
+import com.dd3boh.outertune.db.daos.MonoTuneDao
 import com.dd3boh.outertune.db.daos.PlaylistsDao
 import com.dd3boh.outertune.db.daos.QueueDao
 import com.dd3boh.outertune.db.daos.SongsDao
@@ -46,7 +47,7 @@ import com.zionhuang.innertube.pages.AlbumPage
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface DatabaseDao : SongsDao, AlbumsDao, ArtistsDao, PlaylistsDao, QueueDao {
+interface DatabaseDao : SongsDao, AlbumsDao, ArtistsDao, PlaylistsDao, QueueDao, MonoTuneDao {
 
     @Transaction
     @Query("""

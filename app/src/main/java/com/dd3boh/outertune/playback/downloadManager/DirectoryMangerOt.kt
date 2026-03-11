@@ -6,8 +6,8 @@ import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import androidx.documentfile.provider.TreeDocumentFileOt
 import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.utils.scanners.scanDfRecursive
-import com.dd3boh.outertune.utils.scanners.documentFileFromUri
+import com.dd3boh.outertune.utils.scanDfRecursive
+import com.dd3boh.outertune.utils.documentFileFromUri
 import java.io.IOException
 import java.io.InputStream
 

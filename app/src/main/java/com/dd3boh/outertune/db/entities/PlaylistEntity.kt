@@ -27,7 +27,7 @@ data class PlaylistEntity(
     val shuffleEndpointParams: String? = null,
     val radioEndpointParams: String? = null,
     @ColumnInfo(name = "isLocal", defaultValue = false.toString())
-    val isLocal: Boolean = false, // TODO(MonoTune): remove with local-media scanner
+    val isLocal: Boolean = false, // marks playlists managed locally (not synced to YTM); NOT related to the local media scanner
 ) {
     companion object {
         const val LIKED_PLAYLIST_ID = "LP_LIKED"

@@ -129,8 +129,8 @@ import com.dd3boh.outertune.utils.dlCoroutine
 import com.dd3boh.outertune.utils.formatFileSize
 import com.dd3boh.outertune.utils.rememberEnumPreference
 import com.dd3boh.outertune.utils.rememberPreference
-import com.dd3boh.outertune.utils.scanners.stringFromUriList
-import com.dd3boh.outertune.utils.scanners.uriListFromString
+import com.dd3boh.outertune.utils.stringFromUriList
+import com.dd3boh.outertune.utils.uriListFromString
 import com.zionhuang.innertube.utils.parseCookieString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

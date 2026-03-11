@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.utils.scanners
+package com.dd3boh.outertune.utils
 
 import android.content.Context
 import android.net.Uri
