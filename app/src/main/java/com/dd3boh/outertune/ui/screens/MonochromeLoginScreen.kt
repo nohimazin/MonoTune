@@ -37,11 +37,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -53,7 +53,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
 import com.dd3boh.outertune.R
@@ -99,167 +98,169 @@ fun MonochromeLoginScreen(
         // Top bar space (TopAppBar is drawn separately below)
         Spacer(Modifier.height(64.dp))
 
-        if (session != null) {
-            // ----------------------------------------------------------------
-            // Logged-in state
-            // ----------------------------------------------------------------
-            val activeSession = session // smart-cast the nullable to non-null
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.AccountCircle,
-                    contentDescription = null,
-                    modifier = Modifier.size(72.dp),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-                Text(
-                    text = activeSession.displayName,
-                    style = MaterialTheme.typography.titleLarge,
-                )
-                Text(
-                    text = activeSession.email,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Text(
-                    text = activeSession.serverUrl,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Spacer(Modifier.height(8.dp))
-                Button(
-                    onClick = { viewModel.logout() },
-                    modifier = Modifier.fillMaxWidth(),
+        when (val activeSession = session) {
+            null -> {
+                // ----------------------------------------------------------------
+                // Login form
+                // ----------------------------------------------------------------
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Icon(
-                        Icons.AutoMirrored.Rounded.Logout,
-                        contentDescription = null,
-                        modifier = Modifier.padding(end = 8.dp),
+                    // Stub note
+                    InfoLabel(stringResource(R.string.monochrome_backend_stub_note))
+
+                    Spacer(Modifier.height(4.dp))
+
+                    OutlinedTextField(
+                        value = serverUrl,
+                        onValueChange = { serverUrl = it },
+                        label = { Text(stringResource(R.string.monochrome_server_url)) },
+                        placeholder = { Text(stringResource(R.string.monochrome_server_url_hint)) },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Uri,
+                            imeAction = ImeAction.Next,
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) },
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
                     )
-                    Text(stringResource(R.string.monochrome_logout))
-                }
-            }
-        } else {
-            // ----------------------------------------------------------------
-            // Login form
-            // ----------------------------------------------------------------
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                // Stub note
-                InfoLabel(stringResource(R.string.monochrome_backend_stub_note))
 
-                Spacer(Modifier.height(4.dp))
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        label = { Text(stringResource(R.string.monochrome_email)) },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next,
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) },
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
 
-                OutlinedTextField(
-                    value = serverUrl,
-                    onValueChange = { serverUrl = it },
-                    label = { Text(stringResource(R.string.monochrome_server_url)) },
-                    placeholder = { Text(stringResource(R.string.monochrome_server_url_hint)) },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Uri,
-                        imeAction = ImeAction.Next,
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Down) },
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-
-                OutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = { Text(stringResource(R.string.monochrome_email)) },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next,
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Down) },
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text(stringResource(R.string.monochrome_password)) },
-                    singleLine = true,
-                    visualTransformation = if (passwordVisible) VisualTransformation.None
-                    else PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done,
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            focusManager.clearFocus()
-                            if (!viewModel.isLoading) {
-                                viewModel.login(serverUrl, email, password)
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text(stringResource(R.string.monochrome_password)) },
+                        singleLine = true,
+                        visualTransformation = if (passwordVisible) VisualTransformation.None
+                        else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done,
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                                if (!viewModel.isLoading) {
+                                    viewModel.login(serverUrl, email, password)
+                                }
+                            },
+                        ),
+                        trailingIcon = {
+                            IconButton(
+                                onClick = { passwordVisible = !passwordVisible },
+                            ) {
+                                Icon(
+                                    imageVector = if (passwordVisible) Icons.Rounded.VisibilityOff
+                                    else Icons.Rounded.Visibility,
+                                    contentDescription = null,
+                                )
                             }
                         },
-                    ),
-                    trailingIcon = {
-                        IconButton(
-                            onClick = { passwordVisible = !passwordVisible },
-                        ) {
-                            Icon(
-                                imageVector = if (passwordVisible) Icons.Rounded.VisibilityOff
-                                else Icons.Rounded.Visibility,
-                                contentDescription = null,
-                            )
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-
-                // Error message
-                if (viewModel.loginError != null) {
-                    Text(
-                        text = stringResource(
-                            R.string.monochrome_login_failed,
-                            viewModel.loginError.orEmpty(),
-                        ),
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.fillMaxWidth(),
                     )
-                }
 
-                Spacer(Modifier.height(4.dp))
+                    // Error message
+                    if (viewModel.loginError != null) {
+                        Text(
+                            text = stringResource(
+                                R.string.monochrome_login_failed,
+                                viewModel.loginError.orEmpty(),
+                            ),
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
 
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    if (viewModel.isLoading) {
-                        CircularProgressIndicator()
-                    } else {
-                        Button(
-                            onClick = { viewModel.login(serverUrl, email, password) },
-                            enabled = serverUrl.isNotBlank() && email.isNotBlank() && password.isNotBlank(),
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Text(stringResource(R.string.monochrome_login_button))
+                    Spacer(Modifier.height(4.dp))
+
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        if (viewModel.isLoading) {
+                            CircularProgressIndicator()
+                        } else {
+                            Button(
+                                onClick = { viewModel.login(serverUrl, email, password) },
+                                enabled = serverUrl.isNotBlank() && email.isNotBlank() && password.isNotBlank(),
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Text(stringResource(R.string.monochrome_login_button))
+                            }
                         }
                     }
-                }
 
-                Spacer(Modifier.height(8.dp))
-                TextButton(
-                    onClick = { navController.navigateUp() },
-                    modifier = Modifier.align(Alignment.End),
+                    Spacer(Modifier.height(8.dp))
+                    TextButton(
+                        onClick = { navController.navigateUp() },
+                        modifier = Modifier.align(Alignment.End),
+                    ) {
+                        Text(stringResource(android.R.string.cancel))
+                    }
+                }
+            }
+            else -> {
+                // ----------------------------------------------------------------
+                // Logged-in state
+                // ----------------------------------------------------------------
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    Text(stringResource(android.R.string.cancel))
+                    Icon(
+                        imageVector = Icons.Rounded.AccountCircle,
+                        contentDescription = null,
+                        modifier = Modifier.size(72.dp),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                    Text(
+                        text = activeSession.displayName,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                    Text(
+                        text = activeSession.email,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        text = activeSession.serverUrl,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Button(
+                        onClick = { viewModel.logout() },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Rounded.Logout,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp),
+                        )
+                        Text(stringResource(R.string.monochrome_logout))
+                    }
                 }
             }
         }
