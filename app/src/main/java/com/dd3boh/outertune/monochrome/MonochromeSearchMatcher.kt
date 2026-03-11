@@ -145,7 +145,7 @@ class MonochromeSearchMatcher @Inject constructor(
                 candTitle.contains(normTitle) ||
                 normTitle.contains(candTitle)
 
-            val artistMatch = normArtist.isEmpty() ||
+            val artistMatch = normArtist.isEmpty() || // no artist metadata → can't disqualify
                 candArtist.contains(normArtist) ||
                 normArtist.contains(candArtist)
 

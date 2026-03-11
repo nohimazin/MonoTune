@@ -129,15 +129,20 @@ class OnlineSearchViewModel @Inject constructor(
                     searchResult.continuation,
                 )
             } else {
-                val matches = monochromeSearchMatcher.matchSongs(newSongs)
-                matchedMonochromeTracks.putAll(matches)
-                val filteredNew = newItems.filter { item ->
-                    item !is SongItem || matches.containsKey(item.id)
+                isMatchingInProgress = true
+                try {
+                    val matches = monochromeSearchMatcher.matchSongs(newSongs)
+                    matchedMonochromeTracks.putAll(matches)
+                    val filteredNew = newItems.filter { item ->
+                        item !is SongItem || matches.containsKey(item.id)
+                    }
+                    viewStateMap[filterValue] = ItemsPage(
+                        (viewState.items + filteredNew).distinctBy { it.id },
+                        searchResult.continuation,
+                    )
+                } finally {
+                    isMatchingInProgress = false
                 }
-                viewStateMap[filterValue] = ItemsPage(
-                    (viewState.items + filteredNew).distinctBy { it.id },
-                    searchResult.continuation,
-                )
             }
         }
     }
