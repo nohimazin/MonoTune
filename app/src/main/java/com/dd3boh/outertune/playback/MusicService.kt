@@ -699,7 +699,9 @@ class MusicService : MediaLibraryService(),
 
             Log.d(TAG, "PLAYING: remote song (online fetch)")
 
-            // Determine if this track has a Monochrome ID (manual correction takes precedence)
+            // Determine if this track has a Monochrome ID (manual correction takes precedence).
+            // runBlocking is consistent with existing YouTube URL resolution further below;
+            // this callback runs on ExoPlayer's loader thread, not the main thread.
             val monochromeId: String? = runBlocking(Dispatchers.IO) {
                 val manual = database.getManualCorrection(mediaId)
                 when {

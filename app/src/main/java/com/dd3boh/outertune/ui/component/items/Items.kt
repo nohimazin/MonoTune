@@ -417,7 +417,7 @@ fun YouTubeListItem(
             val downloads by LocalDownloadUtil.current.downloads.collectAsState()
             Icon.Download(downloads[item.id])
         }
-        if (item is SongItem && monochromeTrack != null) {
+        if (monochromeTrack != null) {
             Spacer(modifier = Modifier.width(2.dp))
             Text(
                 text = stringResource(R.string.monochrome_provider_badge),
@@ -431,8 +431,8 @@ fun YouTubeListItem(
     isPlaying: Boolean = false,
     trailingContent: @Composable RowScope.() -> Unit = {},
 ) {
-    // Prefer Monochrome cover art for SongItems that have a matched track with a cover art ID
-    val effectiveThumbnailUrl = if (item is SongItem && monochromeTrack?.coverArtId != null) {
+    // Prefer Monochrome cover art when a matched track with a cover art ID is available
+    val effectiveThumbnailUrl = if (monochromeTrack?.coverArtId != null) {
         tidalCoverUrl(monochromeTrack.coverArtId, 320)
     } else {
         item.thumbnail
