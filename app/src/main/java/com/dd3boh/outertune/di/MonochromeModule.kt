@@ -22,8 +22,9 @@ import javax.inject.Singleton
  * Both bindings are singletons so that the same [MonochromeClient] instance
  * (and its in-memory session state) is shared across the entire process.
  *
- * Replace the [MonochromeClient] binding with a real HTTP implementation once
- * the Monochrome API contract is finalised.
+ * [MonochromeClient] targets the hifi-api backend used by monochrome.tf.
+ * Authentication is handled via the official Appwrite instance at
+ * [com.dd3boh.outertune.monochrome.APPWRITE_ENDPOINT].
  */
 @Module
 @InstallIn(SingletonComponent::class)

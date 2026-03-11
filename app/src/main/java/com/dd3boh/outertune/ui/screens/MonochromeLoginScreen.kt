@@ -69,9 +69,10 @@ import com.dd3boh.outertune.viewmodels.MonochromeLoginViewModel
  * When a session is already active the screen shows the signed-in state and
  * a logout button.  When no session is present, an email/password form is shown.
  *
- * NOTE: The login form is fully wired to [MonochromeLoginViewModel], but the
- * actual network call is a **stub** until the Monochrome API contract is
- * finalised.  A banner is displayed to make this clear.
+ * **Server URL** is the hifi-api instance used for music data
+ * (e.g. `https://api.monochrome.tf`).  Account authentication goes to the
+ * official Appwrite endpoint at [com.dd3boh.outertune.monochrome.APPWRITE_ENDPOINT]
+ * and is not affected by the Server URL field.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,7 +83,7 @@ fun MonochromeLoginScreen(
     val session by viewModel.session.collectAsState()
     val focusManager = LocalFocusManager.current
 
-    var serverUrl by rememberSaveable { mutableStateOf("https://monochrome.tf") }
+    var serverUrl by rememberSaveable { mutableStateOf("https://api.monochrome.tf") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -110,8 +111,8 @@ fun MonochromeLoginScreen(
                         .padding(horizontal = 24.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    // Stub note
-                    InfoLabel(stringResource(R.string.monochrome_backend_stub_note))
+                    // Info note
+                    InfoLabel(stringResource(R.string.monochrome_backend_note))
 
                     Spacer(Modifier.height(4.dp))
 

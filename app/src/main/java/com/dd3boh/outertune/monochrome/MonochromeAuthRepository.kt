@@ -26,11 +26,14 @@ import javax.inject.Singleton
  *
  * Auth state is persisted in the app's DataStore so that the user remains
  * logged in across restarts.  The repository also keeps the [MonochromeClientApi]
- * in sync so that outgoing requests always carry a valid bearer token.
+ * in sync so that subsequent Appwrite calls carry a valid session token and
+ * music-API calls target the correct hifi-api instance.
  *
- * The [login] implementation is a **stub** — it delegates to [MonochromeClientApi.login]
- * which currently returns an error.  Once the real API contract is available,
- * only [MonochromeClient] needs to be updated; the repository layer remains stable.
+ * The [login] flow:
+ * 1. Calls [MonochromeClientApi.login] which authenticates against the Appwrite
+ *    instance at [APPWRITE_ENDPOINT] and stores the hifi-api [serverUrl].
+ * 2. On success, persists the [MonochromeSession] to DataStore.
+ * 3. Installs the session in the [MonochromeClientApi] singleton.
  */
 interface MonochromeAuthRepository {
 
