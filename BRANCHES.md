@@ -103,12 +103,10 @@ Run `./gradlew :app:kspDebugKotlin` (or a full debug build) and commit the gener
 
 ### 3 — Monochrome search/playlist wiring
 
-Authentication infrastructure is in place (`MonochromeAuthRepository`, login UI, Hilt
-bindings).  The stub `MonochromeClient` still returns errors for every API call.
-Once the Monochrome backend endpoint spec is finalised:
+The stub `MonochromeClient` returns errors for every call.  Once the Monochrome
+backend endpoint spec is finalised:
 
-- Replace stub methods with real HTTP calls (search, stream URL, availability),
-  passing the authenticated session from `MonochromeAuthRepository`
+- Replace stub methods with real HTTP calls (search, stream URL, availability)
 - Wire `MonochromeClient` into the search ViewModel so that YTM results are filtered
   to tracks that exist in Monochrome
 - Add the "unresolved tracks" section to playlist detail screen

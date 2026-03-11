@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Logout
+import androidx.compose.material.icons.rounded.CloudQueue
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,8 +30,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import com.dd3boh.outertune.App.Companion.forgetAccount
+import com.dd3boh.outertune.App.Companion.forgetMonochromeAccount
 import com.dd3boh.outertune.R
 import com.dd3boh.outertune.constants.AccountChannelHandleKey
 import com.dd3boh.outertune.constants.AccountEmailKey
@@ -40,10 +44,12 @@ import com.dd3boh.outertune.constants.InnerTubeCookieKey
 import com.dd3boh.outertune.constants.UseLoginForBrowse
 import com.dd3boh.outertune.constants.VisitorDataKey
 import com.dd3boh.outertune.ui.component.PreferenceEntry
+import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
 import com.dd3boh.outertune.ui.component.SwitchPreference
 import com.dd3boh.outertune.ui.dialog.InfoLabel
 import com.dd3boh.outertune.ui.dialog.TextFieldDialog
 import com.dd3boh.outertune.utils.rememberPreference
+import com.dd3boh.outertune.viewmodels.MonochromeLoginViewModel
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.utils.parseCookieString
 
@@ -180,4 +186,45 @@ fun ColumnScope.AccountExtrasFrag() {
             onUseLoginForBrowseChange(it)
         }
     )
+}
+
+/**
+ * Settings fragment that shows the Monochrome account status and provides
+ * a navigation entry point to [MonochromeLoginScreen].
+ *
+ * When a session is active the user's display name and server URL are shown.
+ * A "Log out" entry is also shown so the user can sign out without navigating
+ * to the dedicated login screen.
+ */
+@Composable
+fun ColumnScope.MonochromeAccountFrag(
+    navController: NavController,
+    viewModel: MonochromeLoginViewModel = hiltViewModel(),
+) {
+    val context = LocalContext.current
+    val session by viewModel.session.collectAsState()
+
+    PreferenceGroupTitle(title = stringResource(R.string.monochrome_account))
+
+    PreferenceEntry(
+        title = {
+            Text(session?.displayName ?: stringResource(R.string.monochrome_not_logged_in))
+        },
+        description = session?.serverUrl,
+        icon = { Icon(Icons.Rounded.CloudQueue, null) },
+        onClick = { navController.navigate("monochrome_login") },
+    )
+
+    if (session != null) {
+        PreferenceEntry(
+            title = { Text(stringResource(R.string.monochrome_logout)) },
+            icon = { Icon(Icons.AutoMirrored.Rounded.Logout, null) },
+            onClick = {
+                viewModel.logout()
+                forgetMonochromeAccount(context)
+            },
+        )
+        Spacer(Modifier.height(8.dp))
+        InfoLabel(stringResource(R.string.action_logout_tooltip))
+    }
 }
