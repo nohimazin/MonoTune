@@ -7,9 +7,6 @@
 package com.dd3boh.outertune.db.daos
 
 import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import com.dd3boh.outertune.db.entities.ManualCorrection
@@ -18,85 +15,109 @@ import com.dd3boh.outertune.db.entities.YtmScrobbleQueue
 import kotlinx.coroutines.flow.Flow
 
 /**
- * DAO for the three MonoTune-specific tables:
- * - [MonochromeTrackMatch]: auto-generated YTM → Monochrome catalog matches
- * - [ManualCorrection]: user-supplied overrides for track matching
- * - [YtmScrobbleQueue]: playback events pending submission to YTM history
+ * DAO for MonoTune-specific tables: [MonochromeTrackMatch], [ManualCorrection],
+ * and [YtmScrobbleQueue].
+ *
+ * Exposes through [com.dd3boh.outertune.db.DatabaseDao] which extends this interface.
  */
 @Dao
 interface MonoTuneDao {
 
-    // -------------------------------------------------------------------------
-    // MonochromeTrackMatch
-    // -------------------------------------------------------------------------
+    // region MonochromeTrackMatch
 
-    /** Returns the Monochrome match for the given YTM track ID, or `null` if none exists. */
+    /**
+     * Insert or replace an automatic track match.
+     */
+    @Upsert
+    suspend fun upsertTrackMatch(match: MonochromeTrackMatch)
+
+    /**
+     * Return the automatic match for a given YTM track ID, or `null` if none exists.
+     */
     @Query("SELECT * FROM monochrome_track_match WHERE ytmId = :ytmId")
-    fun getMonochromeMatch(ytmId: String): Flow<MonochromeTrackMatch?>
-
-    /** Returns all Monochrome matches, ordered by confidence (highest first). */
-    @Query("SELECT * FROM monochrome_track_match ORDER BY confidence DESC")
-    fun getAllMonochromeMatches(): Flow<List<MonochromeTrackMatch>>
+    suspend fun getTrackMatch(ytmId: String): MonochromeTrackMatch?
 
     /**
-     * Inserts or replaces the Monochrome match for a YTM track.
-     * Use this when the matching pipeline produces a new or updated result.
+     * Observe the automatic match for a given YTM track ID reactively.
      */
-    @Upsert
-    fun upsertMonochromeMatch(match: MonochromeTrackMatch)
+    @Query("SELECT * FROM monochrome_track_match WHERE ytmId = :ytmId")
+    fun trackMatchFlow(ytmId: String): Flow<MonochromeTrackMatch?>
 
-    /** Removes the automatic Monochrome match for the given YTM track ID. */
+    /**
+     * Delete the automatic match for a given YTM track ID.
+     */
     @Query("DELETE FROM monochrome_track_match WHERE ytmId = :ytmId")
-    fun deleteMonochromeMatch(ytmId: String)
+    suspend fun deleteTrackMatch(ytmId: String)
 
-    // -------------------------------------------------------------------------
-    // ManualCorrection
-    // -------------------------------------------------------------------------
+    // endregion
 
-    /** Returns the user correction for the given YTM track ID, or `null` if none exists. */
-    @Query("SELECT * FROM manual_correction WHERE ytmId = :ytmId")
-    fun getManualCorrection(ytmId: String): Flow<ManualCorrection?>
-
-    /** Returns all user corrections. */
-    @Query("SELECT * FROM manual_correction ORDER BY correctedAt DESC")
-    fun getAllManualCorrections(): Flow<List<ManualCorrection>>
+    // region ManualCorrection
 
     /**
-     * Inserts or replaces a user correction.
-     * A `null` [ManualCorrection.correctedMonochromeId] means the user has explicitly
-     * marked the track as unavailable on Monochrome.
+     * Insert or replace a user-supplied manual correction.
      */
     @Upsert
-    fun upsertManualCorrection(correction: ManualCorrection)
-
-    /** Removes the user correction for the given YTM track ID. */
-    @Query("DELETE FROM manual_correction WHERE ytmId = :ytmId")
-    fun deleteManualCorrection(ytmId: String)
-
-    // -------------------------------------------------------------------------
-    // YtmScrobbleQueue
-    // -------------------------------------------------------------------------
-
-    /** Enqueues a new playback event to be scrobbled to YTM. */
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun enqueueScrobble(entry: YtmScrobbleQueue)
+    suspend fun upsertManualCorrection(correction: ManualCorrection)
 
     /**
-     * Returns all pending (not yet scrobbled) entries, ordered by play time.
-     * A background worker should call this to drain the queue.
+     * Return the manual correction for a given YTM track ID, or `null` if the user
+     * has not overridden the automatic match.
+     */
+    @Query("SELECT * FROM manual_correction WHERE ytmId = :ytmId")
+    suspend fun getManualCorrection(ytmId: String): ManualCorrection?
+
+    /**
+     * Observe the manual correction for a given YTM track ID reactively.
+     */
+    @Query("SELECT * FROM manual_correction WHERE ytmId = :ytmId")
+    fun manualCorrectionFlow(ytmId: String): Flow<ManualCorrection?>
+
+    /**
+     * Delete the manual correction for a given YTM track ID, reverting to the
+     * automatic match (if one exists).
+     */
+    @Query("DELETE FROM manual_correction WHERE ytmId = :ytmId")
+    suspend fun deleteManualCorrection(ytmId: String)
+
+    // endregion
+
+    // region YtmScrobbleQueue
+
+    /**
+     * Enqueue a new scrobble event.
+     *
+     * The [YtmScrobbleQueue.id] is auto-generated; pass `id = 0` (the default).
+     */
+    @Upsert
+    suspend fun enqueueScrobble(event: YtmScrobbleQueue)
+
+    /**
+     * Return all scrobble events that have not yet been submitted to YTM.
      */
     @Query("SELECT * FROM ytm_scrobble_queue WHERE scrobbled = 0 ORDER BY playedAt ASC")
-    fun getPendingScrobbles(): Flow<List<YtmScrobbleQueue>>
+    suspend fun getPendingScrobbles(): List<YtmScrobbleQueue>
 
-    /** Marks a single scrobble entry as successfully submitted. */
+    /**
+     * Observe pending (unsubmitted) scrobble events reactively.
+     */
+    @Query("SELECT * FROM ytm_scrobble_queue WHERE scrobbled = 0 ORDER BY playedAt ASC")
+    fun pendingScrobblesFlow(): Flow<List<YtmScrobbleQueue>>
+
+    /**
+     * Mark a scrobble event as successfully submitted to YTM.
+     *
+     * @param id  The [YtmScrobbleQueue.id] of the event to mark.
+     */
     @Query("UPDATE ytm_scrobble_queue SET scrobbled = 1 WHERE id = :id")
-    fun markScrobbled(id: Long)
+    suspend fun markScrobbled(id: Long)
 
-    /** Removes all entries that have already been successfully submitted to YTM. */
+    /**
+     * Delete all scrobble events that have already been submitted.
+     *
+     * Call this periodically to keep the queue lean.
+     */
     @Query("DELETE FROM ytm_scrobble_queue WHERE scrobbled = 1")
-    fun deleteScrobbled()
+    suspend fun purgeSubmittedScrobbles()
 
-    /** Removes a specific scrobble entry (e.g. after a permanent failure). */
-    @Delete
-    fun deleteScrobble(entry: YtmScrobbleQueue)
+    // endregion
 }
