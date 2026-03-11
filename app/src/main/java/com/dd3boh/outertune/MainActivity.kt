@@ -141,6 +141,7 @@ import com.dd3boh.outertune.ui.screens.BrowseScreen
 import com.dd3boh.outertune.ui.screens.HistoryScreen
 import com.dd3boh.outertune.ui.screens.HomeScreen
 import com.dd3boh.outertune.ui.screens.LoginScreen
+import com.dd3boh.outertune.ui.screens.MonochromeLoginScreen
 import com.dd3boh.outertune.ui.screens.MoodAndGenresScreen
 import com.dd3boh.outertune.ui.screens.PlayerScreen
 import com.dd3boh.outertune.ui.screens.Screens
@@ -703,6 +704,10 @@ class MainActivity : ComponentActivity() {
                                     }
                                     composable("login") {
                                         LoginScreen(navController)
+                                    }
+
+                                    composable("monochrome_login") {
+                                        MonochromeLoginScreen(navController)
                                     }
 
                                     composable("setup_wizard") {

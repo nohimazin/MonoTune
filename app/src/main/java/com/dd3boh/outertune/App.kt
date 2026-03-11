@@ -40,8 +40,14 @@ import com.dd3boh.outertune.constants.ProxyUrlKey
 import com.dd3boh.outertune.constants.SYSTEM_DEFAULT
 import com.dd3boh.outertune.constants.UseLoginForBrowse
 import com.dd3boh.outertune.constants.VisitorDataKey
+import com.dd3boh.outertune.constants.MonochromeAuthTokenKey
+import com.dd3boh.outertune.constants.MonochromeDisplayNameKey
+import com.dd3boh.outertune.constants.MonochromeEmailKey
+import com.dd3boh.outertune.constants.MonochromeServerUrlKey
+import com.dd3boh.outertune.constants.MonochromeTokenExpiryKey
 import com.dd3boh.outertune.extensions.toEnum
 import com.dd3boh.outertune.extensions.toInetSocketAddress
+import com.dd3boh.outertune.monochrome.MonochromeAuthRepository
 import com.dd3boh.outertune.utils.CoilBitmapLoader
 import com.dd3boh.outertune.utils.LocalArtworkPathKeyer
 import com.dd3boh.outertune.utils.dataStore
@@ -51,6 +57,7 @@ import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.models.YouTubeLocale
 import com.zionhuang.kugou.KuGou
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -66,6 +73,9 @@ import java.util.Locale
 class App : Application(), SingletonImageLoader.Factory {
     private val TAG = App::class.simpleName.toString()
 
+    @Inject
+    lateinit var monochromeAuthRepository: MonochromeAuthRepository
+
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
@@ -75,6 +85,10 @@ class App : Application(), SingletonImageLoader.Factory {
         }
 
         instance = this;
+
+        // Restore a previously-persisted Monochrome session so the client is
+        // ready before any UI component asks for it.
+        GlobalScope.launch { monochromeAuthRepository.restoreSession() }
 
         val locale = Locale.getDefault()
         val languageTag = locale.toLanguageTag().replace("-Hant", "") // replace zh-Hant-* to zh-*
@@ -219,6 +233,18 @@ class App : Application(), SingletonImageLoader.Factory {
                     settings.remove(AccountNameKey)
                     settings.remove(AccountEmailKey)
                     settings.remove(AccountChannelHandleKey)
+                }
+            }
+        }
+
+        fun forgetMonochromeAccount(context: Context) {
+            runBlocking {
+                context.dataStore.edit { settings ->
+                    settings.remove(MonochromeAuthTokenKey)
+                    settings.remove(MonochromeEmailKey)
+                    settings.remove(MonochromeDisplayNameKey)
+                    settings.remove(MonochromeServerUrlKey)
+                    settings.remove(MonochromeTokenExpiryKey)
                 }
             }
         }
