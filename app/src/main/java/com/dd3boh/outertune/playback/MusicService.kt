@@ -111,6 +111,8 @@ import com.dd3boh.outertune.models.toMediaMetadata
 import com.dd3boh.outertune.playback.queues.ListQueue
 import com.dd3boh.outertune.playback.queues.Queue
 import com.dd3boh.outertune.playback.queues.YouTubeQueue
+import com.dd3boh.outertune.monochrome.MonochromeClientApi
+import com.dd3boh.outertune.monochrome.MonochromeResult
 import com.dd3boh.outertune.utils.CoilBitmapLoader
 import com.dd3boh.outertune.utils.NetworkConnectivityObserver
 import com.dd3boh.outertune.utils.SyncUtils
@@ -170,6 +172,9 @@ class MusicService : MediaLibraryService(),
 
     @Inject
     lateinit var lyricsHelper: LyricsHelper
+
+    @Inject
+    lateinit var monochromeClient: MonochromeClientApi
 
     @Inject
     lateinit var mediaLibrarySessionCallback: MediaLibrarySessionCallback
@@ -685,6 +690,38 @@ class MusicService : MediaLibraryService(),
             }
 
             Log.d(TAG, "PLAYING: remote song (online fetch)")
+
+            // Try Monochrome stream first: manual correction takes priority over auto-match.
+            val monochromeId = runBlocking(Dispatchers.IO) {
+                val correction = database.getManualCorrection(mediaId)
+                when {
+                    correction != null -> correction.correctedMonochromeId // null = user marked unavailable
+                    else -> database.getTrackMatch(mediaId)?.monochromeId
+                }
+            }
+
+            if (monochromeId != null) {
+                when (val monoResult = runBlocking(Dispatchers.IO) {
+                    monochromeClient.resolveStreamUrl(monochromeId)
+                }) {
+                    is MonochromeResult.Success -> {
+                        val streamUrl = monoResult.data
+                        Log.d(TAG, "PLAYING: monochrome stream for $mediaId → monochromeId=$monochromeId")
+                        offloadScope.launch { recoverSong(mediaId) }
+                        // Cache Monochrome stream URL for 1 hour (they are not always time-limited,
+                        // but using a reasonable TTL avoids stale entries).
+                        songUrlCache[mediaId] = streamUrl to System.currentTimeMillis() + (60 * 60 * 1000L)
+                        return@Factory dataSpec.withUri(streamUrl.toUri())
+                            .subrange(dataSpec.uriPositionOffset, CHUNK_LENGTH)
+                    }
+                    is MonochromeResult.Error -> {
+                        Log.w(
+                            TAG,
+                            "Monochrome stream resolve failed for $mediaId ($monochromeId): ${monoResult.message}, falling back to YTM"
+                        )
+                    }
+                }
+            }
 
             val playbackData = runBlocking(Dispatchers.IO) {
                 val audioQuality by enumPreference(this@MusicService, AudioQualityKey, AudioQuality.AUTO)

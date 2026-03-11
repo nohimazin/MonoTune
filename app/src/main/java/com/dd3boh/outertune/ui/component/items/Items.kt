@@ -881,4 +881,16 @@ object Icon {
                 .padding(end = 2.dp)
         )
     }
+
+    @Composable
+    fun Monochrome() {
+        Icon(
+            imageVector = Icons.Rounded.MusicNote,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .size(18.dp)
+                .padding(end = 2.dp)
+        )
+    }
 }

@@ -34,6 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.dd3boh.outertune.LocalDatabase
+import com.dd3boh.outertune.LocalDownloadUtil
 import com.dd3boh.outertune.LocalMenuState
 import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
 import com.dd3boh.outertune.LocalPlayerConnection
@@ -45,6 +47,7 @@ import com.dd3boh.outertune.constants.SwipeToQueueKey
 import com.dd3boh.outertune.extensions.toMediaItem
 import com.dd3boh.outertune.extensions.togglePlayPause
 import com.dd3boh.outertune.models.toMediaMetadata
+import com.dd3boh.outertune.monochrome.tidalCoverUrl
 import com.dd3boh.outertune.playback.queues.ListQueue
 import com.dd3boh.outertune.ui.component.ChipsRow
 import com.dd3boh.outertune.ui.component.EmptyPlaceholder
@@ -52,6 +55,7 @@ import com.dd3boh.outertune.ui.component.LazyColumnScrollbar
 import com.dd3boh.outertune.ui.component.NavigationTitle
 import com.dd3boh.outertune.ui.component.SwipeToQueueBox
 import com.dd3boh.outertune.ui.component.button.IconButton
+import com.dd3boh.outertune.ui.component.items.Icon as BadgeIcon
 import com.dd3boh.outertune.ui.component.items.YouTubeListItem
 import com.dd3boh.outertune.ui.component.shimmer.ListItemPlaceHolder
 import com.dd3boh.outertune.ui.component.shimmer.ShimmerHost
@@ -116,15 +120,46 @@ fun OnlineSearchResult(
 
     val ytItemContent: @Composable LazyItemScope.(YTItem, List<YTItem>) -> Unit =
         { item: YTItem, collection: List<YTItem> ->
+            // Look up Monochrome match for this item (songs only).
+            val monochromeTrack = if (item is SongItem) viewModel.matchedMonochromeTracks[item.id] else null
+            // Use TIDAL cover art when a coverArtId is available, otherwise keep the YTM thumbnail.
+            val displayItem = if (item is SongItem && monochromeTrack?.coverArtId != null) {
+                item.copy(thumbnail = tidalCoverUrl(monochromeTrack.coverArtId))
+            } else {
+                item
+            }
             val content: @Composable () -> Unit = {
+                val database = LocalDatabase.current
+                val song by database.song(item.id).collectAsState(initial = null)
+                val album by database.album(item.id).collectAsState(initial = null)
                 YouTubeListItem(
-                    item = item,
+                    item = displayItem,
                     isActive = when (item) {
                         is SongItem -> mediaMetadata?.id == item.id
                         is AlbumItem -> mediaMetadata?.album?.id == item.id
                         else -> false
                     },
                     isPlaying = isPlaying,
+                    badges = {
+                        if (item is SongItem && song?.song?.liked == true ||
+                            item is AlbumItem && album?.album?.bookmarkedAt != null
+                        ) {
+                            BadgeIcon.Favorite()
+                        }
+                        if (item.explicit) {
+                            BadgeIcon.Explicit()
+                        }
+                        if (item is SongItem && song?.song?.inLibrary != null) {
+                            BadgeIcon.Library()
+                        }
+                        if (item is SongItem) {
+                            val downloads by LocalDownloadUtil.current.downloads.collectAsState()
+                            BadgeIcon.Download(downloads[item.id])
+                        }
+                        if (monochromeTrack != null) {
+                            BadgeIcon.Monochrome()
+                        }
+                    },
                     trailingContent = {
                         IconButton(
                             onClick = {
