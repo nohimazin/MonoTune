@@ -41,8 +41,8 @@ import com.dd3boh.outertune.utils.enumPreference
 import com.dd3boh.outertune.utils.get
 import com.dd3boh.outertune.utils.reportException
 
-import com.dd3boh.outertune.utils.scanners.fileFromUri
-import com.dd3boh.outertune.utils.scanners.uriListFromString
+import com.dd3boh.outertune.utils.fileFromUri
+import com.dd3boh.outertune.utils.uriListFromString
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.models.SongItem
 import dagger.hilt.android.qualifiers.ApplicationContext

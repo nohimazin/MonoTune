@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.utils.scanners
+package com.dd3boh.outertune.utils
 
 import android.content.Context
 import android.net.Uri
@@ -12,11 +12,11 @@ import androidx.documentfile.provider.TreeDocumentFileOt
 import java.io.File
 
 fun documentFileFromUri(context: Context, uris: List<Uri>): List<DocumentFile> {
-    return uris.map { customDocFileFromTreeTreeUri(context, it) }.filter { it.isDirectory }
+    return uris.map { customDocFileFromTreeUri(context, it) }.filter { it.isDirectory }
 }
 
 fun documentFileFromUri(context: Context, uri: Uri): DocumentFile? {
-    return customDocFileFromTreeTreeUri(context, uri)
+    return customDocFileFromTreeUri(context, uri)
 }
 
 fun stringFromUriList(uris: List<Uri>): String {
@@ -93,7 +93,7 @@ fun absoluteFilePathFromUri(context: Context, uri: Uri): String? {
     return fileFromUri(context, dfUri)?.absolutePath
 }
 
-private fun customDocFileFromTreeTreeUri(context: Context, uri: Uri) = TreeDocumentFileOt(
+private fun customDocFileFromTreeUri(context: Context, uri: Uri) = TreeDocumentFileOt(
     null, context, DocumentsContract.buildDocumentUriUsingTree(
         uri, DocumentsContract.getTreeDocumentId(uri)
     )
