@@ -154,7 +154,6 @@ import javax.inject.Inject
 import kotlin.math.min
 import kotlin.math.pow
 
-
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @AndroidEntryPoint
 class MusicService : MediaLibraryService(),
