@@ -116,9 +116,11 @@ fun OnlineSearchResult(
 
     val ytItemContent: @Composable LazyItemScope.(YTItem, List<YTItem>) -> Unit =
         { item: YTItem, collection: List<YTItem> ->
+            val monochromeTrack = if (item is SongItem) viewModel.matchedMonochromeTracks[item.id] else null
             val content: @Composable () -> Unit = {
                 YouTubeListItem(
                     item = item,
+                    monochromeTrack = monochromeTrack,
                     isActive = when (item) {
                         is SongItem -> mediaMetadata?.id == item.id
                         is AlbumItem -> mediaMetadata?.album?.id == item.id

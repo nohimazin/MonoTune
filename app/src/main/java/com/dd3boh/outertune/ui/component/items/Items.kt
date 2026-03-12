@@ -68,6 +68,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -90,6 +91,8 @@ import com.dd3boh.outertune.db.entities.RecentActivityEntity
 import com.dd3boh.outertune.models.MediaMetadata
 import com.dd3boh.outertune.models.MultiQueueObject
 import com.dd3boh.outertune.models.toMediaMetadata
+import com.dd3boh.outertune.monochrome.MonochromeTrack
+import com.dd3boh.outertune.monochrome.tidalCoverUrl
 import com.dd3boh.outertune.playback.queues.ListQueue
 import com.dd3boh.outertune.ui.component.PlayingIndicator
 import com.dd3boh.outertune.ui.component.PlayingIndicatorBox
@@ -393,6 +396,7 @@ fun YouTubeListItem(
     modifier: Modifier = Modifier,
     albumIndex: Int? = null,
     isSelected: Boolean = false,
+    monochromeTrack: MonochromeTrack? = null,
     badges: @Composable RowScope.() -> Unit = {
         val database = LocalDatabase.current
         val song by database.song(item.id).collectAsState(initial = null)
@@ -413,11 +417,26 @@ fun YouTubeListItem(
             val downloads by LocalDownloadUtil.current.downloads.collectAsState()
             Icon.Download(downloads[item.id])
         }
+        if (monochromeTrack != null) {
+            Spacer(modifier = Modifier.width(2.dp))
+            Text(
+                text = stringResource(R.string.monochrome_provider_badge),
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.labelSmall,
+                maxLines = 1,
+            )
+        }
     },
     isActive: Boolean = false,
     isPlaying: Boolean = false,
     trailingContent: @Composable RowScope.() -> Unit = {},
 ) {
+    // Prefer Monochrome cover art when a matched track with a cover art ID is available
+    val effectiveThumbnailUrl = if (monochromeTrack?.coverArtId != null) {
+        tidalCoverUrl(monochromeTrack.coverArtId, 320)
+    } else {
+        item.thumbnail
+    }
     ListItem(
         title = item.title,
         subtitle = when (item) {
@@ -437,7 +456,7 @@ fun YouTubeListItem(
         badges = badges,
         thumbnailContent = {
             ItemThumbnail(
-                thumbnailUrl = item.thumbnail,
+                thumbnailUrl = effectiveThumbnailUrl,
                 albumIndex = albumIndex,
                 isActive = isActive,
                 isPlaying = isPlaying,
