@@ -64,6 +64,9 @@ import com.dd3boh.outertune.ui.menu.MenuState
 import com.dd3boh.outertune.ui.menu.SongMenu
 import com.dd3boh.outertune.utils.joinByBullet
 import com.dd3boh.outertune.utils.makeTimeString
+import androidx.compose.material3.Text
+import androidx.compose.ui.res.stringResource
+import com.dd3boh.outertune.viewmodels.MonochromeMatchStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -91,6 +94,7 @@ fun SongListItem(
     showLikedIcon: Boolean = true,
     showInLibraryIcon: Boolean = true,
     showDownloadIcon: Boolean = true,
+    matchStatus: MonochromeMatchStatus? = null,
 
     thumbnailSize: Int,
     onPlay: () -> Unit,
@@ -119,6 +123,26 @@ fun SongListItem(
                 if (showDownloadIcon) {
                     val download by LocalDownloadUtil.current.getDownload(song.id).collectAsState(initial = null)
                     Icon.Download(download)
+                }
+                if (matchStatus != null) {
+                    val labelRes = when (matchStatus) {
+                        MonochromeMatchStatus.MATCHED_AUTO -> R.string.monochrome_status_auto
+                        MonochromeMatchStatus.MATCHED_MANUAL -> R.string.monochrome_status_manual
+                        MonochromeMatchStatus.EXPLICITLY_UNAVAILABLE -> R.string.monochrome_status_unavailable
+                        MonochromeMatchStatus.UNRESOLVED -> R.string.monochrome_status_unresolved
+                    }
+                    val labelColor = when (matchStatus) {
+                        MonochromeMatchStatus.MATCHED_AUTO,
+                        MonochromeMatchStatus.MATCHED_MANUAL -> MaterialTheme.colorScheme.primary
+                        MonochromeMatchStatus.EXPLICITLY_UNAVAILABLE,
+                        MonochromeMatchStatus.UNRESOLVED -> MaterialTheme.colorScheme.error
+                    }
+                    Text(
+                        text = stringResource(labelRes),
+                        color = labelColor,
+                        style = MaterialTheme.typography.labelSmall,
+                        maxLines = 1,
+                    )
                 }
             },
             thumbnailContent = {

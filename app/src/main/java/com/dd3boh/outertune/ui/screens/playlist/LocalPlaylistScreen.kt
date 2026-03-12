@@ -24,7 +24,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material.icons.automirrored.rounded.QueueMusic
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Lock
@@ -39,6 +41,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -136,6 +139,7 @@ import com.dd3boh.outertune.utils.rememberEnumPreference
 import com.dd3boh.outertune.utils.rememberPreference
 import com.dd3boh.outertune.utils.syncCoroutine
 import com.dd3boh.outertune.viewmodels.LocalPlaylistViewModel
+import com.dd3boh.outertune.viewmodels.MonochromeMatchStatus
 import com.zionhuang.innertube.YouTube
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -162,6 +166,7 @@ fun LocalPlaylistScreen(
     val snackbarHostState = LocalSnackbarHostState.current
 
     val playlistWithSongs by viewModel.playlistWithSongs.collectAsState()
+    val songsWithStatus by viewModel.songsWithStatus.collectAsState()
 
     val isPlaying by playerConnection.isPlaying.collectAsState()
     val mediaMetadata by playerConnection.mediaMetadata.collectAsState()
@@ -512,53 +517,203 @@ fun LocalPlaylistScreen(
 
             // songs
             val thumbnailSize = (ListThumbnailSize.value * density.density).roundToInt()
-            itemsIndexed(
-                items = mutableSongs,
-                key = { _, song -> song.map.id },
-                contentType = { _, song -> CONTENT_TYPE_SONG },
-            ) { index, song ->
-                ReorderableItem(
-                    state = reorderableState,
-                    key = song.map.id,
-                    enabled = editable
-                ) {
-                    SongListItem(
-                        song = song.song,
-                        thumbnailSize = thumbnailSize,
-                        playlistSong = song,
-                        playlist =  playlistWithSongs.first,
-                        navController = navController,
-                        snackbarHostState = snackbarHostState,
+            val isDragMode = sortType == PlaylistSongSortType.CUSTOM && !locked && !isSearching && editable
 
-                        isActive = song.song.id == mediaMetadata?.id,
-                        isPlaying = isPlaying,
-                        swipeEnabled = swipeEnabled,
-                        onSelectedChange = {
-                            inSelectMode = true
-                            if (it) {
-                                selection.add(song.song.id)
-                            } else {
-                                selection.remove(song.song.id)
-                            }
-                        },
-                        inSelectMode = inSelectMode,
-                        isSelected = selection.contains(song.song.id),
-
-                        onPlay = {
-                            playerConnection.playQueue(
-                                ListQueue(
-                                    title =  playlistWithSongs.first!!.playlist.name,
-                                    items = mutableSongs.map { it.song.toMediaMetadata() },
-                                    startIndex = index,
-                                    playlistId =  playlistWithSongs.first?.playlist?.browseId
+            if (isDragMode) {
+                // Custom sort mode: flat list with drag-and-drop, showing status badges inline
+                itemsIndexed(
+                    items = mutableSongs,
+                    key = { _, song -> song.map.id },
+                    contentType = { _, _ -> CONTENT_TYPE_SONG },
+                ) { index, song ->
+                    ReorderableItem(
+                        state = reorderableState,
+                        key = song.map.id,
+                        enabled = editable
+                    ) {
+                        SongListItem(
+                            song = song.song,
+                            thumbnailSize = thumbnailSize,
+                            playlistSong = song,
+                            playlist = playlistWithSongs.first,
+                            navController = navController,
+                            snackbarHostState = snackbarHostState,
+                            isActive = song.song.id == mediaMetadata?.id,
+                            isPlaying = isPlaying,
+                            swipeEnabled = swipeEnabled,
+                            onSelectedChange = {
+                                inSelectMode = true
+                                if (it) selection.add(song.song.id) else selection.remove(song.song.id)
+                            },
+                            inSelectMode = inSelectMode,
+                            isSelected = selection.contains(song.song.id),
+                            matchStatus = songsWithStatus[song.song.id]?.status,
+                            onPlay = {
+                                playerConnection.playQueue(
+                                    ListQueue(
+                                        title = playlistWithSongs.first!!.playlist.name,
+                                        items = mutableSongs.map { it.song.toMediaMetadata() },
+                                        startIndex = index,
+                                        playlistId = playlistWithSongs.first?.playlist?.browseId
+                                    )
                                 )
-                            )
-                        },
-                        dragHandleModifier = if (sortType == PlaylistSongSortType.CUSTOM && !locked && !isSearching && editable) Modifier.draggableHandle() else null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.background),
-                    )
+                            },
+                            dragHandleModifier = Modifier.draggableHandle(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background),
+                        )
+                    }
+                }
+            } else {
+                // Non-drag mode: grouped sections (Matched / Unresolved)
+                val matchedSongs = mutableSongs.filter { song ->
+                    val status = songsWithStatus[song.song.id]?.status
+                    status == MonochromeMatchStatus.MATCHED_AUTO ||
+                        status == MonochromeMatchStatus.MATCHED_MANUAL
+                }
+                val unresolvedSongs = mutableSongs.filter { song ->
+                    val status = songsWithStatus[song.song.id]?.status
+                    status == null ||
+                        status == MonochromeMatchStatus.UNRESOLVED ||
+                        status == MonochromeMatchStatus.EXPLICITLY_UNAVAILABLE
+                }
+
+                // Matched section header
+                if (matchedSongs.isNotEmpty()) {
+                    item(
+                        key = "matched_section_header",
+                        contentType = CONTENT_TYPE_HEADER,
+                    ) {
+                        PlaylistSectionHeader(
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Rounded.CheckCircle,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            },
+                            title = stringResource(R.string.playlist_section_matched),
+                            count = matchedSongs.size,
+                        )
+                    }
+                }
+
+                // Matched songs
+                itemsIndexed(
+                    items = matchedSongs,
+                    key = { _, song -> "matched_${song.map.id}" },
+                    contentType = { _, _ -> CONTENT_TYPE_SONG },
+                ) { index, song ->
+                    val globalIndex = mutableSongs.indexOf(song)
+                    ReorderableItem(
+                        state = reorderableState,
+                        key = "matched_${song.map.id}",
+                        enabled = false,
+                    ) {
+                        SongListItem(
+                            song = song.song,
+                            thumbnailSize = thumbnailSize,
+                            playlistSong = song,
+                            playlist = playlistWithSongs.first,
+                            navController = navController,
+                            snackbarHostState = snackbarHostState,
+                            isActive = song.song.id == mediaMetadata?.id,
+                            isPlaying = isPlaying,
+                            swipeEnabled = swipeEnabled,
+                            onSelectedChange = {
+                                inSelectMode = true
+                                if (it) selection.add(song.song.id) else selection.remove(song.song.id)
+                            },
+                            inSelectMode = inSelectMode,
+                            isSelected = selection.contains(song.song.id),
+                            matchStatus = songsWithStatus[song.song.id]?.status,
+                            onPlay = {
+                                playerConnection.playQueue(
+                                    ListQueue(
+                                        title = playlistWithSongs.first!!.playlist.name,
+                                        items = mutableSongs.map { it.song.toMediaMetadata() },
+                                        startIndex = if (globalIndex >= 0) globalIndex else index,
+                                        playlistId = playlistWithSongs.first?.playlist?.browseId
+                                    )
+                                )
+                            },
+                            dragHandleModifier = null,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background),
+                        )
+                    }
+                }
+
+                // Unresolved section header
+                if (unresolvedSongs.isNotEmpty()) {
+                    item(
+                        key = "unresolved_section_header",
+                        contentType = CONTENT_TYPE_HEADER,
+                    ) {
+                        PlaylistSectionHeader(
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Rounded.HelpOutline,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            },
+                            title = stringResource(R.string.playlist_section_unresolved),
+                            count = unresolvedSongs.size,
+                        )
+                    }
+                }
+
+                // Unresolved songs
+                itemsIndexed(
+                    items = unresolvedSongs,
+                    key = { _, song -> "unresolved_${song.map.id}" },
+                    contentType = { _, _ -> CONTENT_TYPE_SONG },
+                ) { index, song ->
+                    val globalIndex = mutableSongs.indexOf(song)
+                    val songStatus = songsWithStatus[song.song.id]?.status
+                    ReorderableItem(
+                        state = reorderableState,
+                        key = "unresolved_${song.map.id}",
+                        enabled = false,
+                    ) {
+                        SongListItem(
+                            song = song.song,
+                            thumbnailSize = thumbnailSize,
+                            playlistSong = song,
+                            playlist = playlistWithSongs.first,
+                            navController = navController,
+                            snackbarHostState = snackbarHostState,
+                            isActive = song.song.id == mediaMetadata?.id,
+                            isPlaying = isPlaying,
+                            swipeEnabled = swipeEnabled,
+                            onSelectedChange = {
+                                inSelectMode = true
+                                if (it) selection.add(song.song.id) else selection.remove(song.song.id)
+                            },
+                            inSelectMode = inSelectMode,
+                            isSelected = selection.contains(song.song.id),
+                            matchStatus = songStatus ?: MonochromeMatchStatus.UNRESOLVED,
+                            onPlay = {
+                                playerConnection.playQueue(
+                                    ListQueue(
+                                        title = playlistWithSongs.first!!.playlist.name,
+                                        items = mutableSongs.map { it.song.toMediaMetadata() },
+                                        startIndex = if (globalIndex >= 0) globalIndex else index,
+                                        playlistId = playlistWithSongs.first?.playlist?.browseId
+                                    )
+                                )
+                            },
+                            dragHandleModifier = null,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background),
+                        )
+                    }
                 }
             }
         }
@@ -889,3 +1044,39 @@ fun LocalPlaylistHeader(
             }
         }
     }
+
+/**
+ * A lightweight section header shown above grouped song lists (Matched / Unresolved).
+ */
+@Composable
+private fun PlaylistSectionHeader(
+    icon: @Composable () -> Unit,
+    title: String,
+    count: Int,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        ) {
+            icon()
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text(
+                text = "($count)",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            )
+        }
+    }
+}

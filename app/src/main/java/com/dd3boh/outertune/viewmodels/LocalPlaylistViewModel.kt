@@ -14,10 +14,13 @@ import com.dd3boh.outertune.utils.dataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -53,6 +56,38 @@ class LocalPlaylistViewModel @Inject constructor(
 
         Pair(playlist, sortedSongs)
     }.stateIn(viewModelScope, SharingStarted.Lazily, Pair(null, emptyList()))
+
+    /**
+     * Reactive map of song ID → [PlaylistSongWithStatus] for all songs in this playlist.
+     *
+     * Applies the same manual-correction-first priority used by playback:
+     *  1. [com.dd3boh.outertune.db.entities.ManualCorrection] wins
+     *  2. fallback to [com.dd3boh.outertune.db.entities.MonochromeTrackMatch]
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val songsWithStatus = playlistWithSongs
+        .flatMapLatest { (_, songs) ->
+            if (songs.isEmpty()) {
+                flowOf(emptyMap())
+            } else {
+                val ytmIds = songs.map { it.song.id }
+                combine(
+                    database.trackMatchesForSongsFlow(ytmIds),
+                    database.manualCorrectionsForSongsFlow(ytmIds),
+                ) { matches, corrections ->
+                    val matchMap = matches.associateBy { it.ytmId }
+                    val correctionMap = corrections.associateBy { it.ytmId }
+                    songs.associate { song ->
+                        song.song.id to PlaylistSongWithStatus(
+                            playlistSong = song,
+                            autoMatch = matchMap[song.song.id],
+                            manualCorrection = correctionMap[song.song.id],
+                        )
+                    }
+                }
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyMap())
 
     init {
         // Fix playlist song order
