@@ -18,6 +18,7 @@ ksp = "2.3.4"
 [libraries]
 annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 error-prone-core = { module = "com.google.errorprone:error_prone_core", version = "2.46.0" }
+error-prone-annotations = { module = "com.google.errorprone:error_prone_annotations", version = "2.46.0" }
 guava = { group = "com.google.guava", name = "guava", version = "33.5.0-android" }
 coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version = "1.10.2" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "1.10.2" }
