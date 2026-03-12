@@ -37,11 +37,15 @@ private class FakeMonoTuneDao(
     override suspend fun getTrackMatch(ytmId: String) = matches[ytmId]
     override fun trackMatchFlow(ytmId: String): Flow<MonochromeTrackMatch?> = flowOf(matches[ytmId])
     override suspend fun deleteTrackMatch(ytmId: String) = Unit
+    override fun trackMatchesForSongsFlow(ytmIds: List<String>): Flow<List<MonochromeTrackMatch>> =
+        flowOf(ytmIds.mapNotNull { matches[it] })
 
     override suspend fun upsertManualCorrection(correction: ManualCorrection) = Unit
     override suspend fun getManualCorrection(ytmId: String) = corrections[ytmId]
     override fun manualCorrectionFlow(ytmId: String): Flow<ManualCorrection?> = flowOf(corrections[ytmId])
     override suspend fun deleteManualCorrection(ytmId: String) = Unit
+    override fun manualCorrectionsForSongsFlow(ytmIds: List<String>): Flow<List<ManualCorrection>> =
+        flowOf(ytmIds.mapNotNull { corrections[it] })
 
     override suspend fun enqueueScrobble(event: YtmScrobbleQueue) = Unit
     override suspend fun getPendingScrobbles(): List<YtmScrobbleQueue> = emptyList()

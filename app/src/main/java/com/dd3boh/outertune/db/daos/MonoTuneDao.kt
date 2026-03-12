@@ -49,6 +49,13 @@ interface MonoTuneDao {
     @Query("DELETE FROM monochrome_track_match WHERE ytmId = :ytmId")
     suspend fun deleteTrackMatch(ytmId: String)
 
+    /**
+     * Observe automatic matches for a set of YTM track IDs reactively.
+     * Useful for batch-resolving a whole playlist.
+     */
+    @Query("SELECT * FROM monochrome_track_match WHERE ytmId IN (:ytmIds)")
+    fun trackMatchesForSongsFlow(ytmIds: List<String>): Flow<List<MonochromeTrackMatch>>
+
     // endregion
 
     // region ManualCorrection
@@ -78,6 +85,13 @@ interface MonoTuneDao {
      */
     @Query("DELETE FROM manual_correction WHERE ytmId = :ytmId")
     suspend fun deleteManualCorrection(ytmId: String)
+
+    /**
+     * Observe manual corrections for a set of YTM track IDs reactively.
+     * Useful for batch-resolving a whole playlist.
+     */
+    @Query("SELECT * FROM manual_correction WHERE ytmId IN (:ytmIds)")
+    fun manualCorrectionsForSongsFlow(ytmIds: List<String>): Flow<List<ManualCorrection>>
 
     // endregion
 

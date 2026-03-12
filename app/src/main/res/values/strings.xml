@@ -359,4 +359,18 @@ We recycle translations from upstream, they are pulled periodically. -->
     <string name="monochrome_backend_note">Sign in with your monochrome.tf account. The Server URL is the hifi-api instance used for music streaming (default: https://api.monochrome.tf).</string>
     <!-- Keep for backwards compat - no longer shown in the UI -->
     <string name="monochrome_backend_stub_note">@string/monochrome_backend_note</string>
+
+    <!-- Playlist match status section headers -->
+    <string name="playlist_section_matched">Matched</string>
+    <string name="playlist_section_unresolved">Unresolved</string>
+
+    <!-- Per-song match status badges -->
+    <string name="monochrome_status_auto">Auto</string>
+    <string name="monochrome_status_manual">Manual</string>
+    <string name="monochrome_status_unresolved">Unresolved</string>
+    <string name="monochrome_status_unavailable">Unavailable</string>
+
+    <!-- Manual correction entry point -->
+    <string name="monochrome_fix_match">Fix match</string>
+    <string name="monochrome_clear_correction">Clear correction</string>
 </resources>
