@@ -54,6 +54,9 @@ import com.dd3boh.outertune.monochrome.MonochromeTrack
 import com.dd3boh.outertune.utils.makeTimeString
 import com.dd3boh.outertune.viewmodels.MonochromeFixMatchViewModel
 
+/** Duration delta in seconds within which a candidate is considered a close match. */
+private const val DURATION_CLOSE_MATCH_SECS = 5
+
 /**
  * Full-screen-ish dialog that lets the user search Monochrome for a candidate
  * track for the given [song] and save the result as a [ManualCorrection].
@@ -336,7 +339,7 @@ private fun TrackResultItem(
                 text = subtitle,
                 style = MaterialTheme.typography.bodySmall,
                 color = if (songDurationSecs != null && track.durationSecs > 0 &&
-                    kotlin.math.abs(track.durationSecs - songDurationSecs) <= 5)
+                    kotlin.math.abs(track.durationSecs - songDurationSecs) <= DURATION_CLOSE_MATCH_SECS)
                     MaterialTheme.colorScheme.primary
                 else
                     MaterialTheme.colorScheme.onSurfaceVariant,

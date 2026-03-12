@@ -92,6 +92,9 @@ class SyncUtils @Inject constructor(
 
     companion object {
         const val DEFAULT_SYNC_CONTENT = "ARPLSC"
+
+        /** Default confidence assigned to auto-matches produced during playlist sync. */
+        private const val AUTO_MATCH_DEFAULT_CONFIDENCE = 0.8f
     }
 
     suspend fun tryAutoSync(bypassCd: Boolean = false) {
@@ -621,7 +624,7 @@ class SyncUtils @Inject constructor(
                 MonochromeTrackMatch(
                     ytmId = ytmId,
                     monochromeId = track.monochromeId,
-                    confidence = 0.8f,
+                    confidence = AUTO_MATCH_DEFAULT_CONFIDENCE,
                     matchedAt = now,
                 )
             )
