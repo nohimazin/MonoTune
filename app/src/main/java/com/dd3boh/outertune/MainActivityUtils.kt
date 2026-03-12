@@ -120,10 +120,10 @@ suspend fun scanInit(
             downloadUtil.scanDownloads()
             downloadUtil.resumeDownloadsOnStart()
         }
+        Log.i(MAIN_TAG, "Downloads scan complete")
     } catch (e: Exception) {
         Log.e(MAIN_TAG, "Downloads scan failed", e)
         reportException(e)
     }
     playerConnection?.service?.initQueue()
-    Log.i(MAIN_TAG, "Downloads scan complete")
 }
