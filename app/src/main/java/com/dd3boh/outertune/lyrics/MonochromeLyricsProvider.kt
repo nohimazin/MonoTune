@@ -13,7 +13,6 @@ import com.dd3boh.outertune.db.daos.MonoTuneDao
 import com.dd3boh.outertune.monochrome.MonochromeClientApi
 import com.dd3boh.outertune.monochrome.MonochromeLyrics
 import com.dd3boh.outertune.monochrome.MonochromeResult
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,7 +37,6 @@ import javax.inject.Singleton
  */
 @Singleton
 class MonochromeLyricsProvider @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val monochromeClient: MonochromeClientApi,
     private val database: MusicDatabase,
 ) : LyricsProvider {
