@@ -8,12 +8,10 @@ package com.dd3boh.outertune.lyrics
 
 import android.content.Context
 import android.util.Log
-import com.dd3boh.outertune.db.MusicDatabase // MusicDatabase implements MonoTuneDao via DatabaseDao delegation
 import com.dd3boh.outertune.db.daos.MonoTuneDao
 import com.dd3boh.outertune.monochrome.MonochromeClientApi
 import com.dd3boh.outertune.monochrome.MonochromeLyrics
 import com.dd3boh.outertune.monochrome.MonochromeResult
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,9 +36,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class MonochromeLyricsProvider @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val monochromeClient: MonochromeClientApi,
-    private val database: MusicDatabase,
+    private val dao: MonoTuneDao,
 ) : LyricsProvider {
 
     override val name = "Monochrome"
@@ -54,8 +51,8 @@ class MonochromeLyricsProvider @Inject constructor(
         duration: Int,
     ): Result<String> {
         return try {
-            val monochromeId = resolveMonochromeId(database, id)
-                ?: return Result.failure(Exception("No Monochrome match for track $id"))
+            val monochromeId = resolveMonochromeId(dao, id)
+                ?: return Result.failure(LyricsNotFoundException("No Monochrome match for track"))
 
             // Attempt to fetch TIDAL metadata for more accurate album-based LRCLib lookups.
             // A failure here is non-fatal: we fall back to YTM metadata.
@@ -83,14 +80,14 @@ class MonochromeLyricsProvider @Inject constructor(
                     if (text != null) {
                         Result.success(text)
                     } else {
-                        Result.failure(Exception("No lyrics available for \"$queryTitle\""))
+                        Result.failure(LyricsNotFoundException("No lyrics available for \"$queryTitle\""))
                     }
                 }
                 is MonochromeResult.Error ->
                     Result.failure(Exception(result.message))
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Unexpected error fetching Monochrome lyrics for $id", e)
+            Log.e(TAG, "Unexpected error fetching Monochrome lyrics", e)
             Result.failure(e)
         }
     }
@@ -109,10 +106,10 @@ class MonochromeLyricsProvider @Inject constructor(
          * Returns `null` when no match exists, or when the correction marks the
          * track as unavailable.
          *
-         * The parameter is typed as [MonoTuneDao] (rather than [com.dd3boh.outertune.db.MusicDatabase])
-         * so that unit tests can supply a lightweight fake without a Room database.
-         * In production code, pass the injected [MusicDatabase] directly — it implements
-         * [MonoTuneDao] via delegation.
+         * Typed as [MonoTuneDao] so that unit tests can supply a lightweight fake
+         * without a Room database.  In production code the injected [MonoTuneDao]
+         * is satisfied by the [com.dd3boh.outertune.db.MusicDatabase] binding in
+         * [com.dd3boh.outertune.di.AppModule].
          */
         internal suspend fun resolveMonochromeId(dao: MonoTuneDao, ytmId: String): String? {
             val correction = dao.getManualCorrection(ytmId)

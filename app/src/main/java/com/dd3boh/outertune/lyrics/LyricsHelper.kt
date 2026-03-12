@@ -13,7 +13,6 @@ import com.dd3boh.outertune.utils.get
 import com.dd3boh.outertune.utils.reportException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
-import org.akanework.gramophone.logic.utils.LrcUtils
 import org.akanework.gramophone.logic.utils.SemanticLyrics
 import org.akanework.gramophone.logic.utils.parseLrc
 import javax.inject.Inject
@@ -100,7 +99,10 @@ class LyricsHelper @Inject constructor(
                 ).onSuccess { lyrics ->
                     return lyrics
                 }.onFailure {
-                    reportException(it)
+                    // LyricsNotFoundException is an expected "no match" signal — not a true error.
+                    if (it !is LyricsNotFoundException) {
+                        reportException(it)
+                    }
                 }
             }
         }
@@ -114,8 +116,7 @@ class LyricsHelper @Inject constructor(
         duration: Int,
         callback: (LyricsResult) -> Unit,
     ) {
-        val cacheKey = "$songArtists-$songTitle".replace(" ", "")
-        cache.get(cacheKey)?.let { results ->
+        cache.get(mediaId)?.let { results ->
             results.forEach {
                 callback(it)
             }
@@ -131,7 +132,7 @@ class LyricsHelper @Inject constructor(
                 }
             }
         }
-        cache.put(cacheKey, allResult)
+        cache.put(mediaId, allResult)
     }
 
     companion object {

@@ -11,11 +11,16 @@ import com.dd3boh.outertune.db.entities.MonochromeTrackMatch
 import com.dd3boh.outertune.db.daos.MonoTuneDao
 import com.dd3boh.outertune.db.entities.YtmScrobbleQueue
 import com.dd3boh.outertune.monochrome.MonochromeLyrics
+import com.dd3boh.outertune.monochrome.MonochromeClientApi
+import com.dd3boh.outertune.monochrome.MonochromeResult
+import com.dd3boh.outertune.monochrome.MonochromeSession
+import com.dd3boh.outertune.monochrome.MonochromeTrack
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 // ---------------------------------------------------------------------------
@@ -43,6 +48,34 @@ private class FakeMonoTuneDao(
     override fun pendingScrobblesFlow(): Flow<List<YtmScrobbleQueue>> = flowOf(emptyList())
     override suspend fun markScrobbled(id: Long) = Unit
     override suspend fun purgeSubmittedScrobbles() = Unit
+}
+
+/** Minimal fake [MonochromeClientApi] for unit tests — does not perform network calls. */
+private class FakeMonochromeClientApi(
+    private val trackResult: MonochromeResult<MonochromeTrack> =
+        MonochromeResult.Error("not used"),
+    private val lyricsResult: MonochromeResult<MonochromeLyrics?> =
+        MonochromeResult.Success(null),
+) : MonochromeClientApi {
+    override suspend fun login(serverUrl: String, email: String, password: String) =
+        MonochromeResult.Error("not implemented")
+    override suspend fun logout() = MonochromeResult.Success(Unit)
+    override suspend fun refreshSession(session: MonochromeSession) =
+        MonochromeResult.Error("not implemented")
+    override fun setSession(session: MonochromeSession?) = Unit
+    override fun getSession(): MonochromeSession? = null
+    override suspend fun search(query: String) =
+        MonochromeResult.Error("not implemented")
+    override suspend fun getTrack(tidalId: String) = trackResult
+    override suspend fun resolveStreamUrl(tidalId: String, quality: String) =
+        MonochromeResult.Error("not implemented")
+    override suspend fun isAvailable(tidalId: String) = false
+    override suspend fun getLyrics(
+        title: String,
+        artist: String,
+        album: String?,
+        duration: Int?,
+    ) = lyricsResult
 }
 
 // ---------------------------------------------------------------------------
@@ -90,6 +123,54 @@ class MonochromeLyricsProviderTest {
         val dao = FakeMonoTuneDao()
         val result = MonochromeLyricsProvider.resolveMonochromeId(dao, ytmId)
         assertNull(result)
+    }
+
+    // --- getLyrics: no-match path returns LyricsNotFoundException ---
+
+    @Test
+    fun `getLyrics returns LyricsNotFoundException when no Monochrome match exists`() = runBlocking {
+        val provider = MonochromeLyricsProvider(
+            monochromeClient = FakeMonochromeClientApi(),
+            dao = FakeMonoTuneDao(), // no matches
+        )
+        val result = provider.getLyrics(ytmId, "Title", "Artist", 200)
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is LyricsNotFoundException)
+    }
+
+    @Test
+    fun `getLyrics returns success when Monochrome match and lyrics are found`() = runBlocking {
+        val syncedLyrics = "[00:01.00] Line 1"
+        val provider = MonochromeLyricsProvider(
+            monochromeClient = FakeMonochromeClientApi(
+                lyricsResult = MonochromeResult.Success(
+                    MonochromeLyrics("Title", "Artist", "plain", syncedLyrics)
+                ),
+            ),
+            dao = FakeMonoTuneDao(
+                matches = mapOf(ytmId to MonochromeTrackMatch(ytmId, "mono_123", 0.9f, 0L)),
+            ),
+        )
+        val result = provider.getLyrics(ytmId, "Title", "Artist", 200)
+        assertTrue(result.isSuccess)
+        assertEquals(syncedLyrics, result.getOrNull())
+    }
+
+    @Test
+    fun `getLyrics returns LyricsNotFoundException for instrumental tracks`() = runBlocking {
+        val provider = MonochromeLyricsProvider(
+            monochromeClient = FakeMonochromeClientApi(
+                lyricsResult = MonochromeResult.Success(
+                    MonochromeLyrics("Title", "Artist", null, null, instrumental = true)
+                ),
+            ),
+            dao = FakeMonoTuneDao(
+                matches = mapOf(ytmId to MonochromeTrackMatch(ytmId, "mono_123", 0.9f, 0L)),
+            ),
+        )
+        val result = provider.getLyrics(ytmId, "Title", "Artist", 200)
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is LyricsNotFoundException)
     }
 
     // --- selectLyricsText ---
