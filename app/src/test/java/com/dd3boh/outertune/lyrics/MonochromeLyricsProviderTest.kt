@@ -46,6 +46,8 @@ private class FakeMonoTuneDao(
     override suspend fun deleteManualCorrection(ytmId: String) = Unit
     override fun manualCorrectionsForSongsFlow(ytmIds: List<String>): Flow<List<ManualCorrection>> =
         flowOf(ytmIds.mapNotNull { corrections[it] })
+    override suspend fun getManualCorrectionsForSongs(ytmIds: List<String>): List<ManualCorrection> =
+        ytmIds.mapNotNull { corrections[it] }
 
     override suspend fun enqueueScrobble(event: YtmScrobbleQueue) = Unit
     override suspend fun getPendingScrobbles(): List<YtmScrobbleQueue> = emptyList()

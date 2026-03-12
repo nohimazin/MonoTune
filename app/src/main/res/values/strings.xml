@@ -363,6 +363,7 @@ We recycle translations from upstream, they are pulled periodically. -->
     <!-- Playlist match status section headers -->
     <string name="playlist_section_matched">Matched</string>
     <string name="playlist_section_unresolved">Unresolved</string>
+    <string name="playlist_section_unavailable">Unavailable</string>
 
     <!-- Per-song match status badges -->
     <string name="monochrome_status_auto">Auto</string>
@@ -380,4 +381,9 @@ We recycle translations from upstream, they are pulled periodically. -->
     <string name="monochrome_fix_match_error">Search error: %s</string>
     <string name="monochrome_fix_match_save">Save match</string>
     <string name="monochrome_mark_unavailable">Mark unavailable</string>
+    <string name="monochrome_current_match">Current match</string>
+    <string name="monochrome_current_auto_matched">Auto-matched (%.0f%% confidence)</string>
+    <string name="monochrome_current_manually_matched">Manually matched</string>
+    <string name="monochrome_currently_unavailable">Marked unavailable</string>
+    <string name="monochrome_duration_delta">%+ds vs YTM</string>
 </resources>

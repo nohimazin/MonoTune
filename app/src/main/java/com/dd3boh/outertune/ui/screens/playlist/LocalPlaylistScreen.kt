@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material.icons.automirrored.rounded.QueueMusic
+import androidx.compose.material.icons.rounded.Block
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Edit
@@ -548,6 +549,7 @@ fun LocalPlaylistScreen(
                             inSelectMode = inSelectMode,
                             isSelected = selection.contains(song.song.id),
                             matchStatus = songsWithStatus[song.song.id]?.status,
+                            matchConfidence = songsWithStatus[song.song.id]?.autoMatch?.confidence,
                             onPlay = {
                                 playerConnection.playQueue(
                                     ListQueue(
@@ -566,7 +568,7 @@ fun LocalPlaylistScreen(
                     }
                 }
             } else {
-                // Non-drag mode: grouped sections (Matched / Unresolved)
+                // Non-drag mode: grouped sections (Matched / Unresolved / Unavailable)
                 val matchedSongs = mutableSongs.filter { song ->
                     val status = songsWithStatus[song.song.id]?.status
                     status == MonochromeMatchStatus.MATCHED_AUTO ||
@@ -575,8 +577,10 @@ fun LocalPlaylistScreen(
                 val unresolvedSongs = mutableSongs.filter { song ->
                     val status = songsWithStatus[song.song.id]?.status
                     status == null ||
-                        status == MonochromeMatchStatus.UNRESOLVED ||
-                        status == MonochromeMatchStatus.EXPLICITLY_UNAVAILABLE
+                        status == MonochromeMatchStatus.UNRESOLVED
+                }
+                val unavailableSongs = mutableSongs.filter { song ->
+                    songsWithStatus[song.song.id]?.status == MonochromeMatchStatus.EXPLICITLY_UNAVAILABLE
                 }
 
                 // Matched section header
@@ -629,6 +633,7 @@ fun LocalPlaylistScreen(
                             inSelectMode = inSelectMode,
                             isSelected = selection.contains(song.song.id),
                             matchStatus = songsWithStatus[song.song.id]?.status,
+                            matchConfidence = songsWithStatus[song.song.id]?.autoMatch?.confidence,
                             onPlay = {
                                 playerConnection.playQueue(
                                     ListQueue(
@@ -698,6 +703,74 @@ fun LocalPlaylistScreen(
                             inSelectMode = inSelectMode,
                             isSelected = selection.contains(song.song.id),
                             matchStatus = songStatus ?: MonochromeMatchStatus.UNRESOLVED,
+                            onPlay = {
+                                playerConnection.playQueue(
+                                    ListQueue(
+                                        title = playlistWithSongs.first!!.playlist.name,
+                                        items = mutableSongs.map { it.song.toMediaMetadata() },
+                                        startIndex = if (globalIndex >= 0) globalIndex else index,
+                                        playlistId = playlistWithSongs.first?.playlist?.browseId
+                                    )
+                                )
+                            },
+                            dragHandleModifier = null,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background),
+                        )
+                    }
+                }
+
+                // Unavailable section header
+                if (unavailableSongs.isNotEmpty()) {
+                    item(
+                        key = "unavailable_section_header",
+                        contentType = CONTENT_TYPE_HEADER,
+                    ) {
+                        PlaylistSectionHeader(
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Rounded.Block,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            },
+                            title = stringResource(R.string.playlist_section_unavailable),
+                            count = unavailableSongs.size,
+                        )
+                    }
+                }
+
+                // Unavailable songs
+                itemsIndexed(
+                    items = unavailableSongs,
+                    key = { _, song -> "unavailable_${song.map.id}" },
+                    contentType = { _, _ -> CONTENT_TYPE_SONG },
+                ) { index, song ->
+                    val globalIndex = mutableSongs.indexOf(song)
+                    ReorderableItem(
+                        state = reorderableState,
+                        key = "unavailable_${song.map.id}",
+                        enabled = false,
+                    ) {
+                        SongListItem(
+                            song = song.song,
+                            thumbnailSize = thumbnailSize,
+                            playlistSong = song,
+                            playlist = playlistWithSongs.first,
+                            navController = navController,
+                            snackbarHostState = snackbarHostState,
+                            isActive = song.song.id == mediaMetadata?.id,
+                            isPlaying = isPlaying,
+                            swipeEnabled = swipeEnabled,
+                            onSelectedChange = {
+                                inSelectMode = true
+                                if (it) selection.add(song.song.id) else selection.remove(song.song.id)
+                            },
+                            inSelectMode = inSelectMode,
+                            isSelected = selection.contains(song.song.id),
+                            matchStatus = MonochromeMatchStatus.EXPLICITLY_UNAVAILABLE,
                             onPlay = {
                                 playerConnection.playQueue(
                                     ListQueue(

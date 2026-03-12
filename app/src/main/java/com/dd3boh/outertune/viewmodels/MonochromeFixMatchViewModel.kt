@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dd3boh.outertune.db.MusicDatabase
 import com.dd3boh.outertune.db.entities.ManualCorrection
+import com.dd3boh.outertune.db.entities.MonochromeTrackMatch
 import com.dd3boh.outertune.monochrome.MonochromeClientApi
 import com.dd3boh.outertune.monochrome.MonochromeResult
 import com.dd3boh.outertune.monochrome.MonochromeTrack
@@ -43,6 +44,29 @@ class MonochromeFixMatchViewModel @Inject constructor(
 
     var searchState: SearchState by mutableStateOf(SearchState.Idle)
         private set
+
+    /** Current automatic match for the song being edited, if any. */
+    var currentAutoMatch: MonochromeTrackMatch? by mutableStateOf(null)
+        private set
+
+    /** Current manual correction for the song being edited, if any. */
+    var currentManualCorrection: ManualCorrection? by mutableStateOf(null)
+        private set
+
+    /**
+     * Load the current match state (auto and manual) for [ytmId] from the database.
+     * Call this once when the dialog opens for a given song.
+     */
+    fun loadCurrentMatch(ytmId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val autoMatch = database.getTrackMatch(ytmId)
+            val manualCorrection = database.getManualCorrection(ytmId)
+            withContext(Dispatchers.Main) {
+                currentAutoMatch = autoMatch
+                currentManualCorrection = manualCorrection
+            }
+        }
+    }
 
     /**
      * Execute a search against the Monochrome API for [query].
@@ -87,8 +111,10 @@ class MonochromeFixMatchViewModel @Inject constructor(
         }
     }
 
-    /** Reset search state so the dialog opens fresh for each song. */
+    /** Reset search state and current-match state so the dialog opens fresh for each song. */
     fun resetSearch() {
         searchState = SearchState.Idle
+        currentAutoMatch = null
+        currentManualCorrection = null
     }
 }

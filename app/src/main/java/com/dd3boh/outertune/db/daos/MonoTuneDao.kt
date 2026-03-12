@@ -93,6 +93,13 @@ interface MonoTuneDao {
     @Query("SELECT * FROM manual_correction WHERE ytmId IN (:ytmIds)")
     fun manualCorrectionsForSongsFlow(ytmIds: List<String>): Flow<List<ManualCorrection>>
 
+    /**
+     * One-shot fetch of manual corrections for a set of YTM track IDs.
+     * Useful for checking corrections before persisting auto-matches.
+     */
+    @Query("SELECT * FROM manual_correction WHERE ytmId IN (:ytmIds)")
+    suspend fun getManualCorrectionsForSongs(ytmIds: List<String>): List<ManualCorrection>
+
     // endregion
 
     // region YtmScrobbleQueue

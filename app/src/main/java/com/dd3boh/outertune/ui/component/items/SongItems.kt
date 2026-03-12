@@ -95,6 +95,7 @@ fun SongListItem(
     showInLibraryIcon: Boolean = true,
     showDownloadIcon: Boolean = true,
     matchStatus: MonochromeMatchStatus? = null,
+    matchConfidence: Float? = null,
 
     thumbnailSize: Int,
     onPlay: () -> Unit,
@@ -125,11 +126,17 @@ fun SongListItem(
                     Icon.Download(download)
                 }
                 if (matchStatus != null) {
-                    val labelRes = when (matchStatus) {
-                        MonochromeMatchStatus.MATCHED_AUTO -> R.string.monochrome_status_auto
-                        MonochromeMatchStatus.MATCHED_MANUAL -> R.string.monochrome_status_manual
-                        MonochromeMatchStatus.EXPLICITLY_UNAVAILABLE -> R.string.monochrome_status_unavailable
-                        MonochromeMatchStatus.UNRESOLVED -> R.string.monochrome_status_unresolved
+                    val labelText = when {
+                        matchStatus == MonochromeMatchStatus.MATCHED_AUTO && matchConfidence != null ->
+                            "${stringResource(R.string.monochrome_status_auto)} ${(matchConfidence * 100).toInt()}%"
+                        else -> stringResource(
+                            when (matchStatus) {
+                                MonochromeMatchStatus.MATCHED_AUTO -> R.string.monochrome_status_auto
+                                MonochromeMatchStatus.MATCHED_MANUAL -> R.string.monochrome_status_manual
+                                MonochromeMatchStatus.EXPLICITLY_UNAVAILABLE -> R.string.monochrome_status_unavailable
+                                MonochromeMatchStatus.UNRESOLVED -> R.string.monochrome_status_unresolved
+                            }
+                        )
                     }
                     val labelColor = when (matchStatus) {
                         MonochromeMatchStatus.MATCHED_AUTO,
@@ -138,7 +145,7 @@ fun SongListItem(
                         MonochromeMatchStatus.UNRESOLVED -> MaterialTheme.colorScheme.error
                     }
                     Text(
-                        text = stringResource(labelRes),
+                        text = labelText,
                         color = labelColor,
                         style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
