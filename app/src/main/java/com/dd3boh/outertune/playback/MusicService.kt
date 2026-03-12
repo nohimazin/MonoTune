@@ -656,7 +656,6 @@ class MusicService : MediaLibraryService(),
     }
 
     private fun createDataSourceFactory(): DataSource.Factory {
-        val songUrlCache = HashMap<String, Pair<String, Long>>()
         val monochromeUrlCache = HashMap<String, Pair<String, Long>>()
         return ResolvingDataSource.Factory(createCacheDataSource()) { dataSpec ->
             val mediaId = dataSpec.key ?: error("No media id")
@@ -691,17 +690,10 @@ class MusicService : MediaLibraryService(),
                 return@Factory dataSpec.withUri(it.first.toUri())
             }
 
-            songUrlCache[mediaId]?.takeIf { it.second > System.currentTimeMillis() }?.let {
-                Log.d(TAG, "PLAYING: remote song (temp cache)")
-                offloadScope.launch { recoverSong(mediaId) }
-                return@Factory dataSpec.withUri(it.first.toUri())
-            }
-
             Log.d(TAG, "PLAYING: remote song (online fetch)")
 
             // Determine if this track has a Monochrome ID (manual correction takes precedence).
-            // runBlocking is consistent with existing YouTube URL resolution further below;
-            // this callback runs on ExoPlayer's loader thread, not the main thread.
+            // This callback runs on ExoPlayer's loader thread, not the main thread.
             val monochromeId: String? = runBlocking(Dispatchers.IO) {
                 val manual = database.getManualCorrection(mediaId)
                 when {
@@ -710,7 +702,7 @@ class MusicService : MediaLibraryService(),
                 }
             }
 
-            // Try Monochrome stream if a monochromeId is available
+            // Only play via Monochrome stream. No fallback to YouTube.
             if (monochromeId != null) {
                 Log.d(TAG, "PLAYING: attempting Monochrome stream for monochromeId=$monochromeId")
                 val monochromeResult = runBlocking(Dispatchers.IO) {
@@ -727,69 +719,23 @@ class MusicService : MediaLibraryService(),
                         return@Factory dataSpec.withUri(streamUrl.toUri())
                     }
                     is MonochromeResult.Error -> {
-                        Log.w(TAG, "PLAYING: Monochrome stream resolution failed for monochromeId=$monochromeId: ${monochromeResult.message}, falling back to YouTube")
+                        Log.w(TAG, "PLAYING: Monochrome stream resolution failed for monochromeId=$monochromeId: ${monochromeResult.message}")
+                        throw PlaybackException(
+                            getString(R.string.error_no_stream),
+                            null,
+                            PlaybackException.ERROR_CODE_REMOTE_ERROR
+                        )
                     }
                 }
             }
 
-            val playbackData = runBlocking(Dispatchers.IO) {
-                val audioQuality by enumPreference(this@MusicService, AudioQualityKey, AudioQuality.AUTO)
-                YTPlayerUtils.playerResponseForPlayback(
-                    mediaId,
-                    audioQuality = audioQuality,
-                    connectivityManager = connectivityManager,
-                )
-            }.getOrElse { throwable ->
-                when (throwable) {
-                    is PlaybackException -> throw throwable
-
-                    is ConnectException, is UnknownHostException -> {
-                        throw PlaybackException(
-                            getString(R.string.error_no_internet),
-                            throwable,
-                            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED
-                        )
-                    }
-
-                    is SocketTimeoutException -> {
-                        throw PlaybackException(
-                            getString(R.string.error_timeout),
-                            throwable,
-                            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT
-                        )
-                    }
-
-                    else -> throw PlaybackException(
-                        getString(R.string.error_unknown),
-                        throwable,
-                        PlaybackException.ERROR_CODE_REMOTE_ERROR
-                    )
-                }
-            }
-            val format = playbackData.format
-
-            database.query {
-                upsert(
-                    FormatEntity(
-                        id = mediaId,
-                        itag = format.itag,
-                        mimeType = format.mimeType.split(";")[0],
-                        codecs = format.mimeType.split("codecs=")[1].removeSurrounding("\""),
-                        bitrate = format.bitrate,
-                        sampleRate = format.audioSampleRate,
-                        contentLength = format.contentLength!!,
-                        loudnessDb = playbackData.audioConfig?.loudnessDb,
-                        playbackTrackingUrl = playbackData.playbackTracking?.videostatsPlaybackUrl?.baseUrl
-                    )
-                )
-            }
-            offloadScope.launch { recoverSong(mediaId, playbackData) }
-
-            val streamUrl = playbackData.streamUrl
-
-            songUrlCache[mediaId] =
-                streamUrl to System.currentTimeMillis() + (playbackData.streamExpiresInSeconds * 1000L)
-            dataSpec.withUri(streamUrl.toUri()).subrange(dataSpec.uriPositionOffset, CHUNK_LENGTH)
+            // No Monochrome match found for this track — playback unavailable.
+            Log.w(TAG, "PLAYING: No Monochrome ID for mediaId=$mediaId, playback unavailable")
+            throw PlaybackException(
+                getString(R.string.error_no_stream),
+                null,
+                PlaybackException.ERROR_CODE_REMOTE_ERROR
+            )
         }
     }
 

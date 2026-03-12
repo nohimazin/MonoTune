@@ -1,11 +1,9 @@
 package com.dd3boh.outertune.playback
 
 import android.content.Context
-import android.net.ConnectivityManager
 import android.util.Log
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
-import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.media3.database.DatabaseProvider
 import androidx.media3.datasource.ResolvingDataSource
@@ -18,12 +16,9 @@ import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadNotificationHelper
 import androidx.media3.exoplayer.offline.DownloadRequest
 import androidx.media3.exoplayer.offline.DownloadService
-import com.dd3boh.outertune.constants.AudioQuality
-import com.dd3boh.outertune.constants.AudioQualityKey
 import com.dd3boh.outertune.constants.DownloadExtraPathKey
 import com.dd3boh.outertune.constants.DownloadPathKey
 import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.db.entities.FormatEntity
 import com.dd3boh.outertune.db.entities.PlaylistSong
 import com.dd3boh.outertune.db.entities.Song
 import com.dd3boh.outertune.db.entities.SongEntity
@@ -34,13 +29,13 @@ import com.dd3boh.outertune.playback.DownloadUtil.Companion.STATE_DOWNLOADING
 import com.dd3boh.outertune.playback.DownloadUtil.Companion.STATE_INVALID
 import com.dd3boh.outertune.playback.downloadManager.DownloadDirectoryManagerOt
 import com.dd3boh.outertune.playback.downloadManager.DownloadManagerOt
-import com.dd3boh.outertune.utils.YTPlayerUtils
 import com.dd3boh.outertune.utils.dataStore
 import com.dd3boh.outertune.utils.dlCoroutine
-import com.dd3boh.outertune.utils.enumPreference
 import com.dd3boh.outertune.utils.get
 import com.dd3boh.outertune.utils.reportException
 
+import com.dd3boh.outertune.monochrome.MonochromeClientApi
+import com.dd3boh.outertune.monochrome.MonochromeResult
 import com.dd3boh.outertune.utils.fileFromUri
 import com.dd3boh.outertune.utils.uriListFromString
 import com.zionhuang.innertube.YouTube
@@ -75,21 +70,15 @@ class DownloadUtil @Inject constructor(
     val databaseProvider: DatabaseProvider,
     @DownloadCache val downloadCache: SimpleCache,
     @PlayerCache val playerCache: SimpleCache,
+    val monochromeClient: MonochromeClientApi,
 ) {
     val TAG = DownloadUtil::class.simpleName.toString()
 
-    private val connectivityManager = context.getSystemService<ConnectivityManager>()!!
-    private val audioQuality by enumPreference(context, AudioQualityKey, AudioQuality.AUTO)
-    private val songUrlCache = HashMap<String, Pair<String, Long>>()
     private val dataSourceFactory = ResolvingDataSource.Factory(
         CacheDataSource.Factory()
             .setCache(playerCache)
             .setUpstreamDataSourceFactory(
-                OkHttpDataSource.Factory(
-                    OkHttpClient.Builder()
-                        .proxy(YouTube.proxy)
-                        .build()
-                )
+                OkHttpDataSource.Factory(OkHttpClient.Builder().build())
             )
     ) { dataSpec ->
         val mediaId = dataSpec.key ?: error("No media id")
@@ -98,42 +87,33 @@ class DownloadUtil @Inject constructor(
             return@Factory dataSpec
         }
 
-        songUrlCache[mediaId]?.takeIf { it.second > System.currentTimeMillis() }?.let {
-            return@Factory dataSpec.withUri(it.first.toUri())
+        // Resolve stream URL from Monochrome only — no YouTube fallback.
+        val monochromeId: String? = runBlocking(Dispatchers.IO) {
+            val manual = database.getManualCorrection(mediaId)
+            when {
+                manual != null -> manual.correctedMonochromeId
+                else -> database.getTrackMatch(mediaId)?.monochromeId
+            }
         }
 
-        val playbackData = runBlocking(Dispatchers.IO) {
-            YTPlayerUtils.playerResponseForPlayback(
-                mediaId,
-                audioQuality = audioQuality,
-                connectivityManager = connectivityManager,
-            )
-        }.getOrThrow()
-        val format = playbackData.format
-
-        database.query {
-            upsert(
-                FormatEntity(
-                    id = mediaId,
-                    itag = format.itag,
-                    mimeType = format.mimeType.split(";")[0],
-                    codecs = format.mimeType.split("codecs=")[1].removeSurrounding("\""),
-                    bitrate = format.bitrate,
-                    sampleRate = format.audioSampleRate,
-                    contentLength = format.contentLength!!,
-                    loudnessDb = playbackData.audioConfig?.loudnessDb,
-                    playbackTrackingUrl = playbackData.playbackTracking?.videostatsPlaybackUrl?.baseUrl
-                )
-            )
+        if (monochromeId == null) {
+            Log.w(TAG, "DOWNLOAD: No Monochrome ID for mediaId=$mediaId, download unavailable")
+            throw IOException("No Monochrome stream available for $mediaId")
         }
 
-        val streamUrl = playbackData.streamUrl.let {
-            // Specify range to avoid YouTube's throttling
-            "${it}&range=0-${format.contentLength ?: 10000000}"
+        val monochromeResult = runBlocking(Dispatchers.IO) {
+            monochromeClient.resolveStreamUrl(monochromeId)
         }
-
-        songUrlCache[mediaId] = streamUrl to System.currentTimeMillis() + (playbackData.streamExpiresInSeconds * 1000L)
-        dataSpec.withUri(streamUrl.toUri())
+        when (monochromeResult) {
+            is MonochromeResult.Success -> {
+                Log.d(TAG, "DOWNLOAD: Monochrome stream resolved for monochromeId=$monochromeId")
+                dataSpec.withUri(monochromeResult.data.toUri())
+            }
+            is MonochromeResult.Error -> {
+                Log.w(TAG, "DOWNLOAD: Monochrome stream resolution failed for monochromeId=$monochromeId: ${monochromeResult.message}")
+                throw IOException("Monochrome stream resolution failed: ${monochromeResult.message}")
+            }
+        }
     }
     val downloadNotificationHelper = DownloadNotificationHelper(context, ExoDownloadService.CHANNEL_ID)
     val downloadManager: DownloadManager =
