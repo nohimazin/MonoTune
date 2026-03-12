@@ -373,4 +373,11 @@ We recycle translations from upstream, they are pulled periodically. -->
     <!-- Manual correction entry point -->
     <string name="monochrome_fix_match">Fix match</string>
     <string name="monochrome_clear_correction">Clear correction</string>
+
+    <!-- Fix match dialog -->
+    <string name="monochrome_fix_match_search_hint">Search Monochrome…</string>
+    <string name="monochrome_fix_match_no_results">No results found</string>
+    <string name="monochrome_fix_match_error">Search error: %s</string>
+    <string name="monochrome_fix_match_save">Save match</string>
+    <string name="monochrome_mark_unavailable">Mark unavailable</string>
 </resources>

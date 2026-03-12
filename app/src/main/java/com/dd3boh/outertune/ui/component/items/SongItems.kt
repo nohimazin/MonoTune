@@ -172,6 +172,7 @@ fun SongListItem(
                                         playlistSong = playlistSong,
                                         playlist = playlist,
                                         navController = navController,
+                                        matchStatus = matchStatus,
                                         onDismiss = menuState::dismiss
                                     )
                                 }
