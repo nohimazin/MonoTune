@@ -12,6 +12,7 @@ import androidx.compose.material.icons.automirrored.rounded.PlaylistAdd
 import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.automirrored.rounded.QueueMusic
 import androidx.compose.material.icons.rounded.Album
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Info
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.PlaylistRemove
 import androidx.compose.material.icons.rounded.Radio
 import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -30,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -70,12 +73,15 @@ import com.dd3boh.outertune.ui.dialog.AddToPlaylistDialog
 import com.dd3boh.outertune.ui.dialog.AddToQueueDialog
 import com.dd3boh.outertune.ui.dialog.ArtistDialog
 import com.dd3boh.outertune.ui.dialog.DetailsDialog
+import com.dd3boh.outertune.ui.dialog.MonochromeFixMatchDialog
 import com.dd3boh.outertune.ui.dialog.TextFieldDialog
 import com.dd3boh.outertune.utils.joinByBullet
 import com.dd3boh.outertune.utils.makeTimeString
 import com.dd3boh.outertune.utils.rememberEnumPreference
 import com.dd3boh.outertune.utils.syncCoroutine
+import com.dd3boh.outertune.viewmodels.MonochromeMatchStatus
 import com.zionhuang.innertube.YouTube
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -87,6 +93,7 @@ fun SongMenu(
     playlist: Playlist? = null,
     event: Event? = null,
     navController: NavController,
+    matchStatus: MonochromeMatchStatus? = null,
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -104,6 +111,7 @@ fun SongMenu(
     val download by LocalDownloadUtil.current.getDownload(originalSong.id).collectAsState(initial = null)
     val coroutineScope =
         CoroutineScope(syncCoroutine) // rememberCoroutineScope has exception "rememberCoroutineScope left the composition"
+    val dbScope = rememberCoroutineScope()
 
     val currentFormatState = database.format(originalSong.id).collectAsState(initial = null)
     val currentFormat = currentFormatState.value
@@ -121,6 +129,9 @@ fun SongMenu(
         mutableStateOf(false)
     }
     var showDetailsDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var showFixMatchDialog by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -327,6 +338,29 @@ fun SongMenu(
                 }
             }
         }
+
+        // ── Monochrome match actions ─────────────────────────────────────────
+        if (matchStatus != null) {
+            GridMenuItem(
+                icon = Icons.Rounded.Tune,
+                title = R.string.monochrome_fix_match,
+            ) {
+                showFixMatchDialog = true
+            }
+        }
+        if (matchStatus == MonochromeMatchStatus.MATCHED_MANUAL ||
+            matchStatus == MonochromeMatchStatus.EXPLICITLY_UNAVAILABLE
+        ) {
+            GridMenuItem(
+                icon = Icons.Rounded.Clear,
+                title = R.string.monochrome_clear_correction,
+            ) {
+                onDismiss()
+                dbScope.launch(Dispatchers.IO) {
+                    database.deleteManualCorrection(song.id)
+                }
+            }
+        }
     }
 
     /**
@@ -396,6 +430,17 @@ fun SongMenu(
             currentPlayCount = song.playCount?.fastSumBy { it.count } ?: 0,
             clipboardManager = clipboardManager,
             setVisibility = { showDetailsDialog = it }
+        )
+    }
+
+    if (showFixMatchDialog) {
+        MonochromeFixMatchDialog(
+            song = song,
+            onDismiss = { showFixMatchDialog = false },
+            onSaved = {
+                showFixMatchDialog = false
+                onDismiss()
+            },
         )
     }
 }
