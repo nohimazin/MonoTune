@@ -9,6 +9,7 @@ import androidx.media3.datasource.cache.SimpleCache
 import com.dd3boh.outertune.constants.MaxSongCacheSizeKey
 import com.dd3boh.outertune.db.InternalDatabase
 import com.dd3boh.outertune.db.MusicDatabase
+import com.dd3boh.outertune.db.daos.MonoTuneDao
 import com.dd3boh.outertune.utils.dataStore
 import com.dd3boh.outertune.utils.get
 import dagger.Module
@@ -30,6 +31,10 @@ object AppModule {
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): MusicDatabase =
         InternalDatabase.newInstance(context)
+
+    @Singleton
+    @Provides
+    fun provideMonoTuneDao(db: MusicDatabase): MonoTuneDao = db
 
     @Singleton
     @Provides
