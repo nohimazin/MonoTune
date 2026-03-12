@@ -719,7 +719,7 @@ class MusicService : MediaLibraryService(),
                 when (monochromeResult) {
                     is MonochromeResult.Success -> {
                         val streamUrl = monochromeResult.data
-                        Log.d(TAG, "PLAYING: Monochrome stream resolved: $streamUrl")
+                        Log.d(TAG, "PLAYING: Monochrome stream resolved (${if (streamUrl.startsWith("data:")) "data URI" else streamUrl})")
                         // Cache with 1 hour TTL (Monochrome URLs don't provide explicit expiry)
                         monochromeUrlCache[mediaId] =
                             streamUrl to System.currentTimeMillis() + 3_600_000L
