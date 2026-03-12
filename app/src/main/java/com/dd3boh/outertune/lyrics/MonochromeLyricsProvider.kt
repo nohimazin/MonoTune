@@ -8,7 +8,7 @@ package com.dd3boh.outertune.lyrics
 
 import android.content.Context
 import android.util.Log
-import com.dd3boh.outertune.db.MusicDatabase
+import com.dd3boh.outertune.db.MusicDatabase // MusicDatabase implements MonoTuneDao via DatabaseDao delegation
 import com.dd3boh.outertune.db.daos.MonoTuneDao
 import com.dd3boh.outertune.monochrome.MonochromeClientApi
 import com.dd3boh.outertune.monochrome.MonochromeLyrics
