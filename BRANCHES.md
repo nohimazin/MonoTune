@@ -60,9 +60,12 @@ All historical `v0.6.x`–`v0.9.x` tags and `v0.10.0`, `v0.10.1` are kept unchan
 | YouTube Music search, playlists, likes, history | ✅ Retained |
 | Monochrome integration layer (`MonochromeClient`, DB entities) | ✅ Stub in place |
 | Monochrome authentication (`MonochromeAuthRepository`, login UI, Hilt DI) | ✅ Done — `MonochromeLoginScreen`, `MonochromeAuthRepository` (DataStore-backed), `MonochromeModule` Hilt binding, session restore in `App.kt` |
-| Monochrome API connection | 🔲 Pending (backend spec not yet finalised) |
+| Monochrome API connection | ✅ Done — real HTTP calls wired; `serverUrl` configurable per session |
+| Monochrome search integration | ✅ Done — YTM results filtered to Monochrome-available tracks; badge + TIDAL cover in search UI |
+| Monochrome playback | ✅ Done — `MusicService` resolves stream URL via Monochrome first, falls back to YouTube |
+| Lyrics integration (Plan C) | ✅ Done — `MonochromeLyricsProvider` added; Monochrome/LRCLib-first with provider fallback chain |
 | YTM scrobble drain worker | 🔲 Pending — queue table and DAO are ready; `WorkManager` worker not yet written |
-| YTM → Monochrome search/playlist wiring | 🔲 Pending — UI and repository plumbing not yet implemented |
+| YTM → Monochrome playlist wiring | 🔲 Pending — playlist detail unresolved-tracks section not yet built |
 
 ---
 
@@ -101,16 +104,13 @@ Run `./gradlew :app:kspDebugKotlin` (or a full debug build) and commit the gener
 - Call `markScrobbled(id)` on success, or discard after configurable retry limit
 - Schedule itself with an exponential-back-off `PeriodicWorkRequest`
 
-### 3 — Monochrome search/playlist wiring
+### 3 — YTM → Monochrome playlist wiring
 
-The stub `MonochromeClient` returns errors for every call.  Once the Monochrome
-backend endpoint spec is finalised:
+Search is now wired.  Remaining work:
 
-- Replace stub methods with real HTTP calls (search, stream URL, availability)
-- Wire `MonochromeClient` into the search ViewModel so that YTM results are filtered
-  to tracks that exist in Monochrome
-- Add the "unresolved tracks" section to playlist detail screen
+- Add the "unresolved tracks" section to the playlist detail screen
 - Persist user-supplied track overrides via `MonoTuneDao.upsertManualCorrection()`
+- Build a UI flow for the user to manually pick a Monochrome track for an unresolved YTM track
 
 ---
 
@@ -118,5 +118,4 @@ backend endpoint spec is finalised:
 
 1. Run a debug build and commit the generated `22.json` schema file.
 2. Implement the YTM scrobble `WorkManager` drain worker (see gap 2 above).
-3. Replace `MonochromeClient` stubs with real API calls once the backend spec is ready.
-4. Build the YTM → Monochrome playlist/search wiring and the unresolved-tracks UI.
+3. Build the YTM → Monochrome playlist unresolved-tracks UI (see gap 3 above).

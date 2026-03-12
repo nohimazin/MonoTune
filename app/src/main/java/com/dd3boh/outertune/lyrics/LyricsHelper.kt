@@ -20,10 +20,20 @@ import javax.inject.Inject
 
 class LyricsHelper @Inject constructor(
     @ApplicationContext private val context: Context,
-    val database: MusicDatabase
+    val database: MusicDatabase,
+    private val monochromeLyricsProvider: MonochromeLyricsProvider,
 ) {
-    private val lyricsProviders =
-        listOf(YouTubeSubtitleLyricsProvider, LrcLibLyricsProvider, KuGouLyricsProvider, YouTubeLyricsProvider)
+    // Monochrome is tried first (uses accurate TIDAL metadata + album for LRCLib lookup).
+    // If no Monochrome match exists or the request fails, subsequent providers are attempted.
+    private val lyricsProviders: List<LyricsProvider> by lazy {
+        listOf(
+            monochromeLyricsProvider,
+            YouTubeSubtitleLyricsProvider,
+            LrcLibLyricsProvider,
+            KuGouLyricsProvider,
+            YouTubeLyricsProvider,
+        )
+    }
     private val cache = LruCache<String, List<LyricsResult>>(MAX_CACHE_SIZE)
 
     /**

@@ -28,10 +28,11 @@
 - スリープタイマー
 - Android Auto 対応
 
-### Monochrome 統合（開発中）
+### Monochrome 統合
 - Monochrome バックエンドへのトラックマッチング（DB 層実装済み）
 - スクロブルキュー（YTM + Monochrome）
-- ストリーミング接続は API 仕様確定後に実装予定
+- Monochrome ストリーム経由の TIDAL 再生（マッチ済みトラック）
+- **歌詞**: Monochrome マッチ済みトラックは Monochrome/LRCLib 優先で歌詞取得。未マッチ時は LRCLib（YTM メタデータ）→ KuGou → YouTube の順にフォールバック。同期歌詞（LRC）対応。
 
 ### UI / UX
 - Material 3 デザイン
@@ -69,7 +70,7 @@
 | ネットワーク | Ktor + OkHttp |
 | 画像読み込み | Coil |
 | YouTube API | InnerTube プロトコル（独自実装）+ NewPipe Extractor |
-| 歌詞プロバイダ | YouTube / LRCLib / KuGou |
+| 歌詞プロバイダ | Monochrome（優先） / LRCLib / KuGou / YouTube |
 | ビルド | Gradle (Kotlin DSL)、Java 21 |
 
 ---
@@ -129,9 +130,9 @@ git submodule update --init --recursive
 app/
 ├── db/              # Room データベース（エンティティ・DAO）
 ├── di/              # Hilt モジュール
-├── lyrics/          # 歌詞プロバイダ（YouTube / LRCLib / KuGou）
+├── lyrics/          # 歌詞プロバイダ（Monochrome / YouTube / LRCLib / KuGou）
 ├── models/          # メディアメタデータモデル
-├── monochrome/      # Monochrome クライアント（現在スタブ）
+├── monochrome/      # Monochrome クライアント・認証・検索マッチャー
 ├── playback/        # 再生エンジン、キュー、ダウンロード管理
 ├── ui/              # Compose UI（スクリーン・コンポーネント）
 ├── utils/           # ユーティリティ（一部は削除予定）
