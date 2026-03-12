@@ -27,6 +27,7 @@ import com.dd3boh.outertune.constants.YtmSyncContentKey
 import com.dd3boh.outertune.constants.decodeSyncString
 import com.dd3boh.outertune.db.MusicDatabase
 import com.dd3boh.outertune.db.entities.ArtistEntity
+import com.dd3boh.outertune.db.entities.MonochromeTrackMatch
 import com.dd3boh.outertune.db.entities.PlaylistEntity
 import com.dd3boh.outertune.db.entities.PlaylistSongMap
 import com.dd3boh.outertune.db.entities.SongEntity
@@ -34,6 +35,7 @@ import com.dd3boh.outertune.extensions.isAutoSyncEnabled
 import com.dd3boh.outertune.extensions.isInternetConnected
 import com.dd3boh.outertune.extensions.toEnum
 import com.dd3boh.outertune.models.toMediaMetadata
+import com.dd3boh.outertune.monochrome.MonochromeSearchMatcher
 import com.dd3boh.outertune.playback.DownloadUtil
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.models.AlbumItem
@@ -67,6 +69,7 @@ import javax.inject.Singleton
 class SyncUtils @Inject constructor(
     val database: MusicDatabase,
     private val downloadUtil: DownloadUtil,
+    private val monochromeSearchMatcher: MonochromeSearchMatcher,
     @ApplicationContext private val context: Context
 ) {
     private val TAG = "SyncUtils"
@@ -89,6 +92,9 @@ class SyncUtils @Inject constructor(
 
     companion object {
         const val DEFAULT_SYNC_CONTENT = "ARPLSC"
+
+        /** Default confidence assigned to auto-matches produced during playlist sync. */
+        private const val AUTO_MATCH_DEFAULT_CONFIDENCE = 0.8f
     }
 
     suspend fun tryAutoSync(bypassCd: Boolean = false) {
@@ -576,7 +582,54 @@ class SyncUtils @Inject constructor(
                     }
                 }
             }
+
+            // After persisting songs, run Monochrome auto-matching for songs that
+            // do not already have a manual correction (which must not be overwritten).
+            runBlocking {
+                launch(Dispatchers.IO) {
+                    matchAndPersistPlaylistSongs(playlistPage.songs)
+                }
+            }
         }
+    }
+
+    /**
+     * Run [MonochromeSearchMatcher] on [songs] and persist any new automatic matches
+     * to [MonochromeTrackMatch].
+     *
+     * Songs that already have a [com.dd3boh.outertune.db.entities.ManualCorrection] row
+     * are skipped so that user overrides are never overwritten.
+     */
+    private suspend fun matchAndPersistPlaylistSongs(songs: List<SongItem>) {
+        if (songs.isEmpty()) return
+
+        // Determine which songs already have a manual correction → skip those.
+        val ytmIds = songs.map { it.id }
+        val existingCorrectionIds = database.getManualCorrectionsForSongs(ytmIds)
+            .map { it.ytmId }
+            .toSet()
+        val songsToMatch = songs.filter { it.id !in existingCorrectionIds }
+        if (songsToMatch.isEmpty()) return
+
+        Log.d(TAG, "Running Monochrome auto-match for ${songsToMatch.size} playlist songs")
+        val matches = monochromeSearchMatcher.matchSongs(songsToMatch)
+        if (matches.isEmpty()) {
+            Log.d(TAG, "No Monochrome matches found for playlist songs")
+            return
+        }
+
+        val now = System.currentTimeMillis()
+        for ((ytmId, track) in matches) {
+            database.upsertTrackMatch(
+                MonochromeTrackMatch(
+                    ytmId = ytmId,
+                    monochromeId = track.monochromeId,
+                    confidence = AUTO_MATCH_DEFAULT_CONFIDENCE,
+                    matchedAt = now,
+                )
+            )
+        }
+        Log.d(TAG, "Persisted ${matches.size} Monochrome auto-matches for playlist")
     }
 
     suspend fun syncRecentActivity(bypass: Boolean = false) {

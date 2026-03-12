@@ -26,6 +26,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -53,11 +54,19 @@ import com.dd3boh.outertune.monochrome.MonochromeTrack
 import com.dd3boh.outertune.utils.makeTimeString
 import com.dd3boh.outertune.viewmodels.MonochromeFixMatchViewModel
 
+/** Duration delta in seconds within which a candidate is considered a close match. */
+private const val DURATION_CLOSE_MATCH_SECS = 5
+
 /**
  * Full-screen-ish dialog that lets the user search Monochrome for a candidate
  * track for the given [song] and save the result as a [ManualCorrection].
  *
  * On success [onSaved] is called so the caller can also dismiss the parent menu.
+ *
+ * @param song          The YTM playlist song to fix the match for.
+ * @param onDismiss     Called when the dialog should be dismissed without saving.
+ * @param onSaved       Called after a correction (or unavailable mark) is saved.
+ * @param viewModel     Injected ViewModel (default: Hilt-provided instance).
  */
 @Composable
 fun MonochromeFixMatchDialog(
@@ -73,10 +82,16 @@ fun MonochromeFixMatchDialog(
     var searchQuery by remember(song.song.id) { mutableStateOf(defaultQuery) }
     var selectedTrack by remember(song.song.id) { mutableStateOf<MonochromeTrack?>(null) }
     val searchState = viewModel.searchState
+    val currentAutoMatch = viewModel.currentAutoMatch
+    val currentManualCorrection = viewModel.currentManualCorrection
+
+    // The YTM song duration in seconds (used for duration-delta display in candidates).
+    val songDurationSecs: Int? = song.song.duration.takeIf { it > 0 }
 
     // Reset state and kick off the initial search each time this dialog appears.
     LaunchedEffect(song.song.id) {
         viewModel.resetSearch()
+        viewModel.loadCurrentMatch(song.song.id)
         if (defaultQuery.isNotEmpty()) {
             viewModel.search(defaultQuery)
         }
@@ -121,6 +136,27 @@ fun MonochromeFixMatchDialog(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+
+                // ── Current match state ──────────────────────────────────────
+                val currentMatchLabel: String? = when {
+                    currentManualCorrection != null && currentManualCorrection.correctedMonochromeId == null ->
+                        stringResource(R.string.monochrome_currently_unavailable)
+                    currentManualCorrection != null ->
+                        stringResource(R.string.monochrome_current_manually_matched)
+                    currentAutoMatch != null ->
+                        stringResource(R.string.monochrome_current_auto_matched, currentAutoMatch.confidence * 100f)
+                    else -> null
+                }
+                if (currentMatchLabel != null) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = "${stringResource(R.string.monochrome_current_match)}: $currentMatchLabel",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
 
@@ -192,12 +228,14 @@ fun MonochromeFixMatchDialog(
                                         TrackResultItem(
                                             track = track,
                                             isSelected = selectedTrack?.monochromeId == track.monochromeId,
+                                            songDurationSecs = songDurationSecs,
                                             onClick = {
                                                 selectedTrack =
                                                     if (selectedTrack?.monochromeId == track.monochromeId) null
                                                     else track
                                             },
                                         )
+                                        HorizontalDivider(thickness = 0.5.dp)
                                     }
                                 }
                             }
@@ -260,6 +298,7 @@ fun MonochromeFixMatchDialog(
 private fun TrackResultItem(
     track: MonochromeTrack,
     isSelected: Boolean,
+    songDurationSecs: Int?,
     onClick: () -> Unit,
 ) {
     Row(
@@ -278,15 +317,32 @@ private fun TrackResultItem(
             )
             val subtitle = buildString {
                 append(track.artist)
+                if (!track.album.isNullOrEmpty()) {
+                    append(" · ")
+                    append(track.album)
+                }
                 if (track.durationSecs > 0) {
                     append(" · ")
                     append(makeTimeString(track.durationSecs * 1000L))
+                    // Duration delta vs YTM song
+                    if (songDurationSecs != null) {
+                        val delta = track.durationSecs - songDurationSecs
+                        if (delta != 0) {
+                            append(" (")
+                            append(if (delta > 0) "+${delta}s" else "${delta}s")
+                            append(")")
+                        }
+                    }
                 }
             }
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = if (songDurationSecs != null && track.durationSecs > 0 &&
+                    kotlin.math.abs(track.durationSecs - songDurationSecs) <= DURATION_CLOSE_MATCH_SECS)
+                    MaterialTheme.colorScheme.primary
+                else
+                    MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
