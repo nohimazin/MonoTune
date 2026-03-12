@@ -340,6 +340,7 @@ We recycle translations from upstream, they are pulled periodically. -->
 
     <!-- Monochrome account -->
     <string name="monochrome_account">Monochrome account</string>
+    <string name="monochrome_provider_badge">Monochrome</string>
     <string name="monochrome_login">Log in to Monochrome</string>
     <string name="monochrome_logout">Log out of Monochrome</string>
     <string name="monochrome_not_logged_in">Not logged in to Monochrome</string>

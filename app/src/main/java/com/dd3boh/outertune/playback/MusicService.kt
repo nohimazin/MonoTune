@@ -106,13 +106,13 @@ import com.dd3boh.outertune.extensions.setOffloadEnabled
 import com.dd3boh.outertune.lyrics.LyricsHelper
 import com.dd3boh.outertune.models.HybridCacheDataSinkFactory
 import com.dd3boh.outertune.models.MediaMetadata
+import com.dd3boh.outertune.monochrome.MonochromeClientApi
+import com.dd3boh.outertune.monochrome.MonochromeResult
 import com.dd3boh.outertune.models.MultiQueueObject
 import com.dd3boh.outertune.models.toMediaMetadata
 import com.dd3boh.outertune.playback.queues.ListQueue
 import com.dd3boh.outertune.playback.queues.Queue
 import com.dd3boh.outertune.playback.queues.YouTubeQueue
-import com.dd3boh.outertune.monochrome.MonochromeClientApi
-import com.dd3boh.outertune.monochrome.MonochromeResult
 import com.dd3boh.outertune.utils.CoilBitmapLoader
 import com.dd3boh.outertune.utils.NetworkConnectivityObserver
 import com.dd3boh.outertune.utils.SyncUtils
@@ -657,6 +657,7 @@ class MusicService : MediaLibraryService(),
 
     private fun createDataSourceFactory(): DataSource.Factory {
         val songUrlCache = HashMap<String, Pair<String, Long>>()
+        val monochromeUrlCache = HashMap<String, Pair<String, Long>>()
         return ResolvingDataSource.Factory(createCacheDataSource()) { dataSpec ->
             val mediaId = dataSpec.key ?: error("No media id")
             Log.d(TAG, "PLAYING: song id = $mediaId")
@@ -683,6 +684,13 @@ class MusicService : MediaLibraryService(),
                 return@Factory dataSpec
             }
 
+            // Check Monochrome stream URL cache
+            monochromeUrlCache[mediaId]?.takeIf { it.second > System.currentTimeMillis() }?.let {
+                Log.d(TAG, "PLAYING: Monochrome stream (cached)")
+                offloadScope.launch { recoverSong(mediaId) }
+                return@Factory dataSpec.withUri(it.first.toUri())
+            }
+
             songUrlCache[mediaId]?.takeIf { it.second > System.currentTimeMillis() }?.let {
                 Log.d(TAG, "PLAYING: remote song (temp cache)")
                 offloadScope.launch { recoverSong(mediaId) }
@@ -691,34 +699,35 @@ class MusicService : MediaLibraryService(),
 
             Log.d(TAG, "PLAYING: remote song (online fetch)")
 
-            // Try Monochrome stream first: manual correction takes priority over auto-match.
-            val monochromeId = runBlocking(Dispatchers.IO) {
-                val correction = database.getManualCorrection(mediaId)
+            // Determine if this track has a Monochrome ID (manual correction takes precedence).
+            // runBlocking is consistent with existing YouTube URL resolution further below;
+            // this callback runs on ExoPlayer's loader thread, not the main thread.
+            val monochromeId: String? = runBlocking(Dispatchers.IO) {
+                val manual = database.getManualCorrection(mediaId)
                 when {
-                    correction != null -> correction.correctedMonochromeId // null = user marked unavailable
+                    manual != null -> manual.correctedMonochromeId // may be null (explicitly unavailable)
                     else -> database.getTrackMatch(mediaId)?.monochromeId
                 }
             }
 
+            // Try Monochrome stream if a monochromeId is available
             if (monochromeId != null) {
-                when (val monoResult = runBlocking(Dispatchers.IO) {
+                Log.d(TAG, "PLAYING: attempting Monochrome stream for monochromeId=$monochromeId")
+                val monochromeResult = runBlocking(Dispatchers.IO) {
                     monochromeClient.resolveStreamUrl(monochromeId)
-                }) {
+                }
+                when (monochromeResult) {
                     is MonochromeResult.Success -> {
-                        val streamUrl = monoResult.data
-                        Log.d(TAG, "PLAYING: monochrome stream for $mediaId → monochromeId=$monochromeId")
+                        val streamUrl = monochromeResult.data
+                        Log.d(TAG, "PLAYING: Monochrome stream resolved: $streamUrl")
+                        // Cache with 1 hour TTL (Monochrome URLs don't provide explicit expiry)
+                        monochromeUrlCache[mediaId] =
+                            streamUrl to System.currentTimeMillis() + 3_600_000L
                         offloadScope.launch { recoverSong(mediaId) }
-                        // Cache Monochrome stream URL for 1 hour (they are not always time-limited,
-                        // but using a reasonable TTL avoids stale entries).
-                        songUrlCache[mediaId] = streamUrl to System.currentTimeMillis() + (60 * 60 * 1000L)
                         return@Factory dataSpec.withUri(streamUrl.toUri())
-                            .subrange(dataSpec.uriPositionOffset, CHUNK_LENGTH)
                     }
                     is MonochromeResult.Error -> {
-                        Log.w(
-                            TAG,
-                            "Monochrome stream resolve failed for $mediaId ($monochromeId): ${monoResult.message}, falling back to YTM"
-                        )
+                        Log.w(TAG, "PLAYING: Monochrome stream resolution failed for monochromeId=$monochromeId: ${monochromeResult.message}, falling back to YouTube")
                     }
                 }
             }
