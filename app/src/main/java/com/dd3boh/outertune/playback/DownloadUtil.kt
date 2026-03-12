@@ -107,7 +107,7 @@ class DownloadUtil @Inject constructor(
         when (monochromeResult) {
             is MonochromeResult.Success -> {
                 Log.d(TAG, "DOWNLOAD: Monochrome stream resolved for monochromeId=$monochromeId")
-                dataSpec.withUri(monochromeResult.data.toUri())
+                return@Factory dataSpec.withUri(monochromeResult.data.toUri())
             }
             is MonochromeResult.Error -> {
                 Log.w(TAG, "DOWNLOAD: Monochrome stream resolution failed for monochromeId=$monochromeId: ${monochromeResult.message}")
