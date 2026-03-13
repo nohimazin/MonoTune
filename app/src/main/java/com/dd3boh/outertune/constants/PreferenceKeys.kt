@@ -164,6 +164,13 @@ val MonochromeDisplayNameKey = stringPreferencesKey("monochromeDisplayName")
 val MonochromeTokenExpiryKey = longPreferencesKey("monochromeTokenExpiry")
 
 /**
+ * Monochrome API endpoint – stored independently of login state.
+ * Allows the user to configure the hifi-api Base URL without needing to
+ * log in or out.  Defaults to [com.dd3boh.outertune.monochrome.DEFAULT_MONOCHROME_API_URL].
+ */
+val MonochromeApiEndpointKey = stringPreferencesKey("monochromeApiEndpoint")
+
+/**
  * Misc
  */
 val LastUpdateCheckKey = longPreferencesKey("lastUpdateCheck")

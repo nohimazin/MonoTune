@@ -69,10 +69,8 @@ import com.dd3boh.outertune.viewmodels.MonochromeLoginViewModel
  * When a session is already active the screen shows the signed-in state and
  * a logout button.  When no session is present, an email/password form is shown.
  *
- * **Server URL** is the hifi-api instance used for music data
- * (e.g. `https://api.monochrome.tf`).  Account authentication goes to the
- * official Appwrite endpoint at [com.dd3boh.outertune.monochrome.APPWRITE_ENDPOINT]
- * and is not affected by the Server URL field.
+ * The **API endpoint** (hifi-api Base URL) is configured independently in the
+ * Account & Sync settings and is not part of the login flow.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,15 +79,15 @@ fun MonochromeLoginScreen(
     viewModel: MonochromeLoginViewModel = hiltViewModel(),
 ) {
     val session by viewModel.session.collectAsState()
+    val apiEndpoint by viewModel.apiEndpoint.collectAsState()
     val focusManager = LocalFocusManager.current
 
-    var serverUrl by rememberSaveable { mutableStateOf("https://api.monochrome.tf") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
     // Clear error when input changes
-    LaunchedEffect(serverUrl, email, password) { viewModel.clearError() }
+    LaunchedEffect(email, password) { viewModel.clearError() }
 
     Column(
         modifier = Modifier
@@ -116,21 +114,17 @@ fun MonochromeLoginScreen(
 
                     Spacer(Modifier.height(4.dp))
 
-                    OutlinedTextField(
-                        value = serverUrl,
-                        onValueChange = { serverUrl = it },
-                        label = { Text(stringResource(R.string.monochrome_server_url)) },
-                        placeholder = { Text(stringResource(R.string.monochrome_server_url_hint)) },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Uri,
-                            imeAction = ImeAction.Next,
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onNext = { focusManager.moveFocus(FocusDirection.Down) },
-                        ),
-                        modifier = Modifier.fillMaxWidth(),
+                    // Show the currently configured endpoint so the user knows
+                    // which instance will be used.  The endpoint itself is
+                    // configured in Settings > Account & Sync.
+                    InfoLabel(
+                        stringResource(
+                            R.string.monochrome_login_endpoint_note,
+                            apiEndpoint,
+                        )
                     )
+
+                    Spacer(Modifier.height(4.dp))
 
                     OutlinedTextField(
                         value = email,
@@ -162,7 +156,7 @@ fun MonochromeLoginScreen(
                             onDone = {
                                 focusManager.clearFocus()
                                 if (!viewModel.isLoading) {
-                                    viewModel.login(serverUrl, email, password)
+                                    viewModel.login(email, password)
                                 }
                             },
                         ),
@@ -202,8 +196,8 @@ fun MonochromeLoginScreen(
                             CircularProgressIndicator()
                         } else {
                             Button(
-                                onClick = { viewModel.login(serverUrl, email, password) },
-                                enabled = serverUrl.isNotBlank() && email.isNotBlank() && password.isNotBlank(),
+                                onClick = { viewModel.login(email, password) },
+                                enabled = email.isNotBlank() && password.isNotBlank(),
                                 modifier = Modifier.fillMaxWidth(),
                             ) {
                                 Text(stringResource(R.string.monochrome_login_button))

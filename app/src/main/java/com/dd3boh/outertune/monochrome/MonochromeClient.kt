@@ -204,6 +204,26 @@ interface MonochromeClientApi {
     fun getSession(): MonochromeSession?
 
     // -----------------------------------------------------------------------
+    // API endpoint (independent of login state)
+    // -----------------------------------------------------------------------
+
+    /**
+     * Update the hifi-api Base URL used for all catalog and streaming calls.
+     *
+     * The change takes effect immediately for subsequent requests.  The caller
+     * is responsible for persisting [url] to DataStore so the value survives
+     * restarts (see [com.dd3boh.outertune.monochrome.MonochromeAuthRepository.saveApiEndpoint]).
+     *
+     * @param url Base URL of the hifi-api instance (e.g. `https://api.monochrome.tf`).
+     *            Trailing slashes are trimmed automatically.  An empty string resets
+     *            the value to [DEFAULT_MONOCHROME_API_URL].
+     */
+    fun setApiEndpoint(url: String)
+
+    /** Returns the currently configured hifi-api Base URL. */
+    fun getApiEndpoint(): String
+
+    // -----------------------------------------------------------------------
     // Catalog (hifi-api)
     // -----------------------------------------------------------------------
 
@@ -280,8 +300,9 @@ interface MonochromeClientApi {
  * ([APPWRITE_ENDPOINT]); the Appwrite session token is extracted from the
  * `Set-Cookie` response header and stored in-memory (see [MonochromeSession]).
  *
- * **Music API** calls target the hifi-api instance URL stored in
- * [MonochromeSession.serverUrl] (default: [DEFAULT_MONOCHROME_API_URL]).
+ * **Music API** calls target the hifi-api Base URL controlled by [_apiEndpoint],
+ * which can be updated at any time via [setApiEndpoint] without requiring a login.
+ * It defaults to [DEFAULT_MONOCHROME_API_URL].
  *
  * **Lyrics** are fetched from LRCLib ([LRCLIB_API_URL]).
  */
@@ -297,6 +318,16 @@ class MonochromeClient @Inject constructor() : MonochromeClientApi {
 
     @Volatile
     private var currentSession: MonochromeSession? = null
+
+    /** Configured hifi-api Base URL, independent of login state. */
+    @Volatile
+    private var _apiEndpoint: String = DEFAULT_MONOCHROME_API_URL
+
+    override fun setApiEndpoint(url: String) {
+        _apiEndpoint = url.trimEnd('/').ifEmpty { DEFAULT_MONOCHROME_API_URL }
+    }
+
+    override fun getApiEndpoint(): String = _apiEndpoint
 
     // -----------------------------------------------------------------------
     // Authentication
@@ -425,7 +456,7 @@ class MonochromeClient @Inject constructor() : MonochromeClientApi {
 
     override suspend fun search(query: String): MonochromeResult<List<MonochromeTrack>> =
         withContext(Dispatchers.IO) {
-            val apiUrl = currentSession?.serverUrl ?: DEFAULT_MONOCHROME_API_URL
+            val apiUrl = _apiEndpoint
             try {
                 val request = Request.Builder()
                     .url("$apiUrl/search/?s=${query.encodeUrlParam()}")
@@ -464,7 +495,7 @@ class MonochromeClient @Inject constructor() : MonochromeClientApi {
 
     override suspend fun getTrack(tidalId: String): MonochromeResult<MonochromeTrack> =
         withContext(Dispatchers.IO) {
-            val apiUrl = currentSession?.serverUrl ?: DEFAULT_MONOCHROME_API_URL
+            val apiUrl = _apiEndpoint
             try {
                 val request = Request.Builder()
                     .url("$apiUrl/info/?id=$tidalId")
@@ -502,10 +533,9 @@ class MonochromeClient @Inject constructor() : MonochromeClientApi {
         tidalId: String,
         quality: String,
     ): MonochromeResult<String> = withContext(Dispatchers.IO) {
-        // Use the session's serverUrl as the streaming base. Many hifi-api instances listed in
-        // instances.json serve both the API (search/info) and streaming (/track/) endpoints.
-        // If no session is active, fall back to DEFAULT_MONOCHROME_STREAMING_URL.
-        val streamingUrl = currentSession?.serverUrl ?: DEFAULT_MONOCHROME_STREAMING_URL
+        // Use the configured API endpoint as the streaming base. Many hifi-api instances
+        // serve both the API (search/info) and streaming (/track/) endpoints.
+        val streamingUrl = _apiEndpoint
         try {
             val request = Request.Builder()
                 .url("$streamingUrl/track/?id=$tidalId&quality=$quality")

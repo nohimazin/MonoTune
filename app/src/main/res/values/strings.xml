@@ -344,6 +344,9 @@ We recycle translations from upstream, they are pulled periodically. -->
     <string name="monochrome_login">Log in to Monochrome</string>
     <string name="monochrome_logout">Log out of Monochrome</string>
     <string name="monochrome_not_logged_in">Not logged in to Monochrome</string>
+    <string name="monochrome_api_endpoint">Monochrome API endpoint</string>
+    <string name="monochrome_api_endpoint_invalid">URL must start with http:// or https://</string>
+    <string name="monochrome_login_endpoint_note">Endpoint: %1$s</string>
     <string name="monochrome_server_url">hifi-api instance URL</string>
     <string name="monochrome_server_url_hint">https://api.monochrome.tf</string>
     <string name="monochrome_email">Email</string>
@@ -356,7 +359,7 @@ We recycle translations from upstream, they are pulled periodically. -->
     <string name="monochrome_server_url_invalid">Please enter a valid server URL (starting with https://)</string>
     <string name="monochrome_email_invalid">Please enter a valid email address</string>
     <string name="monochrome_password_empty">Password cannot be empty</string>
-    <string name="monochrome_backend_note">Sign in with your monochrome.tf account. The Server URL is the hifi-api instance used for music streaming (default: https://api.monochrome.tf).</string>
+    <string name="monochrome_backend_note">Sign in with your monochrome.tf account. The API endpoint can be changed in Account &amp; Sync settings.</string>
     <!-- Keep for backwards compat - no longer shown in the UI -->
     <string name="monochrome_backend_stub_note">@string/monochrome_backend_note</string>
 
