@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.rounded.CloudQueue
+import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +33,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import com.dd3boh.outertune.App.Companion.forgetAccount
 import com.dd3boh.outertune.App.Companion.forgetMonochromeAccount
@@ -43,6 +44,7 @@ import com.dd3boh.outertune.constants.DataSyncIdKey
 import com.dd3boh.outertune.constants.InnerTubeCookieKey
 import com.dd3boh.outertune.constants.UseLoginForBrowse
 import com.dd3boh.outertune.constants.VisitorDataKey
+import com.dd3boh.outertune.ui.component.EditTextPreference
 import com.dd3boh.outertune.ui.component.PreferenceEntry
 import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
 import com.dd3boh.outertune.ui.component.SwitchPreference
@@ -195,6 +197,9 @@ fun ColumnScope.AccountExtrasFrag() {
  * When a session is active the user's display name and server URL are shown.
  * A "Log out" entry is also shown so the user can sign out without navigating
  * to the dedicated login screen.
+ *
+ * The **API endpoint** (hifi-api Base URL) is configured here independently of
+ * login state, so users can change it without signing in or out.
  */
 @Composable
 fun ColumnScope.MonochromeAccountFrag(
@@ -203,14 +208,29 @@ fun ColumnScope.MonochromeAccountFrag(
 ) {
     val context = LocalContext.current
     val session by viewModel.session.collectAsState()
+    val apiEndpoint by viewModel.apiEndpoint.collectAsState()
 
     PreferenceGroupTitle(title = stringResource(R.string.monochrome_account))
 
+    // ------------------------------------------------------------------
+    // API endpoint – independent of login state
+    // ------------------------------------------------------------------
+    EditTextPreference(
+        title = { Text(stringResource(R.string.monochrome_api_endpoint)) },
+        icon = { Icon(Icons.Rounded.Link, null) },
+        value = apiEndpoint,
+        onValueChange = { viewModel.saveEndpoint(it) },
+        isInputValid = { it.startsWith("http://") || it.startsWith("https://") },
+    )
+
+    // ------------------------------------------------------------------
+    // Login / account entry
+    // ------------------------------------------------------------------
     PreferenceEntry(
         title = {
             Text(session?.displayName ?: stringResource(R.string.monochrome_not_logged_in))
         },
-        description = session?.serverUrl,
+        description = session?.email,
         icon = { Icon(Icons.Rounded.CloudQueue, null) },
         onClick = { navController.navigate("monochrome_login") },
     )

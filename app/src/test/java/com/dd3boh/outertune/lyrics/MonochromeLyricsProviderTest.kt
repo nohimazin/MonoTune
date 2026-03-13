@@ -70,6 +70,8 @@ private class FakeMonochromeClientApi(
         MonochromeResult.Error("not implemented")
     override fun setSession(session: MonochromeSession?) = Unit
     override fun getSession(): MonochromeSession? = null
+    override fun setApiEndpoint(url: String) = Unit
+    override fun getApiEndpoint(): String = "https://api.monochrome.tf"
     override suspend fun search(query: String) =
         MonochromeResult.Error("not implemented")
     override suspend fun getTrack(tidalId: String) = trackResult
