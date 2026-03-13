@@ -160,9 +160,8 @@ class MonochromeAuthRepositoryImpl @Inject constructor(
 
     override suspend fun restoreSession(): MonochromeSession? {
         // Always restore the API endpoint first, even if no session exists.
-        val storedEndpoint = context.dataStore[MonochromeApiEndpointKey]
-        val endpoint = if (!storedEndpoint.isNullOrEmpty()) storedEndpoint
-                       else DEFAULT_MONOCHROME_API_URL
+        val endpoint = context.dataStore[MonochromeApiEndpointKey]?.ifEmpty { null }
+            ?: DEFAULT_MONOCHROME_API_URL
         client.setApiEndpoint(endpoint)
 
         // Now restore the auth session (if any).
