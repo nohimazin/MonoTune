@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.constants
+package com.nohimazin.monotune.constants
 
 import android.os.Build
 import com.nohimazin.monotune.BuildConfig

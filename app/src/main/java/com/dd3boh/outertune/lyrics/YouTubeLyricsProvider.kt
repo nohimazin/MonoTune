@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.lyrics
+package com.nohimazin.monotune.lyrics
 
 import android.content.Context
 import com.zionhuang.innertube.YouTube

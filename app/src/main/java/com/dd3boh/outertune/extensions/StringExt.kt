@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.extensions
+package com.nohimazin.monotune.extensions
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import java.net.InetSocketAddress

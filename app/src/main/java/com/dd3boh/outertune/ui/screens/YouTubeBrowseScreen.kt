@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens
+package com.nohimazin.monotune.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable

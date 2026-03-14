@@ -1,9 +1,9 @@
-package com.dd3boh.outertune.viewmodels
+package com.nohimazin.monotune.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.db.entities.SearchHistory
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.db.entities.SearchHistory
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.models.YTItem
 import dagger.hilt.android.lifecycle.HiltViewModel

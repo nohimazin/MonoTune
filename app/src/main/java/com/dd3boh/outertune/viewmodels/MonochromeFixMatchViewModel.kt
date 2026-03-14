@@ -4,19 +4,19 @@
  * SPDX-License-Identifier: GPL-3.0
  */
 
-package com.dd3boh.outertune.viewmodels
+package com.nohimazin.monotune.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.db.entities.ManualCorrection
-import com.dd3boh.outertune.db.entities.MonochromeTrackMatch
-import com.dd3boh.outertune.monochrome.MonochromeClientApi
-import com.dd3boh.outertune.monochrome.MonochromeResult
-import com.dd3boh.outertune.monochrome.MonochromeTrack
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.db.entities.ManualCorrection
+import com.nohimazin.monotune.db.entities.MonochromeTrackMatch
+import com.nohimazin.monotune.monochrome.MonochromeClientApi
+import com.nohimazin.monotune.monochrome.MonochromeResult
+import com.nohimazin.monotune.monochrome.MonochromeTrack
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

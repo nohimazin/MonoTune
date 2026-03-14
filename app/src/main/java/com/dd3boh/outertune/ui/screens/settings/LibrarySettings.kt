@@ -5,7 +5,7 @@
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.screens.settings
+package com.nohimazin.monotune.ui.screens.settings
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column

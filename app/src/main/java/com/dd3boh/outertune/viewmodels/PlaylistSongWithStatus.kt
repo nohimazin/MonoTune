@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0
  */
 
-package com.dd3boh.outertune.viewmodels
+package com.nohimazin.monotune.viewmodels
 
-import com.dd3boh.outertune.db.entities.ManualCorrection
-import com.dd3boh.outertune.db.entities.MonochromeTrackMatch
-import com.dd3boh.outertune.db.entities.PlaylistSong
+import com.nohimazin.monotune.db.entities.ManualCorrection
+import com.nohimazin.monotune.db.entities.MonochromeTrackMatch
+import com.nohimazin.monotune.db.entities.PlaylistSong
 
 /**
  * Effective Monochrome match state for a single playlist song.

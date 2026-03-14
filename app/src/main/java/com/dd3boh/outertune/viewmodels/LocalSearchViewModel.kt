@@ -1,13 +1,13 @@
-package com.dd3boh.outertune.viewmodels
+package com.nohimazin.monotune.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.db.entities.Album
-import com.dd3boh.outertune.db.entities.Artist
-import com.dd3boh.outertune.db.entities.LocalItem
-import com.dd3boh.outertune.db.entities.Playlist
-import com.dd3boh.outertune.db.entities.Song
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.db.entities.Album
+import com.nohimazin.monotune.db.entities.Artist
+import com.nohimazin.monotune.db.entities.LocalItem
+import com.nohimazin.monotune.db.entities.Playlist
+import com.nohimazin.monotune.db.entities.Song
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

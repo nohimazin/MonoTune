@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.viewmodels
+package com.nohimazin.monotune.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

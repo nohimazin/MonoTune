@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.viewmodels
+package com.nohimazin.monotune.viewmodels
 
 import android.content.Context
 import android.content.Intent
@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModel
 import com.nohimazin.monotune.MainActivity
 import com.nohimazin.monotune.R
 import com.nohimazin.monotune.db.InternalDatabase
-import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.extensions.div
-import com.dd3boh.outertune.extensions.zipInputStream
-import com.dd3boh.outertune.extensions.zipOutputStream
-import com.dd3boh.outertune.playback.MusicService
-import com.dd3boh.outertune.utils.reportException
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.extensions.div
+import com.nohimazin.monotune.extensions.zipInputStream
+import com.nohimazin.monotune.extensions.zipOutputStream
+import com.nohimazin.monotune.playback.MusicService
+import com.nohimazin.monotune.utils.reportException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.utils
+package com.nohimazin.monotune.utils
 
 import android.content.Context
 import androidx.compose.runtime.Composable

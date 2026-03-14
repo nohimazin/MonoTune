@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens
+package com.nohimazin.monotune.ui.screens
 
 import android.annotation.SuppressLint
 import android.webkit.CookieManager

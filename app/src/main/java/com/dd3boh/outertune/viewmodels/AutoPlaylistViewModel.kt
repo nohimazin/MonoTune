@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.viewmodels
+package com.nohimazin.monotune.viewmodels
 
 import android.content.Context
 import androidx.compose.material.icons.Icons
@@ -9,12 +9,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dd3boh.outertune.constants.SongSortDescendingKey
-import com.dd3boh.outertune.constants.SongSortType
-import com.dd3boh.outertune.constants.SongSortTypeKey
-import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.extensions.toEnum
-import com.dd3boh.outertune.utils.dataStore
+import com.nohimazin.monotune.constants.SongSortDescendingKey
+import com.nohimazin.monotune.constants.SongSortType
+import com.nohimazin.monotune.constants.SongSortTypeKey
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.extensions.toEnum
+import com.nohimazin.monotune.utils.dataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -1,10 +1,10 @@
-package com.dd3boh.outertune.viewmodels
+package com.nohimazin.monotune.viewmodels
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.utils.reportException
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.utils.reportException
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.models.AlbumItem
 import dagger.hilt.android.lifecycle.HiltViewModel

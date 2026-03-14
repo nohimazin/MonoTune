@@ -6,7 +6,7 @@
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.theme
+package com.nohimazin.monotune.ui.theme
 
 import android.content.Context
 import android.graphics.Bitmap

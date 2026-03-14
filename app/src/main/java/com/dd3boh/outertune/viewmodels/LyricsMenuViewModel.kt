@@ -1,12 +1,12 @@
-package com.dd3boh.outertune.viewmodels
+package com.nohimazin.monotune.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dd3boh.outertune.constants.LYRIC_FETCH_TIMEOUT
-import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.lyrics.LyricsHelper
-import com.dd3boh.outertune.lyrics.LyricsResult
-import com.dd3boh.outertune.models.MediaMetadata
+import com.nohimazin.monotune.constants.LYRIC_FETCH_TIMEOUT
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.lyrics.LyricsHelper
+import com.nohimazin.monotune.lyrics.LyricsResult
+import com.nohimazin.monotune.models.MediaMetadata
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
