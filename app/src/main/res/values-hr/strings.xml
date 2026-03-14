@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">MonoTune</string>
     <string name="playlist_synced">Playlista je sinkronizirana</string>
     <string name="undo">Poništi</string>
     <string name="lyrics_not_found">Tekst pjesama nije pronađen</string>

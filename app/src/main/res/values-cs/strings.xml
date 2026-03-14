@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">MonoTune</string>
     <string name="home">Domů</string>
     <string name="songs">Skladby</string>
     <string name="artists">Umělci</string>

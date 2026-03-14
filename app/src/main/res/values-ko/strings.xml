@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">MonoTune</string>
     <string name="home">홈</string>
     <string name="songs">노래</string>
     <string name="artists">아티스트</string>
