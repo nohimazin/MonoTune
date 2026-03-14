@@ -1,4 +1,4 @@
-package com.dd3boh.outertune
+package com.nohimazin.monotune
 
 import android.content.Context
 import android.net.Uri

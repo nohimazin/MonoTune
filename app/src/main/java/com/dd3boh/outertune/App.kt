@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune
+package com.nohimazin.monotune
 
 import android.app.Application
 import android.content.Context

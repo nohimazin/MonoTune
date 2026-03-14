@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.db
+package com.nohimazin.monotune.db
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

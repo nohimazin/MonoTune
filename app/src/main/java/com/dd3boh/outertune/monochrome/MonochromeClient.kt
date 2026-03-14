@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0
  */
 
-package com.dd3boh.outertune.monochrome
+package com.nohimazin.monotune.monochrome
 
 import android.util.Base64
 import android.util.Log
