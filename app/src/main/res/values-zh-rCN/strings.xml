@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">MonoTune</string>
     <string name="home">首页</string>
     <string name="songs">歌曲</string>
     <string name="artists">音乐人</string>

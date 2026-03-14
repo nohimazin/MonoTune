@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">MonoTune</string>
     <string name="home">Beranda</string>
     <string name="songs">Lagu</string>
     <string name="artists">Artis</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">MonoTune</string>
     <string name="home">Αρχική</string>
     <string name="songs">Τραγούδια</string>
     <string name="artists">Καλλιτέχνες</string>

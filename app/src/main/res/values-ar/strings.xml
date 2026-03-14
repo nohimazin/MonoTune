@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">MonoTune</string>
     <string name="artists">فنانون</string>
     <string name="albums">ألبومات</string>
     <string name="history">السجل</string>

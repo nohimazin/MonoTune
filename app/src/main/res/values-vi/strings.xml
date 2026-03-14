@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">MonoTune</string>
     <string name="home">Trang chủ</string>
     <string name="songs">Bài hát</string>
     <string name="artists">Nghệ sĩ</string>
