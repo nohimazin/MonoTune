@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: GPL-3.0
  */
 
-package com.dd3boh.outertune.lyrics
+package com.nohimazin.monotune.lyrics
 
-import com.dd3boh.outertune.db.entities.ManualCorrection
-import com.dd3boh.outertune.db.entities.MonochromeTrackMatch
-import com.dd3boh.outertune.db.daos.MonoTuneDao
-import com.dd3boh.outertune.db.entities.YtmScrobbleQueue
-import com.dd3boh.outertune.monochrome.MonochromeLyrics
-import com.dd3boh.outertune.monochrome.MonochromeClientApi
-import com.dd3boh.outertune.monochrome.MonochromeResult
-import com.dd3boh.outertune.monochrome.MonochromeSession
-import com.dd3boh.outertune.monochrome.MonochromeTrack
+import com.nohimazin.monotune.db.entities.ManualCorrection
+import com.nohimazin.monotune.db.entities.MonochromeTrackMatch
+import com.nohimazin.monotune.db.daos.MonoTuneDao
+import com.nohimazin.monotune.db.entities.YtmScrobbleQueue
+import com.nohimazin.monotune.monochrome.MonochromeLyrics
+import com.nohimazin.monotune.monochrome.MonochromeClientApi
+import com.nohimazin.monotune.monochrome.MonochromeResult
+import com.nohimazin.monotune.monochrome.MonochromeSession
+import com.nohimazin.monotune.monochrome.MonochromeTrack
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking

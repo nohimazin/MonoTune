@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.db.entities
+package com.nohimazin.monotune.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

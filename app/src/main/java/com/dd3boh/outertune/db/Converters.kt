@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.db
+package com.nohimazin.monotune.db
 
 import androidx.room.TypeConverter
 import java.time.Instant

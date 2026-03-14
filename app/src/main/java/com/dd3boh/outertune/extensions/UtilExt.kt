@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.extensions
+package com.nohimazin.monotune.extensions
 
 fun <T> tryOrNull(block: () -> T): T? =
     try {

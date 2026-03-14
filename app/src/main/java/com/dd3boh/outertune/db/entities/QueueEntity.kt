@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.db.entities
+package com.nohimazin.monotune.db.entities
 
 import androidx.media3.common.C
 import androidx.room.ColumnInfo

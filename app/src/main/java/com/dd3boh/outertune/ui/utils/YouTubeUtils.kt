@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.utils
+package com.nohimazin.monotune.ui.utils
 
 fun String.resize(
     width: Int? = null,

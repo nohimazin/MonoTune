@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0
  */
 
-package com.dd3boh.outertune.db.daos
+package com.nohimazin.monotune.db.daos
 
 import androidx.room.Dao
 import androidx.room.Query
