@@ -321,8 +321,7 @@ class PoTokenWebView private constructor(
 
     companion object {
         private const val TAG = "PoTokenWebView"
-        // Google API Keyは環境変数や安全な方法で管理してください
-        private const val GOOGLE_API_KEY = ""
+        private const val GOOGLE_API_KEY = "AIzaSyDyT5W0Jh49F30Pqqtyfdf7pDLFKLJoAnw"
         private const val REQUEST_KEY = "O43z0dpjhgX20SCx4KAo"
         private const val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
                 "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.3"
