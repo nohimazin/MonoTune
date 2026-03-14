@@ -3,9 +3,9 @@ package com.dd3boh.outertune.viewmodels
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dd3boh.outertune.constants.HistorySource
-import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.utils.reportException
+import com.nohimazin.monotune.constants.HistorySource
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.utils.reportException
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.pages.HistoryPage
 import dagger.hilt.android.lifecycle.HiltViewModel

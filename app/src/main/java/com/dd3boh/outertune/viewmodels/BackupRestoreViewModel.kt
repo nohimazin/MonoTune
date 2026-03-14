@@ -6,9 +6,9 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import com.dd3boh.outertune.MainActivity
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.db.InternalDatabase
+import com.nohimazin.monotune.MainActivity
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.db.InternalDatabase
 import com.dd3boh.outertune.db.MusicDatabase
 import com.dd3boh.outertune.extensions.div
 import com.dd3boh.outertune.extensions.zipInputStream

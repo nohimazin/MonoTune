@@ -11,9 +11,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dd3boh.outertune.monochrome.MonochromeAuthRepository
-import com.dd3boh.outertune.monochrome.MonochromeResult
-import com.dd3boh.outertune.monochrome.MonochromeSession
+import com.nohimazin.monotune.monochrome.MonochromeAuthRepository
+import com.nohimazin.monotune.monochrome.MonochromeResult
+import com.nohimazin.monotune.monochrome.MonochromeSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

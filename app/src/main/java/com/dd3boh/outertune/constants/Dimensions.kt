@@ -12,7 +12,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
 
 const val CONTENT_TYPE_HEADER = 0
 const val CONTENT_TYPE_LIST = 1

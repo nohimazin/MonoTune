@@ -31,15 +31,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.ColumnWithContentPadding
-import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.screens.settings.fragments.DownloadsFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.ImageCacheFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.SongCacheFrag
-import com.dd3boh.outertune.ui.utils.backToMain
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.ColumnWithContentPadding
+import com.nohimazin.monotune.ui.component.PreferenceGroupTitle
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.screens.settings.fragments.DownloadsFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.ImageCacheFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.SongCacheFrag
+import com.nohimazin.monotune.ui.utils.backToMain
 
 
 @SuppressLint("PrivateResource")

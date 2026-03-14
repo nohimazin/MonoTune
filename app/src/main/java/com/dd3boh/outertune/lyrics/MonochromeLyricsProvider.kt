@@ -8,10 +8,10 @@ package com.dd3boh.outertune.lyrics
 
 import android.content.Context
 import android.util.Log
-import com.dd3boh.outertune.db.daos.MonoTuneDao
-import com.dd3boh.outertune.monochrome.MonochromeClientApi
-import com.dd3boh.outertune.monochrome.MonochromeLyrics
-import com.dd3boh.outertune.monochrome.MonochromeResult
+import com.nohimazin.monotune.db.daos.MonoTuneDao
+import com.nohimazin.monotune.monochrome.MonochromeClientApi
+import com.nohimazin.monotune.monochrome.MonochromeLyrics
+import com.nohimazin.monotune.monochrome.MonochromeResult
 import javax.inject.Inject
 import javax.inject.Singleton
 

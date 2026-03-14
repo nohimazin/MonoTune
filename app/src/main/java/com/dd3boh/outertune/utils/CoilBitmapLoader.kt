@@ -33,7 +33,7 @@ import coil3.request.ImageRequest
 import coil3.request.Options
 import coil3.request.allowHardware
 import coil3.toBitmap
-import com.dd3boh.outertune.R
+import com.nohimazin.monotune.R
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.guava.future

@@ -1,9 +1,9 @@
 package com.dd3boh.outertune.lyrics
 
 import android.content.Context
-import com.dd3boh.outertune.constants.EnableKugouKey
-import com.dd3boh.outertune.utils.dataStore
-import com.dd3boh.outertune.utils.get
+import com.nohimazin.monotune.constants.EnableKugouKey
+import com.nohimazin.monotune.utils.dataStore
+import com.nohimazin.monotune.utils.get
 import com.zionhuang.kugou.KuGou
 
 object KuGouLyricsProvider : LyricsProvider {

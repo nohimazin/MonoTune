@@ -10,7 +10,7 @@ import androidx.annotation.MainThread
 import androidx.collection.ArrayMap
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
-import com.dd3boh.outertune.BuildConfig
+import com.nohimazin.monotune.BuildConfig
 import com.zionhuang.innertube.YouTube
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers

@@ -2,7 +2,7 @@ package com.dd3boh.outertune.utils.potoken
 
 import android.util.Log
 import android.webkit.CookieManager
-import com.dd3boh.outertune.App
+import com.nohimazin.monotune.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex

@@ -8,7 +8,7 @@ import androidx.media3.common.Player.REPEAT_MODE_OFF
 import androidx.media3.common.Player.REPEAT_MODE_ONE
 import androidx.media3.common.Timeline
 import androidx.media3.common.TrackSelectionParameters
-import com.dd3boh.outertune.models.MediaMetadata
+import com.nohimazin.monotune.models.MediaMetadata
 import java.util.ArrayDeque
 
 fun Player.togglePlayPause() {

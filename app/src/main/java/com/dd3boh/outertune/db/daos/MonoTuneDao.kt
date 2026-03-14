@@ -9,9 +9,9 @@ package com.dd3boh.outertune.db.daos
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.dd3boh.outertune.db.entities.ManualCorrection
-import com.dd3boh.outertune.db.entities.MonochromeTrackMatch
-import com.dd3boh.outertune.db.entities.YtmScrobbleQueue
+import com.nohimazin.monotune.db.entities.ManualCorrection
+import com.nohimazin.monotune.db.entities.MonochromeTrackMatch
+import com.nohimazin.monotune.db.entities.YtmScrobbleQueue
 import kotlinx.coroutines.flow.Flow
 
 /**

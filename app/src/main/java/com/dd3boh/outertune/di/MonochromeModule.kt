@@ -6,10 +6,10 @@
 
 package com.dd3boh.outertune.di
 
-import com.dd3boh.outertune.monochrome.MonochromeAuthRepository
-import com.dd3boh.outertune.monochrome.MonochromeAuthRepositoryImpl
-import com.dd3boh.outertune.monochrome.MonochromeClient
-import com.dd3boh.outertune.monochrome.MonochromeClientApi
+import com.nohimazin.monotune.monochrome.MonochromeAuthRepository
+import com.nohimazin.monotune.monochrome.MonochromeAuthRepositoryImpl
+import com.nohimazin.monotune.monochrome.MonochromeClient
+import com.nohimazin.monotune.monochrome.MonochromeClientApi
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

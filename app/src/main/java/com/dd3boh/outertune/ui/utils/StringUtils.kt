@@ -2,7 +2,7 @@ package com.dd3boh.outertune.ui.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.pluralStringResource
-import com.dd3boh.outertune.R
+import com.nohimazin.monotune.R
 
 /*
 IMPORTANT: Put any string utils that **DO NOT** require composable in outertu.ne/utils/StringUtils.kt

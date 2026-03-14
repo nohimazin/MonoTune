@@ -8,11 +8,11 @@ import androidx.room.Query
 import androidx.room.RewriteQueriesToDropUnusedColumns
 import androidx.room.Transaction
 import androidx.room.Update
-import com.dd3boh.outertune.constants.SongSortType
-import com.dd3boh.outertune.db.entities.PlayCountEntity
-import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.db.entities.SongEntity
-import com.dd3boh.outertune.extensions.reversed
+import com.nohimazin.monotune.constants.SongSortType
+import com.nohimazin.monotune.db.entities.PlayCountEntity
+import com.nohimazin.monotune.db.entities.Song
+import com.nohimazin.monotune.db.entities.SongEntity
+import com.nohimazin.monotune.extensions.reversed
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

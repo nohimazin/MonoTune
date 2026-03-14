@@ -7,10 +7,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dd3boh.outertune.models.ItemsPage
-import com.dd3boh.outertune.monochrome.MonochromeSearchMatcher
-import com.dd3boh.outertune.monochrome.MonochromeTrack
-import com.dd3boh.outertune.utils.reportException
+import com.nohimazin.monotune.models.ItemsPage
+import com.nohimazin.monotune.monochrome.MonochromeSearchMatcher
+import com.nohimazin.monotune.monochrome.MonochromeTrack
+import com.nohimazin.monotune.utils.reportException
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.pages.SearchSummary
 import com.zionhuang.innertube.pages.SearchSummaryPage

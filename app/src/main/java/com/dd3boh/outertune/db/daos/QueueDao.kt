@@ -7,11 +7,11 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.dd3boh.outertune.db.entities.QueueEntity
-import com.dd3boh.outertune.db.entities.QueueSong
-import com.dd3boh.outertune.db.entities.QueueSongMap
-import com.dd3boh.outertune.models.MultiQueueObject
-import com.dd3boh.outertune.models.toMediaMetadata
+import com.nohimazin.monotune.db.entities.QueueEntity
+import com.nohimazin.monotune.db.entities.QueueSong
+import com.nohimazin.monotune.db.entities.QueueSongMap
+import com.nohimazin.monotune.models.MultiQueueObject
+import com.nohimazin.monotune.models.toMediaMetadata
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

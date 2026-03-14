@@ -2,15 +2,15 @@ package com.dd3boh.outertune.lyrics
 
 import android.content.Context
 import android.util.LruCache
-import com.dd3boh.outertune.constants.LyricTrimKey
-import com.dd3boh.outertune.constants.MultilineLrcKey
-import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.db.entities.LyricsEntity
-import com.dd3boh.outertune.db.entities.LyricsEntity.Companion.LYRICS_NOT_FOUND
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.utils.dataStore
-import com.dd3boh.outertune.utils.get
-import com.dd3boh.outertune.utils.reportException
+import com.nohimazin.monotune.constants.LyricTrimKey
+import com.nohimazin.monotune.constants.MultilineLrcKey
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.db.entities.LyricsEntity
+import com.nohimazin.monotune.db.entities.LyricsEntity.Companion.LYRICS_NOT_FOUND
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.utils.dataStore
+import com.nohimazin.monotune.utils.get
+import com.nohimazin.monotune.utils.reportException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import org.akanework.gramophone.logic.utils.SemanticLyrics

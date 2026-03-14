@@ -1,7 +1,7 @@
 package com.dd3boh.outertune.constants
 
 import android.content.Context
-import com.dd3boh.outertune.R
+import com.nohimazin.monotune.R
 
 /*
 ---------------------------

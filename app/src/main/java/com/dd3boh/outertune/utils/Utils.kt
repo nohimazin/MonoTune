@@ -10,11 +10,11 @@ package com.dd3boh.outertune.utils
 
 import androidx.compose.ui.util.fastAny
 import androidx.media3.exoplayer.offline.Download
-import com.dd3boh.outertune.constants.MAX_COIL_JOBS
-import com.dd3boh.outertune.constants.MAX_DL_JOBS
-import com.dd3boh.outertune.constants.MAX_YTM_CONTENT_JOBS
-import com.dd3boh.outertune.constants.MAX_YTM_SYNC_JOBS
-import com.dd3boh.outertune.playback.DownloadUtil
+import com.nohimazin.monotune.constants.MAX_COIL_JOBS
+import com.nohimazin.monotune.constants.MAX_DL_JOBS
+import com.nohimazin.monotune.constants.MAX_YTM_CONTENT_JOBS
+import com.nohimazin.monotune.constants.MAX_YTM_SYNC_JOBS
+import com.nohimazin.monotune.playback.DownloadUtil
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newFixedThreadPoolContext

@@ -1,8 +1,8 @@
 package com.dd3boh.outertune.utils
 
 import android.net.Uri
-import com.dd3boh.outertune.db.entities.AlbumEntity
-import com.dd3boh.outertune.db.entities.ArtistEntity
+import com.nohimazin.monotune.db.entities.AlbumEntity
+import com.nohimazin.monotune.db.entities.ArtistEntity
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.math.absoluteValue

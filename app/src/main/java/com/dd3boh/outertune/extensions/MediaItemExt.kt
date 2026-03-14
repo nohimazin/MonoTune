@@ -3,9 +3,9 @@ package com.dd3boh.outertune.extensions
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata.MEDIA_TYPE_MUSIC
-import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.models.toMediaMetadata
+import com.nohimazin.monotune.db.entities.Song
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.models.toMediaMetadata
 import com.zionhuang.innertube.models.SongItem
 
 val MediaItem.metadata: MediaMetadata?

@@ -35,8 +35,8 @@ import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import coil3.toBitmap
 import coil3.toUri
-import com.dd3boh.outertune.playback.PlayerConnection
-import com.dd3boh.outertune.utils.coilCoroutine
+import com.nohimazin.monotune.playback.PlayerConnection
+import com.nohimazin.monotune.utils.coilCoroutine
 import com.google.material.color.dynamiccolor.DynamicScheme
 import com.google.material.color.hct.Hct
 import com.google.material.color.scheme.SchemeTonalSpot

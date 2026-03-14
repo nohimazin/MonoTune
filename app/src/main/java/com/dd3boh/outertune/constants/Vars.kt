@@ -1,7 +1,7 @@
 package com.dd3boh.outertune.constants
 
 import android.os.Build
-import com.dd3boh.outertune.BuildConfig
+import com.nohimazin.monotune.BuildConfig
 
 /**
  * Feature flags

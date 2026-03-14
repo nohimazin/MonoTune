@@ -4,11 +4,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.PowerManager
-import com.dd3boh.outertune.constants.InnerTubeCookieKey
-import com.dd3boh.outertune.constants.TabletUiKey
-import com.dd3boh.outertune.constants.YtmSyncKey
-import com.dd3boh.outertune.utils.dataStore
-import com.dd3boh.outertune.utils.get
+import com.nohimazin.monotune.constants.InnerTubeCookieKey
+import com.nohimazin.monotune.constants.TabletUiKey
+import com.nohimazin.monotune.constants.YtmSyncKey
+import com.nohimazin.monotune.utils.dataStore
+import com.nohimazin.monotune.utils.get
 import com.zionhuang.innertube.utils.parseCookieString
 
 fun Context.isAutoSyncEnabled(): Boolean {
