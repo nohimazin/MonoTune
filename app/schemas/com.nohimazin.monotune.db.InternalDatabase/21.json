@@ -1,0 +1,46 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 21,
+    "identityHash": "1961d92ae1e2025230b07aed55c3eb9c",
+    "entities": [
+      {
+        "tableName": "song",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `duration` INTEGER NOT NULL, `thumbnailUrl` TEXT, `inLibrary` INTEGER, `isLocal` INTEGER NOT NULL DEFAULT false, `localPath` TEXT, `dateDownload` INTEGER, `liked` INTEGER NOT NULL, `likedDate` INTEGER, `trackNumber` INTEGER, `discNumber` INTEGER, `albumId` TEXT, `albumName` TEXT, `year` INTEGER, `date` INTEGER, `dateModified` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          { "fieldPath": "id", "columnName": "id", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "title", "columnName": "title", "affinity": "TEXT", "notNull": true },
+          { "fieldPath": "duration", "columnName": "duration", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "thumbnailUrl", "columnName": "thumbnailUrl", "affinity": "TEXT" },
+          { "fieldPath": "inLibrary", "columnName": "inLibrary", "affinity": "INTEGER" },
+          { "fieldPath": "isLocal", "columnName": "isLocal", "affinity": "INTEGER", "notNull": true, "defaultValue": "false" },
+          { "fieldPath": "localPath", "columnName": "localPath", "affinity": "TEXT" },
+          { "fieldPath": "dateDownload", "columnName": "dateDownload", "affinity": "INTEGER" },
+          { "fieldPath": "liked", "columnName": "liked", "affinity": "INTEGER", "notNull": true },
+          { "fieldPath": "likedDate", "columnName": "likedDate", "affinity": "INTEGER" },
+          { "fieldPath": "trackNumber", "columnName": "trackNumber", "affinity": "INTEGER" },
+          { "fieldPath": "discNumber", "columnName": "discNumber", "affinity": "INTEGER" },
+          { "fieldPath": "albumId", "columnName": "albumId", "affinity": "TEXT" },
+          { "fieldPath": "albumName", "columnName": "albumName", "affinity": "TEXT" },
+          { "fieldPath": "year", "columnName": "year", "affinity": "INTEGER" },
+          { "fieldPath": "date", "columnName": "date", "affinity": "INTEGER" },
+          { "fieldPath": "dateModified", "columnName": "dateModified", "affinity": "INTEGER" }
+        ],
+        "primaryKey": { "autoGenerate": false, "columnNames": [ "id" ] },
+        "indices": [
+          { "name": "index_song_albumId", "unique": false, "columnNames": [ "albumId" ], "orders": [], "createSql": "CREATE INDEX IF NOT EXISTS `index_song_albumId` ON `${TABLE_NAME}` (`albumId`)" },
+          { "name": "index_song_localPath", "unique": false, "columnNames": [ "localPath" ], "orders": [], "createSql": "CREATE INDEX IF NOT EXISTS `index_song_localPath` ON `${TABLE_NAME}` (`localPath`)" }
+        ]
+      }
+    ],
+    "views": [
+      { "viewName": "sorted_song_artist_map", "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT * FROM song_artist_map ORDER BY position" },
+      { "viewName": "sorted_song_album_map", "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT * FROM song_album_map ORDER BY `index`" },
+      { "viewName": "playlist_song_map_preview", "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT * FROM playlist_song_map WHERE position <= 3 ORDER BY position" }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1961d92ae1e2025230b07aed55c3eb9c')"
+    ]
+  }
+}
