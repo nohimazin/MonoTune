@@ -1,0 +1,13 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 6,
+    "identityHash": "e099eec2e21e2def3fd2dc8b29798a02",
+    "entities": [],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e099eec2e21e2def3fd2dc8b29798a02')"
+    ]
+  }
+}
