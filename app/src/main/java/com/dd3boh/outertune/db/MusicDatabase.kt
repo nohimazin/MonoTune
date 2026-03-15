@@ -1,3 +1,6 @@
+package com.dd3boh.outertune.db
+
+typealias MusicDatabase = com.nohimazin.monotune.db.MusicDatabase
 package com.nohimazin.monotune.db
 
 import android.content.Context
