@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.constants.MAX_COIL_JOBS
+import com.nohimazin.monotune.constants.MAX_COIL_JOBS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch

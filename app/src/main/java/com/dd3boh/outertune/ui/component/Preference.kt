@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component
+﻿package com.nohimazin.monotune.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,8 +26,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.ui.dialog.ListDialog
-import com.dd3boh.outertune.ui.dialog.TextFieldDialog
+import com.nohimazin.monotune.ui.dialog.ListDialog
+import com.nohimazin.monotune.ui.dialog.TextFieldDialog
 
 @Composable
 fun PreferenceEntry(

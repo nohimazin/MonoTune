@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 MonoTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
  * DAO for MonoTune-specific tables: [MonochromeTrackMatch], [ManualCorrection],
  * and [YtmScrobbleQueue].
  *
- * Exposes through [com.dd3boh.outertune.db.DatabaseDao] which extends this interface.
+ * Exposes through [com.nohimazin.monotune.db.DatabaseDao] which extends this interface.
  */
 @Dao
 interface MonoTuneDao {
@@ -142,3 +142,4 @@ interface MonoTuneDao {
 
     // endregion
 }
+

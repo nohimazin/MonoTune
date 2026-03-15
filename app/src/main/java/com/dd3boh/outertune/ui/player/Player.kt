@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 OuterTune Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.player
+package com.nohimazin.monotune.ui.player
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
@@ -113,43 +113,43 @@ import coil3.imageLoader
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import coil3.toBitmap
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.DEFAULT_PLAYER_BACKGROUND
-import com.dd3boh.outertune.constants.DarkMode
-import com.dd3boh.outertune.constants.DarkModeKey
-import com.dd3boh.outertune.constants.PlayerBackgroundStyle
-import com.dd3boh.outertune.constants.PlayerBackgroundStyleKey
-import com.dd3boh.outertune.constants.PlayerHorizontalPadding
-import com.dd3boh.outertune.constants.QueuePeekHeight
-import com.dd3boh.outertune.constants.SeekIncrement
-import com.dd3boh.outertune.constants.SeekIncrementKey
-import com.dd3boh.outertune.constants.ShowLyricsKey
-import com.dd3boh.outertune.constants.SwipeToSkipKey
-import com.dd3boh.outertune.extensions.isPowerSaver
-import com.dd3boh.outertune.extensions.metadata
-import com.dd3boh.outertune.extensions.supportsWideScreen
-import com.dd3boh.outertune.extensions.tabMode
-import com.dd3boh.outertune.extensions.togglePlayPause
-import com.dd3boh.outertune.extensions.toggleRepeatMode
-import com.dd3boh.outertune.playback.PlayerConnection
-import com.dd3boh.outertune.playback.QueueBoard
-import com.dd3boh.outertune.ui.component.BottomSheet
-import com.dd3boh.outertune.ui.component.BottomSheetState
-import com.dd3boh.outertune.ui.component.PlayerSliderTrack
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.button.ResizableIconButton
-import com.dd3boh.outertune.ui.component.collapsedAnchor
-import com.dd3boh.outertune.ui.component.dismissedAnchor
-import com.dd3boh.outertune.ui.component.rememberBottomSheetState
-import com.dd3boh.outertune.ui.menu.PlayerMenu
-import com.dd3boh.outertune.ui.theme.extractGradientColors
-import com.dd3boh.outertune.ui.utils.SnapLayoutInfoProvider
-import com.dd3boh.outertune.utils.coilCoroutine
-import com.dd3boh.outertune.utils.makeTimeString
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.DEFAULT_PLAYER_BACKGROUND
+import com.nohimazin.monotune.constants.DarkMode
+import com.nohimazin.monotune.constants.DarkModeKey
+import com.nohimazin.monotune.constants.PlayerBackgroundStyle
+import com.nohimazin.monotune.constants.PlayerBackgroundStyleKey
+import com.nohimazin.monotune.constants.PlayerHorizontalPadding
+import com.nohimazin.monotune.constants.QueuePeekHeight
+import com.nohimazin.monotune.constants.SeekIncrement
+import com.nohimazin.monotune.constants.SeekIncrementKey
+import com.nohimazin.monotune.constants.ShowLyricsKey
+import com.nohimazin.monotune.constants.SwipeToSkipKey
+import com.nohimazin.monotune.extensions.isPowerSaver
+import com.nohimazin.monotune.extensions.metadata
+import com.nohimazin.monotune.extensions.supportsWideScreen
+import com.nohimazin.monotune.extensions.tabMode
+import com.nohimazin.monotune.extensions.togglePlayPause
+import com.nohimazin.monotune.extensions.toggleRepeatMode
+import com.nohimazin.monotune.playback.PlayerConnection
+import com.nohimazin.monotune.playback.QueueBoard
+import com.nohimazin.monotune.ui.component.BottomSheet
+import com.nohimazin.monotune.ui.component.BottomSheetState
+import com.nohimazin.monotune.ui.component.PlayerSliderTrack
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.button.ResizableIconButton
+import com.nohimazin.monotune.ui.component.collapsedAnchor
+import com.nohimazin.monotune.ui.component.dismissedAnchor
+import com.nohimazin.monotune.ui.component.rememberBottomSheetState
+import com.nohimazin.monotune.ui.menu.PlayerMenu
+import com.nohimazin.monotune.ui.theme.extractGradientColors
+import com.nohimazin.monotune.ui.utils.SnapLayoutInfoProvider
+import com.nohimazin.monotune.utils.coilCoroutine
+import com.nohimazin.monotune.utils.makeTimeString
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext

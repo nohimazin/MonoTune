@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
@@ -9,7 +9,7 @@
 
 @file:Suppress("INVISIBLE_MEMBER")
 
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
@@ -87,7 +87,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
-import com.dd3boh.outertune.constants.AppBarHeight
+import com.nohimazin.monotune.constants.AppBarHeight
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -347,3 +347,4 @@ val SearchBarIconOffsetX: Dp = 4.dp
 
 // Animation specs
 private const val AnimationDurationMillis: Int = durationMedium2.toInt()
+

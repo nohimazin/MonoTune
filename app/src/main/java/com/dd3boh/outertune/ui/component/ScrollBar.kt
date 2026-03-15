@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component
+﻿package com.nohimazin.monotune.ui.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -10,7 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
 import my.nanihadesuka.compose.InternalLazyColumnScrollbar
 import my.nanihadesuka.compose.InternalLazyVerticalGridScrollbar
 import my.nanihadesuka.compose.ScrollbarSettings

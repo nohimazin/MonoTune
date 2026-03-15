@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.constants
+﻿package com.nohimazin.monotune.constants
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -87,3 +87,4 @@ val InsetsSafeTEB: WindowInsets
 val NavigationBarAnimationSpec = spring<Dp>(stiffness = Spring.StiffnessMediumLow)
 val BottomSheetAnimationSpec = spring<Dp>(stiffness = Spring.StiffnessMediumLow)
 val BottomSheetSoftAnimationSpec = spring<Dp>(stiffness = Spring.StiffnessLow)
+

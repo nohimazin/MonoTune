@@ -1,11 +1,11 @@
-/*
+﻿/*
  * Copyright (C) 2025 O﻿ute﻿rTu﻿ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.component.items
+package com.nohimazin.monotune.ui.component.items
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -40,14 +40,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.ThumbnailCornerRadius
-import com.dd3boh.outertune.db.entities.Playlist
-import com.dd3boh.outertune.db.entities.PlaylistEntity
-import com.dd3boh.outertune.ui.component.items.Icon.PlaylistIcon
-import com.dd3boh.outertune.ui.utils.getNSongsString
-import com.dd3boh.outertune.utils.getThumbnailModel
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.constants.ThumbnailCornerRadius
+import com.nohimazin.monotune.db.entities.Playlist
+import com.nohimazin.monotune.db.entities.PlaylistEntity
+import com.nohimazin.monotune.ui.component.items.Icon.PlaylistIcon
+import com.nohimazin.monotune.ui.utils.getNSongsString
+import com.nohimazin.monotune.utils.getThumbnailModel
 import kotlin.math.roundToInt
 
 @Composable

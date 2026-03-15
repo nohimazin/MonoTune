@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 OuterTune Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
@@ -53,11 +53,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.constants.BottomSheetAnimationSpec
-import com.dd3boh.outertune.constants.BottomSheetSoftAnimationSpec
-import com.dd3boh.outertune.constants.MinMiniPlayerHeight
-import com.dd3boh.outertune.constants.MiniPlayerHeight
-import com.dd3boh.outertune.constants.NavigationBarAnimationSpec
+import com.nohimazin.monotune.constants.BottomSheetAnimationSpec
+import com.nohimazin.monotune.constants.BottomSheetSoftAnimationSpec
+import com.nohimazin.monotune.constants.MinMiniPlayerHeight
+import com.nohimazin.monotune.constants.MiniPlayerHeight
+import com.nohimazin.monotune.constants.NavigationBarAnimationSpec
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.pow
@@ -376,3 +376,4 @@ fun rememberBottomSheetState(
         )
     }
 }
+

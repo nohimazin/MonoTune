@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O⁠ute⁠rTu⁠ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.dialog
+package com.nohimazin.monotune.ui.dialog
 
 import android.content.ClipData
 import android.text.format.Formatter
@@ -76,13 +76,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.dd3boh.outertune.LocalSnackbarHostState
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.DialogCornerRadius
-import com.dd3boh.outertune.constants.SNACKBAR_VERY_SHORT
-import com.dd3boh.outertune.db.entities.FormatEntity
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.ui.component.button.IconButton
+import com.nohimazin.monotune.LocalSnackbarHostState
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.DialogCornerRadius
+import com.nohimazin.monotune.constants.SNACKBAR_VERY_SHORT
+import com.nohimazin.monotune.db.entities.FormatEntity
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.ui.component.button.IconButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -616,3 +616,4 @@ fun InfoLabel(
         modifier = Modifier.padding(horizontal = 4.dp)
     )
 }
+

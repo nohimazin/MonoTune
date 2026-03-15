@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.constants
+﻿package com.nohimazin.monotune.constants
 
 import android.content.Context
 import com.nohimazin.monotune.R
@@ -205,3 +205,4 @@ enum class Speed {
             FAST -> 16
         }
 }
+

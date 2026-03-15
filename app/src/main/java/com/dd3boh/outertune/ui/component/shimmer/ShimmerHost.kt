@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component.shimmer
+﻿package com.nohimazin.monotune.ui.component.shimmer
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 OuterTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.screens.settings.fragments
+package com.nohimazin.monotune.ui.screens.settings.fragments
 
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
@@ -20,19 +20,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.DEFAULT_PLAYER_BACKGROUND
-import com.dd3boh.outertune.constants.DarkMode
-import com.dd3boh.outertune.constants.DarkModeKey
-import com.dd3boh.outertune.constants.DynamicThemeKey
-import com.dd3boh.outertune.constants.HighContrastKey
-import com.dd3boh.outertune.constants.PlayerBackgroundStyle
-import com.dd3boh.outertune.constants.PlayerBackgroundStyleKey
-import com.dd3boh.outertune.constants.PureBlackKey
-import com.dd3boh.outertune.ui.component.EnumListPreference
-import com.dd3boh.outertune.ui.component.SwitchPreference
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.DEFAULT_PLAYER_BACKGROUND
+import com.nohimazin.monotune.constants.DarkMode
+import com.nohimazin.monotune.constants.DarkModeKey
+import com.nohimazin.monotune.constants.DynamicThemeKey
+import com.nohimazin.monotune.constants.HighContrastKey
+import com.nohimazin.monotune.constants.PlayerBackgroundStyle
+import com.nohimazin.monotune.constants.PlayerBackgroundStyleKey
+import com.nohimazin.monotune.constants.PureBlackKey
+import com.nohimazin.monotune.ui.component.EnumListPreference
+import com.nohimazin.monotune.ui.component.SwitchPreference
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
 
 @Composable
 fun ColumnScope.ThemeAppFrag() {
@@ -104,4 +104,5 @@ fun ColumnScope.ThemePlayerFrag() {
         values = availableBackgroundStyles
     )
 }
+
 

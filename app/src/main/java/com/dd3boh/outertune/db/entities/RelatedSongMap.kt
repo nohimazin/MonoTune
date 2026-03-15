@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.db.entities
+﻿package com.nohimazin.monotune.db.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -27,3 +27,4 @@ data class RelatedSongMap(
     @ColumnInfo(index = true) val songId: String,
     @ColumnInfo(index = true) val relatedSongId: String,
 )
+

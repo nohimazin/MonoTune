@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens.artist
+﻿package com.nohimazin.monotune.ui.screens.artist
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -46,35 +46,35 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.LocalSnackbarHostState
-import com.dd3boh.outertune.constants.GridThumbnailHeight
-import com.dd3boh.outertune.constants.SwipeToQueueKey
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.extensions.toMediaItem
-import com.dd3boh.outertune.extensions.togglePlayPause
-import com.dd3boh.outertune.models.toMediaMetadata
-import com.dd3boh.outertune.playback.queues.ListQueue
-import com.dd3boh.outertune.ui.component.FloatingFooter
-import com.dd3boh.outertune.ui.component.LazyColumnScrollbar
-import com.dd3boh.outertune.ui.component.LazyVerticalGridScrollbar
-import com.dd3boh.outertune.ui.component.SelectHeader
-import com.dd3boh.outertune.ui.component.SwipeToQueueBox
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.items.YouTubeGridItem
-import com.dd3boh.outertune.ui.component.items.YouTubeListItem
-import com.dd3boh.outertune.ui.component.shimmer.GridItemPlaceHolder
-import com.dd3boh.outertune.ui.component.shimmer.ListItemPlaceHolder
-import com.dd3boh.outertune.ui.component.shimmer.ShimmerHost
-import com.dd3boh.outertune.ui.menu.YouTubeAlbumMenu
-import com.dd3boh.outertune.ui.menu.YouTubeArtistMenu
-import com.dd3boh.outertune.ui.menu.YouTubePlaylistMenu
-import com.dd3boh.outertune.ui.menu.YouTubeSongMenu
-import com.dd3boh.outertune.ui.utils.backToMain
-import com.dd3boh.outertune.utils.rememberPreference
-import com.dd3boh.outertune.viewmodels.ArtistItemsViewModel
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.LocalSnackbarHostState
+import com.nohimazin.monotune.constants.GridThumbnailHeight
+import com.nohimazin.monotune.constants.SwipeToQueueKey
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.extensions.toMediaItem
+import com.nohimazin.monotune.extensions.togglePlayPause
+import com.nohimazin.monotune.models.toMediaMetadata
+import com.nohimazin.monotune.playback.queues.ListQueue
+import com.nohimazin.monotune.ui.component.FloatingFooter
+import com.nohimazin.monotune.ui.component.LazyColumnScrollbar
+import com.nohimazin.monotune.ui.component.LazyVerticalGridScrollbar
+import com.nohimazin.monotune.ui.component.SelectHeader
+import com.nohimazin.monotune.ui.component.SwipeToQueueBox
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.items.YouTubeGridItem
+import com.nohimazin.monotune.ui.component.items.YouTubeListItem
+import com.nohimazin.monotune.ui.component.shimmer.GridItemPlaceHolder
+import com.nohimazin.monotune.ui.component.shimmer.ListItemPlaceHolder
+import com.nohimazin.monotune.ui.component.shimmer.ShimmerHost
+import com.nohimazin.monotune.ui.menu.YouTubeAlbumMenu
+import com.nohimazin.monotune.ui.menu.YouTubeArtistMenu
+import com.nohimazin.monotune.ui.menu.YouTubePlaylistMenu
+import com.nohimazin.monotune.ui.menu.YouTubeSongMenu
+import com.nohimazin.monotune.ui.utils.backToMain
+import com.nohimazin.monotune.utils.rememberPreference
+import com.nohimazin.monotune.viewmodels.ArtistItemsViewModel
 import com.zionhuang.innertube.models.AlbumItem
 import com.zionhuang.innertube.models.ArtistItem
 import com.zionhuang.innertube.models.PlaylistItem
@@ -382,3 +382,4 @@ fun ArtistItemsScreen(
         )
     }
 }
+

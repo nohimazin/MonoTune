@@ -1,6 +1,6 @@
-@file:Suppress("INVISIBLE_MEMBER")
+﻿@file:Suppress("INVISIBLE_MEMBER")
 
-package com.dd3boh.outertune.ui.utils
+package com.nohimazin.monotune.ui.utils
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.Orientation

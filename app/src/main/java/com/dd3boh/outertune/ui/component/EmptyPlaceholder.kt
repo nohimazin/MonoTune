@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component
+﻿package com.nohimazin.monotune.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -73,3 +73,4 @@ fun EmptyPlaceholder(
         )
     }
 }
+

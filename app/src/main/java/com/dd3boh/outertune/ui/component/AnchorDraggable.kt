@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O﻿ute﻿rTu﻿ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
@@ -50,9 +50,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.MediaItem
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.SNACKBAR_VERY_SHORT
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.SNACKBAR_VERY_SHORT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -276,3 +276,4 @@ fun DragActionIcon(
         }
     }
 }
+

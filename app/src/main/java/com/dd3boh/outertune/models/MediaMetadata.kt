@@ -1,9 +1,9 @@
-package com.dd3boh.outertune.models
+﻿package com.nohimazin.monotune.models
 
 import androidx.compose.runtime.Immutable
-import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.db.entities.SongEntity
-import com.dd3boh.outertune.ui.utils.resize
+import com.nohimazin.monotune.db.entities.Song
+import com.nohimazin.monotune.db.entities.SongEntity
+import com.nohimazin.monotune.ui.utils.resize
 import com.zionhuang.innertube.models.SongItem
 import java.io.Serializable
 import java.time.LocalDateTime
@@ -156,3 +156,4 @@ fun SongItem.toMediaMetadata() = MediaMetadata(
     genre = null,
     setVideoId = setVideoId
 )
+

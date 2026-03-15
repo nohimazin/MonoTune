@@ -1,11 +1,11 @@
-/*
+﻿/*
  * Copyright (C) 2025 OuterTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
 
 @Composable
 fun ColumnWithContentPadding(

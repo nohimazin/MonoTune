@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.menu
+﻿package com.nohimazin.monotune.ui.menu
 
 import android.content.Intent
 import androidx.compose.animation.core.animateFloatAsState
@@ -38,22 +38,22 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.offline.Download.STATE_STOPPED
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.LocalDownloadUtil
-import com.dd3boh.outertune.LocalNetworkConnected
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.db.entities.Album
-import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.extensions.toMediaItem
-import com.dd3boh.outertune.models.toMediaMetadata
-import com.dd3boh.outertune.playback.ExoDownloadService
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.items.AlbumListItem
-import com.dd3boh.outertune.ui.dialog.AddToPlaylistDialog
-import com.dd3boh.outertune.ui.dialog.AddToQueueDialog
-import com.dd3boh.outertune.ui.dialog.ArtistDialog
-import com.dd3boh.outertune.utils.getDownloadState
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.LocalDownloadUtil
+import com.nohimazin.monotune.LocalNetworkConnected
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.db.entities.Album
+import com.nohimazin.monotune.db.entities.Song
+import com.nohimazin.monotune.extensions.toMediaItem
+import com.nohimazin.monotune.models.toMediaMetadata
+import com.nohimazin.monotune.playback.ExoDownloadService
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.items.AlbumListItem
+import com.nohimazin.monotune.ui.dialog.AddToPlaylistDialog
+import com.nohimazin.monotune.ui.dialog.AddToQueueDialog
+import com.nohimazin.monotune.ui.dialog.ArtistDialog
+import com.nohimazin.monotune.utils.getDownloadState
 import com.zionhuang.innertube.YouTube
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -313,3 +313,4 @@ fun AlbumMenu(
     }
 
 }
+

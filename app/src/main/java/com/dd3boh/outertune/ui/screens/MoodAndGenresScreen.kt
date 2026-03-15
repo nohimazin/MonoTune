@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens
+﻿package com.nohimazin.monotune.ui.screens
 
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import androidx.compose.foundation.background
@@ -34,16 +34,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.LazyColumnScrollbar
-import com.dd3boh.outertune.ui.component.NavigationTitle
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.shimmer.ListItemPlaceHolder
-import com.dd3boh.outertune.ui.component.shimmer.ShimmerHost
-import com.dd3boh.outertune.ui.utils.backToMain
-import com.dd3boh.outertune.viewmodels.MoodAndGenresViewModel
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.LazyColumnScrollbar
+import com.nohimazin.monotune.ui.component.NavigationTitle
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.shimmer.ListItemPlaceHolder
+import com.nohimazin.monotune.ui.component.shimmer.ShimmerHost
+import com.nohimazin.monotune.ui.utils.backToMain
+import com.nohimazin.monotune.viewmodels.MoodAndGenresViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

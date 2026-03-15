@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.extensions
+﻿package com.nohimazin.monotune.extensions
 
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem

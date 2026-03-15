@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens.settings.fragments
+﻿package com.nohimazin.monotune.ui.screens.settings.fragments
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,30 +40,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ContentCountryKey
-import com.dd3boh.outertune.constants.ContentLanguageKey
-import com.dd3boh.outertune.constants.CountryCodeToName
-import com.dd3boh.outertune.constants.DEFAULT_ENABLED_FILTERS
-import com.dd3boh.outertune.constants.DEFAULT_ENABLED_TABS
-import com.dd3boh.outertune.constants.DefaultOpenTabKey
-import com.dd3boh.outertune.constants.EnabledFiltersKey
-import com.dd3boh.outertune.constants.EnabledTabsKey
-import com.dd3boh.outertune.constants.LanguageCodeToName
-import com.dd3boh.outertune.constants.ListItemHeight
-import com.dd3boh.outertune.constants.SYSTEM_DEFAULT
-import com.dd3boh.outertune.constants.SwipeToQueueKey
-import com.dd3boh.outertune.constants.SwipeToSkipKey
-import com.dd3boh.outertune.constants.ThumbnailCornerRadius
-import com.dd3boh.outertune.extensions.move
-import com.dd3boh.outertune.ui.component.ListPreference
-import com.dd3boh.outertune.ui.component.PreferenceEntry
-import com.dd3boh.outertune.ui.component.SwitchPreference
-import com.dd3boh.outertune.ui.dialog.ActionPromptDialog
-import com.dd3boh.outertune.ui.dialog.InfoLabel
-import com.dd3boh.outertune.ui.screens.Screens
-import com.dd3boh.outertune.ui.screens.Screens.LibraryFilter
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ContentCountryKey
+import com.nohimazin.monotune.constants.ContentLanguageKey
+import com.nohimazin.monotune.constants.CountryCodeToName
+import com.nohimazin.monotune.constants.DEFAULT_ENABLED_FILTERS
+import com.nohimazin.monotune.constants.DEFAULT_ENABLED_TABS
+import com.nohimazin.monotune.constants.DefaultOpenTabKey
+import com.nohimazin.monotune.constants.EnabledFiltersKey
+import com.nohimazin.monotune.constants.EnabledTabsKey
+import com.nohimazin.monotune.constants.LanguageCodeToName
+import com.nohimazin.monotune.constants.ListItemHeight
+import com.nohimazin.monotune.constants.SYSTEM_DEFAULT
+import com.nohimazin.monotune.constants.SwipeToQueueKey
+import com.nohimazin.monotune.constants.SwipeToSkipKey
+import com.nohimazin.monotune.constants.ThumbnailCornerRadius
+import com.nohimazin.monotune.extensions.move
+import com.nohimazin.monotune.ui.component.ListPreference
+import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.SwitchPreference
+import com.nohimazin.monotune.ui.dialog.ActionPromptDialog
+import com.nohimazin.monotune.ui.dialog.InfoLabel
+import com.nohimazin.monotune.ui.screens.Screens
+import com.nohimazin.monotune.ui.screens.Screens.LibraryFilter
+import com.nohimazin.monotune.utils.rememberPreference
 import com.zionhuang.innertube.YouTube
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
@@ -466,3 +466,4 @@ fun ColumnScope.LocalizationFrag() {
         }
     )
 }
+

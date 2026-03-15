@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.db.entities
+﻿package com.nohimazin.monotune.db.entities
 
 import androidx.compose.runtime.Immutable
 import androidx.room.Entity
@@ -24,3 +24,4 @@ data class RecentActivityEntity(
     val shufflePlaylistId: String?,
     val date: LocalDateTime = LocalDateTime.now()
 )
+

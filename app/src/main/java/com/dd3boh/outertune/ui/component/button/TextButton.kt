@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component.button
+﻿package com.nohimazin.monotune.ui.component.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.constants.MenuCornerRadius
+import com.nohimazin.monotune.constants.MenuCornerRadius
 
 @Composable
 fun IconLabelButton(

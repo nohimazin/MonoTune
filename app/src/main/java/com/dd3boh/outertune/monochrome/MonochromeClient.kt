@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 MonoTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -212,7 +212,7 @@ interface MonochromeClientApi {
      *
      * The change takes effect immediately for subsequent requests.  The caller
      * is responsible for persisting [url] to DataStore so the value survives
-     * restarts (see [com.dd3boh.outertune.monochrome.MonochromeAuthRepository.saveApiEndpoint]).
+     * restarts (see [com.nohimazin.monotune.monochrome.MonochromeAuthRepository.saveApiEndpoint]).
      *
      * @param url Base URL of the hifi-api instance (e.g. `https://api.monochrome.tf`).
      *            Trailing slashes are trimmed automatically.  An empty string resets
@@ -739,3 +739,4 @@ class MonochromeClient @Inject constructor() : MonochromeClientApi {
     private fun String.encodeUrlParam(): String =
         java.net.URLEncoder.encode(this, "UTF-8")
 }
+

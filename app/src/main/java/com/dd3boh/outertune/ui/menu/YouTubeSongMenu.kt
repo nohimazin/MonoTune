@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.menu
+﻿package com.nohimazin.monotune.ui.menu
 
 import android.content.Intent
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,28 +36,28 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.LocalDownloadUtil
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.LocalSyncUtils
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.ThumbnailCornerRadius
-import com.dd3boh.outertune.db.entities.SongEntity
-import com.dd3boh.outertune.extensions.toMediaItem
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.models.toMediaMetadata
-import com.dd3boh.outertune.playback.ExoDownloadService
-import com.dd3boh.outertune.playback.queues.ListQueue
-import com.dd3boh.outertune.playback.queues.YouTubeQueue
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.items.ListItem
-import com.dd3boh.outertune.ui.dialog.AddToPlaylistDialog
-import com.dd3boh.outertune.ui.dialog.AddToQueueDialog
-import com.dd3boh.outertune.ui.dialog.ArtistDialog
-import com.dd3boh.outertune.utils.joinByBullet
-import com.dd3boh.outertune.utils.makeTimeString
-import com.dd3boh.outertune.utils.syncCoroutine
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.LocalDownloadUtil
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.LocalSyncUtils
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.constants.ThumbnailCornerRadius
+import com.nohimazin.monotune.db.entities.SongEntity
+import com.nohimazin.monotune.extensions.toMediaItem
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.models.toMediaMetadata
+import com.nohimazin.monotune.playback.ExoDownloadService
+import com.nohimazin.monotune.playback.queues.ListQueue
+import com.nohimazin.monotune.playback.queues.YouTubeQueue
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.items.ListItem
+import com.nohimazin.monotune.ui.dialog.AddToPlaylistDialog
+import com.nohimazin.monotune.ui.dialog.AddToQueueDialog
+import com.nohimazin.monotune.ui.dialog.ArtistDialog
+import com.nohimazin.monotune.utils.joinByBullet
+import com.nohimazin.monotune.utils.makeTimeString
+import com.nohimazin.monotune.utils.syncCoroutine
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.models.SongItem
 import kotlinx.coroutines.launch
@@ -293,3 +293,4 @@ fun YouTubeSongMenu(
         )
     }
 }
+

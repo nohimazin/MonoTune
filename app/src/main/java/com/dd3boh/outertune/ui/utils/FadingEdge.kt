@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.utils
+﻿package com.nohimazin.monotune.ui.utils
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent

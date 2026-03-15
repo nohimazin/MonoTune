@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O​u​t​er​Tu​ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -123,3 +123,4 @@ private fun stepsToTickFractions(steps: Int): FloatArray {
 
 private fun calcFraction(a: Float, b: Float, pos: Float) =
     (if (b - a == 0f) 0f else (pos - a) / (b - a)).coerceIn(0f, 1f)
+

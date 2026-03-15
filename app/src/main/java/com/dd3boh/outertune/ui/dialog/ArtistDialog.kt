@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.dialog
+﻿package com.nohimazin.monotune.ui.dialog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import com.dd3boh.outertune.constants.ListItemHeight
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.db.entities.ArtistEntity
-import com.dd3boh.outertune.models.MediaMetadata
+import com.nohimazin.monotune.constants.ListItemHeight
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.db.entities.ArtistEntity
+import com.nohimazin.monotune.models.MediaMetadata
 
 @JvmName("ArtistDialogMediaMetadataArtist")
 @Composable
@@ -119,3 +119,4 @@ fun ArtistDialog(
         }
     }
 }
+

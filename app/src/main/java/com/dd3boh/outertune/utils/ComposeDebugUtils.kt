@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.utils
+﻿package com.nohimazin.monotune.utils
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -97,3 +97,4 @@ private val recomposeModifier =
             }
         }
     }
+

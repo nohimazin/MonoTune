@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.constants
+﻿package com.nohimazin.monotune.constants
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.floatPreferencesKey
@@ -166,7 +166,7 @@ val MonochromeTokenExpiryKey = longPreferencesKey("monochromeTokenExpiry")
 /**
  * Monochrome API endpoint – stored independently of login state.
  * Allows the user to configure the hifi-api Base URL without needing to
- * log in or out.  Defaults to [com.dd3boh.outertune.monochrome.DEFAULT_MONOCHROME_API_URL].
+ * log in or out.  Defaults to [com.nohimazin.monotune.monochrome.DEFAULT_MONOCHROME_API_URL].
  */
 val MonochromeApiEndpointKey = stringPreferencesKey("monochromeApiEndpoint")
 
@@ -368,3 +368,5 @@ val CountryCodeToName = mapOf(
     "YE" to "Yemen",
     "ZW" to "Zimbabwe",
 )
+
+

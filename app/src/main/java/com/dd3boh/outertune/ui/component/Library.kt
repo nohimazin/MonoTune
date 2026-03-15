@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 OuterTune Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -22,20 +22,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.navigation.NavController
-import com.dd3boh.outertune.db.entities.Album
-import com.dd3boh.outertune.db.entities.Artist
-import com.dd3boh.outertune.db.entities.Playlist
-import com.dd3boh.outertune.ui.component.items.AlbumGridItem
-import com.dd3boh.outertune.ui.component.items.AlbumListItem
-import com.dd3boh.outertune.ui.component.items.ArtistGridItem
-import com.dd3boh.outertune.ui.component.items.ArtistListItem
-import com.dd3boh.outertune.ui.component.items.PlaylistGridItem
-import com.dd3boh.outertune.ui.component.items.PlaylistListItem
-import com.dd3boh.outertune.ui.menu.AlbumMenu
-import com.dd3boh.outertune.ui.menu.ArtistMenu
-import com.dd3boh.outertune.ui.menu.MenuState
-import com.dd3boh.outertune.ui.menu.PlaylistMenu
-import com.dd3boh.outertune.ui.menu.YouTubePlaylistMenu
+import com.nohimazin.monotune.db.entities.Album
+import com.nohimazin.monotune.db.entities.Artist
+import com.nohimazin.monotune.db.entities.Playlist
+import com.nohimazin.monotune.ui.component.items.AlbumGridItem
+import com.nohimazin.monotune.ui.component.items.AlbumListItem
+import com.nohimazin.monotune.ui.component.items.ArtistGridItem
+import com.nohimazin.monotune.ui.component.items.ArtistListItem
+import com.nohimazin.monotune.ui.component.items.PlaylistGridItem
+import com.nohimazin.monotune.ui.component.items.PlaylistListItem
+import com.nohimazin.monotune.ui.menu.AlbumMenu
+import com.nohimazin.monotune.ui.menu.ArtistMenu
+import com.nohimazin.monotune.ui.menu.MenuState
+import com.nohimazin.monotune.ui.menu.PlaylistMenu
+import com.nohimazin.monotune.ui.menu.YouTubePlaylistMenu
 import com.zionhuang.innertube.models.PlaylistItem
 import com.zionhuang.innertube.models.WatchEndpoint
 import kotlinx.coroutines.CoroutineScope
@@ -312,3 +312,4 @@ fun LibraryPlaylistGridItem(
             }
         )
 )
+

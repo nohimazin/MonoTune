@@ -1,11 +1,11 @@
-/*
+﻿/*
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.screens.settings
+package com.nohimazin.monotune.ui.screens.settings
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -28,16 +28,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.ColumnWithContentPadding
-import com.dd3boh.outertune.ui.component.ContributorCard
-import com.dd3boh.outertune.ui.component.ContributorInfo
-import com.dd3boh.outertune.ui.component.ContributorType.CUSTOM
-import com.dd3boh.outertune.ui.component.ContributorType.LEAD_DEVELOPER
-import com.dd3boh.outertune.ui.component.ContributorType.MAINTAINER
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.utils.backToMain
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.ColumnWithContentPadding
+import com.nohimazin.monotune.ui.component.ContributorCard
+import com.nohimazin.monotune.ui.component.ContributorInfo
+import com.nohimazin.monotune.ui.component.ContributorType.CUSTOM
+import com.nohimazin.monotune.ui.component.ContributorType.LEAD_DEVELOPER
+import com.nohimazin.monotune.ui.component.ContributorType.MAINTAINER
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.utils.backToMain
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -130,3 +130,4 @@ val contributors = mutableListOf(
 
 //val translators = mutableListOf(
 //)
+

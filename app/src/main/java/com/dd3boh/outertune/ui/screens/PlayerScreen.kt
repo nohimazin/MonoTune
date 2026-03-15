@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens
+﻿package com.nohimazin.monotune.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
@@ -18,22 +18,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.constants.DEFAULT_PLAYER_BACKGROUND
-import com.dd3boh.outertune.constants.DarkMode
-import com.dd3boh.outertune.constants.DarkModeKey
-import com.dd3boh.outertune.constants.MiniPlayerHeight
-import com.dd3boh.outertune.constants.PlayerBackgroundStyleKey
-import com.dd3boh.outertune.constants.ShowLyricsKey
-import com.dd3boh.outertune.extensions.supportsWideScreen
-import com.dd3boh.outertune.extensions.tabMode
-import com.dd3boh.outertune.ui.component.expandedAnchor
-import com.dd3boh.outertune.ui.component.rememberBottomSheetState
-import com.dd3boh.outertune.ui.player.LandscapePlayer
-import com.dd3boh.outertune.ui.player.PlayerBackground
-import com.dd3boh.outertune.ui.player.PortraitPlayer
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.constants.DEFAULT_PLAYER_BACKGROUND
+import com.nohimazin.monotune.constants.DarkMode
+import com.nohimazin.monotune.constants.DarkModeKey
+import com.nohimazin.monotune.constants.MiniPlayerHeight
+import com.nohimazin.monotune.constants.PlayerBackgroundStyleKey
+import com.nohimazin.monotune.constants.ShowLyricsKey
+import com.nohimazin.monotune.extensions.supportsWideScreen
+import com.nohimazin.monotune.extensions.tabMode
+import com.nohimazin.monotune.ui.component.expandedAnchor
+import com.nohimazin.monotune.ui.component.rememberBottomSheetState
+import com.nohimazin.monotune.ui.player.LandscapePlayer
+import com.nohimazin.monotune.ui.player.PlayerBackground
+import com.nohimazin.monotune.ui.player.PortraitPlayer
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,3 +91,4 @@ fun PlayerScreen(
         }
     }
 }
+

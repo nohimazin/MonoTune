@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.db.entities
+﻿package com.nohimazin.monotune.db.entities
 
 import androidx.compose.runtime.Immutable
 import androidx.room.Embedded
@@ -33,3 +33,4 @@ data class AlbumWithSongs(
     val songs: List<Song>,
     val downloadCount: Int,
 )
+

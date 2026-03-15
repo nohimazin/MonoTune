@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O​u​t​er​Tu​ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.screens
+package com.nohimazin.monotune.ui.screens
 
 import android.content.Intent
 import android.net.Uri
@@ -810,3 +810,4 @@ private fun OobeFeatureRow(title: String, description: String?, icon: ImageVecto
         }
     }
 }
+

@@ -1,11 +1,11 @@
-/*
+﻿/*
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.screens.settings.fragments
+package com.nohimazin.monotune.ui.screens.settings.fragments
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -34,24 +34,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dd3boh.outertune.App.Companion.forgetAccount
-import com.dd3boh.outertune.App.Companion.forgetMonochromeAccount
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.AccountChannelHandleKey
-import com.dd3boh.outertune.constants.AccountEmailKey
-import com.dd3boh.outertune.constants.AccountNameKey
-import com.dd3boh.outertune.constants.DataSyncIdKey
-import com.dd3boh.outertune.constants.InnerTubeCookieKey
-import com.dd3boh.outertune.constants.UseLoginForBrowse
-import com.dd3boh.outertune.constants.VisitorDataKey
-import com.dd3boh.outertune.ui.component.EditTextPreference
-import com.dd3boh.outertune.ui.component.PreferenceEntry
-import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
-import com.dd3boh.outertune.ui.component.SwitchPreference
-import com.dd3boh.outertune.ui.dialog.InfoLabel
-import com.dd3boh.outertune.ui.dialog.TextFieldDialog
-import com.dd3boh.outertune.utils.rememberPreference
-import com.dd3boh.outertune.viewmodels.MonochromeLoginViewModel
+import com.nohimazin.monotune.App.Companion.forgetAccount
+import com.nohimazin.monotune.App.Companion.forgetMonochromeAccount
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.AccountChannelHandleKey
+import com.nohimazin.monotune.constants.AccountEmailKey
+import com.nohimazin.monotune.constants.AccountNameKey
+import com.nohimazin.monotune.constants.DataSyncIdKey
+import com.nohimazin.monotune.constants.InnerTubeCookieKey
+import com.nohimazin.monotune.constants.UseLoginForBrowse
+import com.nohimazin.monotune.constants.VisitorDataKey
+import com.nohimazin.monotune.ui.component.EditTextPreference
+import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.PreferenceGroupTitle
+import com.nohimazin.monotune.ui.component.SwitchPreference
+import com.nohimazin.monotune.ui.dialog.InfoLabel
+import com.nohimazin.monotune.ui.dialog.TextFieldDialog
+import com.nohimazin.monotune.utils.rememberPreference
+import com.nohimazin.monotune.viewmodels.MonochromeLoginViewModel
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.utils.parseCookieString
 
@@ -248,3 +248,4 @@ fun ColumnScope.MonochromeAccountFrag(
         InfoLabel(stringResource(R.string.action_logout_tooltip))
     }
 }
+

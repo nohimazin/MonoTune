@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.utils
+﻿package com.nohimazin.monotune.ui.utils
 
 import androidx.navigation.NavController
 
@@ -8,3 +8,4 @@ val NavController.canNavigateUp: Boolean
 fun NavController.backToMain() {
     do { navigateUp() } while (canNavigateUp)
 }
+

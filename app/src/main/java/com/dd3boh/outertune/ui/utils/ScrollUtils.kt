@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.utils
+﻿package com.nohimazin.monotune.ui.utils
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.lazy.LazyListState
@@ -57,3 +57,4 @@ fun ScrollState.isScrollingUp(): Boolean {
         }
     }.value
 }
+

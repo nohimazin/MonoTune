@@ -1,10 +1,10 @@
-/*
+﻿/*
  * Copyright (C) 2025 MonoTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
  */
 
-package com.dd3boh.outertune.db.entities
+package com.nohimazin.monotune.db.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -42,3 +42,4 @@ data class ManualCorrection(
     val correctedAt: Long,
     val note: String? = null,
 )
+

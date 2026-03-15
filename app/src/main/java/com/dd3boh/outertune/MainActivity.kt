@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O​u​t​er​Tu​ne Project
  *
@@ -1030,10 +1030,10 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        const val ACTION_SEARCH = "com.dd3boh.outertune.action.SEARCH"
-        const val ACTION_SONGS = "com.dd3boh.outertune.action.SONGS"
-        const val ACTION_ALBUMS = "com.dd3boh.outertune.action.ALBUMS"
-        const val ACTION_PLAYLISTS = "com.dd3boh.outertune.action.PLAYLISTS"
+        const val ACTION_SEARCH = "com.nohimazin.monotune.action.SEARCH"
+        const val ACTION_SONGS = "com.nohimazin.monotune.action.SONGS"
+        const val ACTION_ALBUMS = "com.nohimazin.monotune.action.ALBUMS"
+        const val ACTION_PLAYLISTS = "com.nohimazin.monotune.action.PLAYLISTS"
     }
 }
 
@@ -1045,3 +1045,4 @@ val LocalDownloadUtil = staticCompositionLocalOf<DownloadUtil> { error("No Downl
 val LocalSyncUtils = staticCompositionLocalOf<SyncUtils> { error("No SyncUtils provided") }
 val LocalNetworkConnected = staticCompositionLocalOf<Boolean> { error("No Network Status provided") }
 val LocalSnackbarHostState = staticCompositionLocalOf<SnackbarHostState> { error("No SnackbarHostState provided") }
+

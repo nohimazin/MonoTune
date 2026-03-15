@@ -1,10 +1,10 @@
-/*
+﻿/*
  * Copyright (C) 2025 MonoTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
  */
 
-package com.dd3boh.outertune.di
+package com.nohimazin.monotune.di
 
 import com.nohimazin.monotune.monochrome.MonochromeAuthRepository
 import com.nohimazin.monotune.monochrome.MonochromeAuthRepositoryImpl
@@ -24,7 +24,7 @@ import javax.inject.Singleton
  *
  * [MonochromeClient] targets the hifi-api backend used by monochrome.tf.
  * Authentication is handled via the official Appwrite instance at
- * [com.dd3boh.outertune.monochrome.APPWRITE_ENDPOINT].
+ * [com.nohimazin.monotune.monochrome.APPWRITE_ENDPOINT].
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -40,3 +40,5 @@ abstract class MonochromeModule {
         impl: MonochromeAuthRepositoryImpl,
     ): MonochromeAuthRepository
 }
+
+

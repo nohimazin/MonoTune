@@ -1,11 +1,11 @@
-/*
+﻿/*
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.screens.settings.fragments
+package com.nohimazin.monotune.ui.screens.settings.fragments
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -34,28 +34,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.LocalNetworkConnected
-import com.dd3boh.outertune.LocalSnackbarHostState
-import com.dd3boh.outertune.LocalSyncUtils
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.InnerTubeCookieKey
-import com.dd3boh.outertune.constants.PauseListenHistoryKey
-import com.dd3boh.outertune.constants.PauseRemoteListenHistoryKey
-import com.dd3boh.outertune.constants.SyncConflictResolution
-import com.dd3boh.outertune.constants.SyncContent
-import com.dd3boh.outertune.constants.SyncMode
-import com.dd3boh.outertune.constants.YtmSyncConflictKey
-import com.dd3boh.outertune.constants.YtmSyncContentKey
-import com.dd3boh.outertune.constants.YtmSyncKey
-import com.dd3boh.outertune.constants.YtmSyncModeKey
-import com.dd3boh.outertune.constants.decodeSyncString
-import com.dd3boh.outertune.constants.encodeSyncString
-import com.dd3boh.outertune.ui.component.EnumListPreference
-import com.dd3boh.outertune.ui.component.PreferenceEntry
-import com.dd3boh.outertune.ui.component.SwitchPreference
-import com.dd3boh.outertune.utils.SyncUtils
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.LocalNetworkConnected
+import com.nohimazin.monotune.LocalSnackbarHostState
+import com.nohimazin.monotune.LocalSyncUtils
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.InnerTubeCookieKey
+import com.nohimazin.monotune.constants.PauseListenHistoryKey
+import com.nohimazin.monotune.constants.PauseRemoteListenHistoryKey
+import com.nohimazin.monotune.constants.SyncConflictResolution
+import com.nohimazin.monotune.constants.SyncContent
+import com.nohimazin.monotune.constants.SyncMode
+import com.nohimazin.monotune.constants.YtmSyncConflictKey
+import com.nohimazin.monotune.constants.YtmSyncContentKey
+import com.nohimazin.monotune.constants.YtmSyncKey
+import com.nohimazin.monotune.constants.YtmSyncModeKey
+import com.nohimazin.monotune.constants.decodeSyncString
+import com.nohimazin.monotune.constants.encodeSyncString
+import com.nohimazin.monotune.ui.component.EnumListPreference
+import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.SwitchPreference
+import com.nohimazin.monotune.utils.SyncUtils
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
 import com.zionhuang.innertube.utils.parseCookieString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -250,3 +250,4 @@ fun SyncProgressItem(isSyncing: Boolean, modifier: Modifier = Modifier) {
         }
     }
 }
+

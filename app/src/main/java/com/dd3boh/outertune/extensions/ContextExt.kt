@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.extensions
+﻿package com.nohimazin.monotune.extensions
 
 import android.content.Context
 import android.net.ConnectivityManager

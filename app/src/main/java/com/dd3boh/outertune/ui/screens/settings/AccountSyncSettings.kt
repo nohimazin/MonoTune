@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.screens.settings
+package com.nohimazin.monotune.ui.screens.settings
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Spacer
@@ -30,19 +30,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.ColumnWithContentPadding
-import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.screens.settings.fragments.AccountExtrasFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.AccountFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.MonochromeAccountFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.SyncAutoFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.SyncExtrasFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.SyncManualFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.SyncParamsFrag
-import com.dd3boh.outertune.ui.utils.backToMain
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.ColumnWithContentPadding
+import com.nohimazin.monotune.ui.component.PreferenceGroupTitle
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.screens.settings.fragments.AccountExtrasFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.AccountFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.MonochromeAccountFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.SyncAutoFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.SyncExtrasFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.SyncManualFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.SyncParamsFrag
+import com.nohimazin.monotune.ui.utils.backToMain
 
 @SuppressLint("PrivateResource")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -133,4 +133,5 @@ fun AccountSyncSettings(
         scrollBehavior = scrollBehavior
     )
 }
+
 

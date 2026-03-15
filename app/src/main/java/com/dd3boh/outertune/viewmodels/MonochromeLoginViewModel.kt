@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 MonoTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -47,7 +47,7 @@ class MonochromeLoginViewModel @Inject constructor(
     val apiEndpoint = authRepository.apiEndpointFlow.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = com.dd3boh.outertune.monochrome.DEFAULT_MONOCHROME_API_URL,
+        initialValue = com.nohimazin.monotune.monochrome.DEFAULT_MONOCHROME_API_URL,
     )
 
     var isLoading by mutableStateOf(false)
@@ -105,3 +105,4 @@ class MonochromeLoginViewModel @Inject constructor(
         }
     }
 }
+

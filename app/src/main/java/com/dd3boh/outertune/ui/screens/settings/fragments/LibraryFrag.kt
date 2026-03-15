@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens.settings.fragments
+﻿package com.nohimazin.monotune.ui.screens.settings.fragments
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
@@ -18,16 +18,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.InnerTubeCookieKey
-import com.dd3boh.outertune.constants.PauseListenHistoryKey
-import com.dd3boh.outertune.constants.PauseRemoteListenHistoryKey
-import com.dd3boh.outertune.constants.PauseSearchHistoryKey
-import com.dd3boh.outertune.ui.component.PreferenceEntry
-import com.dd3boh.outertune.ui.component.SwitchPreference
-import com.dd3boh.outertune.ui.dialog.DefaultDialog
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.InnerTubeCookieKey
+import com.nohimazin.monotune.constants.PauseListenHistoryKey
+import com.nohimazin.monotune.constants.PauseRemoteListenHistoryKey
+import com.nohimazin.monotune.constants.PauseSearchHistoryKey
+import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.SwitchPreference
+import com.nohimazin.monotune.ui.dialog.DefaultDialog
+import com.nohimazin.monotune.utils.rememberPreference
 import com.zionhuang.innertube.utils.parseCookieString
 
 @Composable
@@ -171,3 +171,4 @@ fun ColumnScope.SearchHistoryFrag() {
         )
     }
 }
+

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O⁠ute⁠rTu⁠ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.utils
+package com.nohimazin.monotune.utils
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -190,3 +190,4 @@ class LocalArtworkPathKeyer : Keyer<LocalArtworkPath> {
 }
 
 data class LocalArtworkPath(val path: String?, val x: Int = -1, val y: Int = -1)
+

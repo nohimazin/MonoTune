@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 OuterTune Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.player
+package com.nohimazin.monotune.ui.player
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -38,13 +38,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import coil3.compose.AsyncImage
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.constants.PlayerHorizontalPadding
-import com.dd3boh.outertune.constants.ShowLyricsKey
-import com.dd3boh.outertune.constants.ThumbnailCornerRadius
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.ui.component.Lyrics
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.constants.PlayerHorizontalPadding
+import com.nohimazin.monotune.constants.ShowLyricsKey
+import com.nohimazin.monotune.constants.ThumbnailCornerRadius
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.ui.component.Lyrics
+import com.nohimazin.monotune.utils.rememberPreference
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -134,3 +134,4 @@ fun Thumbnail(
         }
     }
 }
+

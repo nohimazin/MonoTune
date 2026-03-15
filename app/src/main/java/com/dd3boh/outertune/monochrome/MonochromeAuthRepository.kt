@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 MonoTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -8,14 +8,14 @@ package com.nohimazin.monotune.monochrome
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
-import com.dd3boh.outertune.constants.MonochromeApiEndpointKey
-import com.dd3boh.outertune.constants.MonochromeAuthTokenKey
-import com.dd3boh.outertune.constants.MonochromeDisplayNameKey
-import com.dd3boh.outertune.constants.MonochromeEmailKey
-import com.dd3boh.outertune.constants.MonochromeServerUrlKey
-import com.dd3boh.outertune.constants.MonochromeTokenExpiryKey
-import com.dd3boh.outertune.utils.dataStore
-import com.dd3boh.outertune.utils.get
+import com.nohimazin.monotune.constants.MonochromeApiEndpointKey
+import com.nohimazin.monotune.constants.MonochromeAuthTokenKey
+import com.nohimazin.monotune.constants.MonochromeDisplayNameKey
+import com.nohimazin.monotune.constants.MonochromeEmailKey
+import com.nohimazin.monotune.constants.MonochromeServerUrlKey
+import com.nohimazin.monotune.constants.MonochromeTokenExpiryKey
+import com.nohimazin.monotune.utils.dataStore
+import com.nohimazin.monotune.utils.get
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -206,3 +206,4 @@ class MonochromeAuthRepositoryImpl @Inject constructor(
         }
     }
 }
+

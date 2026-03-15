@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.component.items
+package com.nohimazin.monotune.ui.component.items
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -78,28 +78,28 @@ import androidx.media3.exoplayer.offline.Download.STATE_DOWNLOADING
 import androidx.media3.exoplayer.offline.Download.STATE_QUEUED
 import coil3.compose.AsyncImage
 import coil3.imageLoader
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.LocalDownloadUtil
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.GridThumbnailHeight
-import com.dd3boh.outertune.constants.ListItemHeight
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.ThumbnailCornerRadius
-import com.dd3boh.outertune.db.entities.PlaylistEntity
-import com.dd3boh.outertune.db.entities.RecentActivityEntity
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.models.MultiQueueObject
-import com.dd3boh.outertune.models.toMediaMetadata
-import com.dd3boh.outertune.monochrome.MonochromeTrack
-import com.dd3boh.outertune.monochrome.tidalCoverUrl
-import com.dd3boh.outertune.playback.queues.ListQueue
-import com.dd3boh.outertune.ui.component.PlayingIndicator
-import com.dd3boh.outertune.ui.component.PlayingIndicatorBox
-import com.dd3boh.outertune.utils.getDownloadState
-import com.dd3boh.outertune.utils.joinByBullet
-import com.dd3boh.outertune.utils.makeTimeString
-import com.dd3boh.outertune.utils.reportException
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.LocalDownloadUtil
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.GridThumbnailHeight
+import com.nohimazin.monotune.constants.ListItemHeight
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.constants.ThumbnailCornerRadius
+import com.nohimazin.monotune.db.entities.PlaylistEntity
+import com.nohimazin.monotune.db.entities.RecentActivityEntity
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.models.MultiQueueObject
+import com.nohimazin.monotune.models.toMediaMetadata
+import com.nohimazin.monotune.monochrome.MonochromeTrack
+import com.nohimazin.monotune.monochrome.tidalCoverUrl
+import com.nohimazin.monotune.playback.queues.ListQueue
+import com.nohimazin.monotune.ui.component.PlayingIndicator
+import com.nohimazin.monotune.ui.component.PlayingIndicatorBox
+import com.nohimazin.monotune.utils.getDownloadState
+import com.nohimazin.monotune.utils.joinByBullet
+import com.nohimazin.monotune.utils.makeTimeString
+import com.nohimazin.monotune.utils.reportException
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.models.AlbumItem
 import com.zionhuang.innertube.models.ArtistItem
@@ -901,3 +901,4 @@ object Icon {
         )
     }
 }
+

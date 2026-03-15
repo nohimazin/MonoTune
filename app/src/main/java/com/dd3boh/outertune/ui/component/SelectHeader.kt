@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -25,11 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.menu.MenuState
-import com.dd3boh.outertune.ui.menu.SelectionMediaMetadataMenu
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.menu.MenuState
+import com.nohimazin.monotune.ui.menu.SelectionMediaMetadataMenu
 
 @Composable
 fun RowScope.SelectHeader(

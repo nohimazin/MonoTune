@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O​u​t​er​Tu​ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.menu
+package com.nohimazin.monotune.ui.menu
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -45,9 +45,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.offline.Download
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.utils.getDownloadState
-import com.dd3boh.outertune.utils.makeTimeString
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.utils.getDownloadState
+import com.nohimazin.monotune.utils.makeTimeString
 import java.time.LocalDateTime
 
 val GridMenuItemHeight = 96.dp
@@ -261,3 +261,4 @@ fun LazyGridScope.SleepTimerGridMenu(
         }
     }
 }
+

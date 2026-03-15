@@ -1,4 +1,4 @@
-package com.nohimazin.monotune.ui.screens
+﻿package com.nohimazin.monotune.ui.screens
 
 import android.annotation.SuppressLint
 import android.webkit.CookieManager
@@ -21,19 +21,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.AccountChannelHandleKey
-import com.dd3boh.outertune.constants.AccountEmailKey
-import com.dd3boh.outertune.constants.AccountNameKey
-import com.dd3boh.outertune.constants.DataSyncIdKey
-import com.dd3boh.outertune.constants.InnerTubeCookieKey
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.constants.VisitorDataKey
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.utils.backToMain
-import com.dd3boh.outertune.utils.rememberPreference
-import com.dd3boh.outertune.utils.reportException
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.AccountChannelHandleKey
+import com.nohimazin.monotune.constants.AccountEmailKey
+import com.nohimazin.monotune.constants.AccountNameKey
+import com.nohimazin.monotune.constants.DataSyncIdKey
+import com.nohimazin.monotune.constants.InnerTubeCookieKey
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.constants.VisitorDataKey
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.utils.backToMain
+import com.nohimazin.monotune.utils.rememberPreference
+import com.nohimazin.monotune.utils.reportException
 import com.zionhuang.innertube.YouTube
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -124,3 +124,4 @@ fun LoginScreen(
         webView?.goBack()
     }
 }
+

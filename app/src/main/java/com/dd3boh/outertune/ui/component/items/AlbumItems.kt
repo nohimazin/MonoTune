@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component.items
+﻿package com.nohimazin.monotune.ui.component.items
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
@@ -14,18 +14,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.media3.exoplayer.offline.Download
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.LocalDownloadUtil
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.ThumbnailCornerRadius
-import com.dd3boh.outertune.db.entities.Album
-import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.models.toMediaMetadata
-import com.dd3boh.outertune.playback.queues.ListQueue
-import com.dd3boh.outertune.ui.utils.getNSongsString
-import com.dd3boh.outertune.utils.getDownloadState
-import com.dd3boh.outertune.utils.joinByBullet
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.LocalDownloadUtil
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.constants.ThumbnailCornerRadius
+import com.nohimazin.monotune.db.entities.Album
+import com.nohimazin.monotune.db.entities.Song
+import com.nohimazin.monotune.models.toMediaMetadata
+import com.nohimazin.monotune.playback.queues.ListQueue
+import com.nohimazin.monotune.ui.utils.getNSongsString
+import com.nohimazin.monotune.utils.getDownloadState
+import com.nohimazin.monotune.utils.joinByBullet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

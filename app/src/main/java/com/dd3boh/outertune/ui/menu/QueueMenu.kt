@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.menu
+﻿package com.nohimazin.monotune.ui.menu
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,13 +16,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.models.MultiQueueObject
-import com.dd3boh.outertune.ui.component.items.QueueListItem
-import com.dd3boh.outertune.ui.dialog.AddToPlaylistDialog
-import com.dd3boh.outertune.ui.dialog.AddToQueueDialog
-import com.dd3boh.outertune.ui.dialog.EditQueueDialog
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.models.MultiQueueObject
+import com.nohimazin.monotune.ui.component.items.QueueListItem
+import com.nohimazin.monotune.ui.dialog.AddToPlaylistDialog
+import com.nohimazin.monotune.ui.dialog.AddToQueueDialog
+import com.nohimazin.monotune.ui.dialog.EditQueueDialog
 
 @Composable
 fun QueueMenu(

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -597,7 +597,7 @@ class SyncUtils @Inject constructor(
      * Run [MonochromeSearchMatcher] on [songs] and persist any new automatic matches
      * to [MonochromeTrackMatch].
      *
-     * Songs that already have a [com.dd3boh.outertune.db.entities.ManualCorrection] row
+     * Songs that already have a [com.nohimazin.monotune.db.entities.ManualCorrection] row
      * are skipped so that user overrides are never overwritten.
      */
     private suspend fun matchAndPersistPlaylistSongs(songs: List<SongItem>) {
@@ -691,3 +691,4 @@ class SyncUtils @Inject constructor(
         return remote
     }
 }
+

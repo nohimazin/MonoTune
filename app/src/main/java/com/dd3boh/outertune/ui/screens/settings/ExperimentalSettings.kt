@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O​u​t​er​Tu​ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.screens.settings
+package com.nohimazin.monotune.ui.screens.settings
 
 import android.util.Log
 import android.widget.Toast
@@ -61,26 +61,26 @@ import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.edit
 import androidx.navigation.NavController
 import coil3.imageLoader
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.AudioGaplessOffloadKey
-import com.dd3boh.outertune.constants.AudioOffloadKey
-import com.dd3boh.outertune.constants.DevSettingsKey
-import com.dd3boh.outertune.constants.MaxQueuesKey
-import com.dd3boh.outertune.constants.OobeStatusKey
-import com.dd3boh.outertune.constants.TabletUiKey
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.constants.VisitorDataKey
-import com.dd3boh.outertune.ui.component.ColumnWithContentPadding
-import com.dd3boh.outertune.ui.component.PreferenceEntry
-import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
-import com.dd3boh.outertune.ui.component.SwitchPreference
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.dialog.CounterDialog
-import com.dd3boh.outertune.ui.utils.backToMain
-import com.dd3boh.outertune.utils.dataStore
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.AudioGaplessOffloadKey
+import com.nohimazin.monotune.constants.AudioOffloadKey
+import com.nohimazin.monotune.constants.DevSettingsKey
+import com.nohimazin.monotune.constants.MaxQueuesKey
+import com.nohimazin.monotune.constants.OobeStatusKey
+import com.nohimazin.monotune.constants.TabletUiKey
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.constants.VisitorDataKey
+import com.nohimazin.monotune.ui.component.ColumnWithContentPadding
+import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.PreferenceGroupTitle
+import com.nohimazin.monotune.ui.component.SwitchPreference
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.dialog.CounterDialog
+import com.nohimazin.monotune.ui.utils.backToMain
+import com.nohimazin.monotune.utils.dataStore
+import com.nohimazin.monotune.utils.rememberPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

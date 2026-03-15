@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component
+﻿package com.nohimazin.monotune.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -23,8 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.constants.MenuCornerRadius
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.constants.MenuCornerRadius
 
 @Composable
 fun FloatingFooter(
@@ -65,3 +65,4 @@ fun FloatingFooter(
         }
     }
 }
+

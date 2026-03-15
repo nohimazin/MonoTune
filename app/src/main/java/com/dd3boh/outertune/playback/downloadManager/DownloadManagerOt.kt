@@ -1,7 +1,7 @@
-package com.dd3boh.outertune.playback.downloadManager
+﻿package com.nohimazin.monotune.playback.downloadManager
 
 import android.net.Uri
-import com.dd3boh.outertune.utils.reportException
+import com.nohimazin.monotune.utils.reportException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow

@@ -1,11 +1,11 @@
-/*
+﻿/*
  * Copyright (C) 2025 OuterTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.component.items
+package com.nohimazin.monotune.ui.component.items
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -43,30 +43,30 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import com.dd3boh.outertune.BuildConfig
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.LocalDownloadUtil
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.GridThumbnailHeight
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.ThumbnailCornerRadius
-import com.dd3boh.outertune.db.entities.Playlist
-import com.dd3boh.outertune.db.entities.PlaylistSong
-import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.extensions.toMediaItem
-import com.dd3boh.outertune.extensions.togglePlayPause
-import com.dd3boh.outertune.ui.component.PlayingIndicatorBox
-import com.dd3boh.outertune.ui.component.SwipeToQueueBox
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.menu.MenuState
-import com.dd3boh.outertune.ui.menu.SongMenu
-import com.dd3boh.outertune.utils.joinByBullet
-import com.dd3boh.outertune.utils.makeTimeString
+import com.nohimazin.monotune.BuildConfig
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.LocalDownloadUtil
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.GridThumbnailHeight
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.constants.ThumbnailCornerRadius
+import com.nohimazin.monotune.db.entities.Playlist
+import com.nohimazin.monotune.db.entities.PlaylistSong
+import com.nohimazin.monotune.db.entities.Song
+import com.nohimazin.monotune.extensions.toMediaItem
+import com.nohimazin.monotune.extensions.togglePlayPause
+import com.nohimazin.monotune.ui.component.PlayingIndicatorBox
+import com.nohimazin.monotune.ui.component.SwipeToQueueBox
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.menu.MenuState
+import com.nohimazin.monotune.ui.menu.SongMenu
+import com.nohimazin.monotune.utils.joinByBullet
+import com.nohimazin.monotune.utils.makeTimeString
 import androidx.compose.material3.Text
 import androidx.compose.ui.res.stringResource
-import com.dd3boh.outertune.viewmodels.MonochromeMatchStatus
+import com.nohimazin.monotune.viewmodels.MonochromeMatchStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

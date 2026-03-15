@@ -1,6 +1,6 @@
-package com.dd3boh.outertune.playback.queues
+﻿package com.nohimazin.monotune.playback.queues
 
-import com.dd3boh.outertune.models.MediaMetadata
+import com.nohimazin.monotune.models.MediaMetadata
 
 class ListQueue(
     override val playlistId: String? = null,

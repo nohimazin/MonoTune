@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.constants
+﻿package com.nohimazin.monotune.constants
 
 enum class HistorySource {
     LOCAL, REMOTE

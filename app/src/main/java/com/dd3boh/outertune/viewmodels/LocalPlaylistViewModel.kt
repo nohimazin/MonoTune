@@ -1,4 +1,4 @@
-package com.nohimazin.monotune.viewmodels
+﻿package com.nohimazin.monotune.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
@@ -61,8 +61,8 @@ class LocalPlaylistViewModel @Inject constructor(
      * Reactive map of song ID → [PlaylistSongWithStatus] for all songs in this playlist.
      *
      * Applies the same manual-correction-first priority used by playback:
-     *  1. [com.dd3boh.outertune.db.entities.ManualCorrection] wins
-     *  2. fallback to [com.dd3boh.outertune.db.entities.MonochromeTrackMatch]
+     *  1. [com.nohimazin.monotune.db.entities.ManualCorrection] wins
+     *  2. fallback to [com.nohimazin.monotune.db.entities.MonochromeTrackMatch]
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     val songsWithStatus = playlistWithSongs

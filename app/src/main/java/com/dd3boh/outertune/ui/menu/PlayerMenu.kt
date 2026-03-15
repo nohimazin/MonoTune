@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.menu
+﻿package com.nohimazin.monotune.ui.menu
 
 import android.content.Intent
 import android.media.audiofx.AudioEffect
@@ -82,22 +82,22 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.LocalDownloadUtil
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ShowLyricsKey
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.playback.ExoDownloadService
-import com.dd3boh.outertune.playback.queues.YouTubeQueue
-import com.dd3boh.outertune.ui.component.BigSeekBar
-import com.dd3boh.outertune.ui.component.BottomSheetState
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.dialog.AddToPlaylistDialog
-import com.dd3boh.outertune.ui.dialog.AddToQueueDialog
-import com.dd3boh.outertune.ui.dialog.ArtistDialog
-import com.dd3boh.outertune.ui.dialog.DetailsDialog
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.LocalDownloadUtil
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ShowLyricsKey
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.playback.ExoDownloadService
+import com.nohimazin.monotune.playback.queues.YouTubeQueue
+import com.nohimazin.monotune.ui.component.BigSeekBar
+import com.nohimazin.monotune.ui.component.BottomSheetState
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.dialog.AddToPlaylistDialog
+import com.nohimazin.monotune.ui.dialog.AddToQueueDialog
+import com.nohimazin.monotune.ui.dialog.ArtistDialog
+import com.nohimazin.monotune.ui.dialog.DetailsDialog
+import com.nohimazin.monotune.utils.rememberPreference
 import com.zionhuang.innertube.YouTube
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -761,3 +761,4 @@ fun getNextInterval(targetMin: Long): Pair<String, Float> {
 
     return Pair(timeString, minutesBetween)
 }
+

@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.utils.potoken
+﻿package com.nohimazin.monotune.utils.potoken
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull

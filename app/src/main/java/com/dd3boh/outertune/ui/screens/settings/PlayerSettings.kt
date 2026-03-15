@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 OuterTune Project
  *
@@ -33,26 +33,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.navigation.NavController
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.AudioDecoderKey
-import com.dd3boh.outertune.constants.ENABLE_FFMETADATAEX
-import com.dd3boh.outertune.constants.KeepAliveKey
-import com.dd3boh.outertune.constants.PersistentQueueKey
-import com.dd3boh.outertune.constants.StopMusicOnTaskClearKey
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.ColumnWithContentPadding
-import com.dd3boh.outertune.ui.component.ListPreference
-import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
-import com.dd3boh.outertune.ui.component.SettingsClickToReveal
-import com.dd3boh.outertune.ui.component.SwitchPreference
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.dialog.InfoLabel
-import com.dd3boh.outertune.ui.screens.settings.fragments.AudioEffectsFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.AudioQualityFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.PlaybackBehaviourFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.PlayerGeneralFrag
-import com.dd3boh.outertune.ui.utils.backToMain
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.AudioDecoderKey
+import com.nohimazin.monotune.constants.ENABLE_FFMETADATAEX
+import com.nohimazin.monotune.constants.KeepAliveKey
+import com.nohimazin.monotune.constants.PersistentQueueKey
+import com.nohimazin.monotune.constants.StopMusicOnTaskClearKey
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.ColumnWithContentPadding
+import com.nohimazin.monotune.ui.component.ListPreference
+import com.nohimazin.monotune.ui.component.PreferenceGroupTitle
+import com.nohimazin.monotune.ui.component.SettingsClickToReveal
+import com.nohimazin.monotune.ui.component.SwitchPreference
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.dialog.InfoLabel
+import com.nohimazin.monotune.ui.screens.settings.fragments.AudioEffectsFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.AudioQualityFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.PlaybackBehaviourFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.PlayerGeneralFrag
+import com.nohimazin.monotune.ui.utils.backToMain
+import com.nohimazin.monotune.utils.rememberPreference
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -188,3 +188,4 @@ fun PlayerSettings(
         scrollBehavior = scrollBehavior
     )
 }
+

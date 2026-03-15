@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O⁠ute⁠rTu⁠ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.playback
+package com.nohimazin.monotune.playback
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
@@ -15,16 +15,16 @@ import androidx.compose.ui.util.fastFirst
 import androidx.compose.ui.util.fastFirstOrNull
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.media3.common.C
-import com.dd3boh.outertune.constants.PersistentQueueKey
-import com.dd3boh.outertune.constants.QUEUE_DEBUG
-import com.dd3boh.outertune.db.entities.QueueEntity
-import com.dd3boh.outertune.extensions.currentMetadata
-import com.dd3boh.outertune.extensions.move
-import com.dd3boh.outertune.extensions.toMediaItem
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.models.MultiQueueObject
-import com.dd3boh.outertune.utils.dataStore
-import com.dd3boh.outertune.utils.get
+import com.nohimazin.monotune.constants.PersistentQueueKey
+import com.nohimazin.monotune.constants.QUEUE_DEBUG
+import com.nohimazin.monotune.db.entities.QueueEntity
+import com.nohimazin.monotune.extensions.currentMetadata
+import com.nohimazin.monotune.extensions.move
+import com.nohimazin.monotune.extensions.toMediaItem
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.models.MultiQueueObject
+import com.nohimazin.monotune.utils.dataStore
+import com.nohimazin.monotune.utils.get
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart

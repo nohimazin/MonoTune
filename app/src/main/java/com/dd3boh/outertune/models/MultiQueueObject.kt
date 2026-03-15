@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.models
+﻿package com.nohimazin.monotune.models
 
 import androidx.compose.ui.util.fastFirstOrNull
 import androidx.compose.ui.util.fastForEachIndexed

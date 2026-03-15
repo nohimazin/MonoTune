@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.lyrics
+﻿package com.nohimazin.monotune.lyrics
 
 import android.content.Context
 import com.nohimazin.monotune.constants.EnableKugouKey
@@ -18,3 +18,4 @@ object KuGouLyricsProvider : LyricsProvider {
         KuGou.getAllPossibleLyricsOptions(title, artist, duration, callback)
     }
 }
+

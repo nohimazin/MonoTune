@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.lyrics
+﻿package com.nohimazin.monotune.lyrics
 
 /**
  * Thrown (as a [Result.failure]) by a [LyricsProvider] when the provider has no
@@ -9,3 +9,4 @@ package com.dd3boh.outertune.lyrics
  * so that routine "no match" outcomes don't flood logcat with stack traces.
  */
 class LyricsNotFoundException(message: String) : Exception(message)
+

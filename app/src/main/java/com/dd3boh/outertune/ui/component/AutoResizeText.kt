@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component
+﻿package com.nohimazin.monotune.ui.component
 
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text

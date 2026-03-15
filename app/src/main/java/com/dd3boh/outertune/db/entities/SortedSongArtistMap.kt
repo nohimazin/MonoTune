@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.db.entities
+﻿package com.nohimazin.monotune.db.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.DatabaseView
@@ -11,3 +11,4 @@ data class SortedSongArtistMap(
     @ColumnInfo(index = true) val artistId: String,
     val position: Int,
 )
+

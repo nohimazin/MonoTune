@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens.library
+﻿package com.nohimazin.monotune.ui.screens.library
 
 import android.content.pm.PackageManager
 import android.util.Log
@@ -56,39 +56,39 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.MainActivity
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.CONTENT_TYPE_HEADER
-import com.dd3boh.outertune.constants.CONTENT_TYPE_PLAYLIST
-import com.dd3boh.outertune.constants.GridThumbnailHeight
-import com.dd3boh.outertune.constants.LibraryViewType
-import com.dd3boh.outertune.constants.LibraryViewTypeKey
-import com.dd3boh.outertune.constants.PlaylistFilter
-import com.dd3boh.outertune.constants.PlaylistFilterKey
-import com.dd3boh.outertune.constants.PlaylistSortDescendingKey
-import com.dd3boh.outertune.constants.PlaylistSortType
-import com.dd3boh.outertune.constants.PlaylistSortTypeKey
-import com.dd3boh.outertune.constants.PlaylistViewTypeKey
-import com.dd3boh.outertune.constants.ShowLikedAndDownloadedPlaylist
-import com.dd3boh.outertune.db.entities.PlaylistEntity
-import com.dd3boh.outertune.ui.component.ChipsRow
-import com.dd3boh.outertune.ui.component.EmptyPlaceholder
-import com.dd3boh.outertune.ui.component.LazyColumnScrollbar
-import com.dd3boh.outertune.ui.component.LazyVerticalGridScrollbar
-import com.dd3boh.outertune.ui.component.LibraryPlaylistGridItem
-import com.dd3boh.outertune.ui.component.LibraryPlaylistListItem
-import com.dd3boh.outertune.ui.component.ScrollToTopManager
-import com.dd3boh.outertune.ui.component.SortHeader
-import com.dd3boh.outertune.ui.component.items.AutoPlaylistGridItem
-import com.dd3boh.outertune.ui.component.items.AutoPlaylistListItem
-import com.dd3boh.outertune.ui.dialog.CreatePlaylistDialog
-import com.dd3boh.outertune.ui.menu.ActionDropdown
-import com.dd3boh.outertune.ui.menu.DropdownItem
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
-import com.dd3boh.outertune.viewmodels.LibraryPlaylistsViewModel
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.MainActivity
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.CONTENT_TYPE_HEADER
+import com.nohimazin.monotune.constants.CONTENT_TYPE_PLAYLIST
+import com.nohimazin.monotune.constants.GridThumbnailHeight
+import com.nohimazin.monotune.constants.LibraryViewType
+import com.nohimazin.monotune.constants.LibraryViewTypeKey
+import com.nohimazin.monotune.constants.PlaylistFilter
+import com.nohimazin.monotune.constants.PlaylistFilterKey
+import com.nohimazin.monotune.constants.PlaylistSortDescendingKey
+import com.nohimazin.monotune.constants.PlaylistSortType
+import com.nohimazin.monotune.constants.PlaylistSortTypeKey
+import com.nohimazin.monotune.constants.PlaylistViewTypeKey
+import com.nohimazin.monotune.constants.ShowLikedAndDownloadedPlaylist
+import com.nohimazin.monotune.db.entities.PlaylistEntity
+import com.nohimazin.monotune.ui.component.ChipsRow
+import com.nohimazin.monotune.ui.component.EmptyPlaceholder
+import com.nohimazin.monotune.ui.component.LazyColumnScrollbar
+import com.nohimazin.monotune.ui.component.LazyVerticalGridScrollbar
+import com.nohimazin.monotune.ui.component.LibraryPlaylistGridItem
+import com.nohimazin.monotune.ui.component.LibraryPlaylistListItem
+import com.nohimazin.monotune.ui.component.ScrollToTopManager
+import com.nohimazin.monotune.ui.component.SortHeader
+import com.nohimazin.monotune.ui.component.items.AutoPlaylistGridItem
+import com.nohimazin.monotune.ui.component.items.AutoPlaylistListItem
+import com.nohimazin.monotune.ui.dialog.CreatePlaylistDialog
+import com.nohimazin.monotune.ui.menu.ActionDropdown
+import com.nohimazin.monotune.ui.menu.DropdownItem
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
+import com.nohimazin.monotune.viewmodels.LibraryPlaylistsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -422,3 +422,4 @@ fun LibraryPlaylistsScreen(
 
     }
 }
+

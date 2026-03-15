@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.utils.potoken
+﻿package com.nohimazin.monotune.utils.potoken
 
 class PoTokenException(message: String) : Exception(message)
 

@@ -1,13 +1,13 @@
-package com.dd3boh.outertune.playback.downloadManager
+﻿package com.nohimazin.monotune.playback.downloadManager
 
 import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import androidx.documentfile.provider.TreeDocumentFileOt
-import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.utils.scanDfRecursive
-import com.dd3boh.outertune.utils.documentFileFromUri
+import com.nohimazin.monotune.db.entities.Song
+import com.nohimazin.monotune.utils.scanDfRecursive
+import com.nohimazin.monotune.utils.documentFileFromUri
 import java.io.IOException
 import java.io.InputStream
 
@@ -154,3 +154,4 @@ class DownloadDirectoryManagerOt(private var context: Context, private var dir: 
         return result.filter { it.name != null }.sumOf { it.length() }
     }
 }
+

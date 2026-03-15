@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens.artist
+﻿package com.nohimazin.monotune.ui.screens.artist
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -39,19 +39,19 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.LocalSnackbarHostState
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.CONTENT_TYPE_ALBUM
-import com.dd3boh.outertune.constants.CONTENT_TYPE_HEADER
-import com.dd3boh.outertune.constants.GridThumbnailHeight
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.LibraryAlbumGridItem
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.utils.backToMain
-import com.dd3boh.outertune.viewmodels.ArtistAlbumsViewModel
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.LocalSnackbarHostState
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.CONTENT_TYPE_ALBUM
+import com.nohimazin.monotune.constants.CONTENT_TYPE_HEADER
+import com.nohimazin.monotune.constants.GridThumbnailHeight
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.LibraryAlbumGridItem
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.utils.backToMain
+import com.nohimazin.monotune.viewmodels.ArtistAlbumsViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable

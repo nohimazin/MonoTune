@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens
+﻿package com.nohimazin.monotune.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -21,20 +21,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.constants.GridThumbnailHeight
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.items.YouTubeGridItem
-import com.dd3boh.outertune.ui.component.shimmer.GridItemPlaceHolder
-import com.dd3boh.outertune.ui.component.shimmer.ShimmerHost
-import com.dd3boh.outertune.ui.menu.YouTubeAlbumMenu
-import com.dd3boh.outertune.ui.menu.YouTubeArtistMenu
-import com.dd3boh.outertune.ui.menu.YouTubePlaylistMenu
-import com.dd3boh.outertune.ui.utils.backToMain
-import com.dd3boh.outertune.viewmodels.BrowseViewModel
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.constants.GridThumbnailHeight
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.items.YouTubeGridItem
+import com.nohimazin.monotune.ui.component.shimmer.GridItemPlaceHolder
+import com.nohimazin.monotune.ui.component.shimmer.ShimmerHost
+import com.nohimazin.monotune.ui.menu.YouTubeAlbumMenu
+import com.nohimazin.monotune.ui.menu.YouTubeArtistMenu
+import com.nohimazin.monotune.ui.menu.YouTubePlaylistMenu
+import com.nohimazin.monotune.ui.utils.backToMain
+import com.nohimazin.monotune.viewmodels.BrowseViewModel
 import com.zionhuang.innertube.models.AlbumItem
 import com.zionhuang.innertube.models.ArtistItem
 import com.zionhuang.innertube.models.PlaylistItem
@@ -148,3 +148,4 @@ fun BrowseScreen(
         scrollBehavior = scrollBehavior
     )
 }
+

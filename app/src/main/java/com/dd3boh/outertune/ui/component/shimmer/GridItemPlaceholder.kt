@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component.shimmer
+﻿package com.nohimazin.monotune.ui.component.shimmer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.constants.GridThumbnailHeight
-import com.dd3boh.outertune.constants.ThumbnailCornerRadius
+import com.nohimazin.monotune.constants.GridThumbnailHeight
+import com.nohimazin.monotune.constants.ThumbnailCornerRadius
 
 @Composable
 fun GridItemPlaceHolder(
@@ -53,3 +53,4 @@ fun GridItemPlaceHolder(
         TextPlaceholder()
     }
 }
+

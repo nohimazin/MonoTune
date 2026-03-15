@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.db.entities
+﻿package com.nohimazin.monotune.db.entities
 
 import androidx.compose.runtime.Immutable
 import androidx.room.Embedded
@@ -29,3 +29,4 @@ data class Album(
     override val thumbnailUrl: String?
         get() = album.thumbnailUrl
 }
+

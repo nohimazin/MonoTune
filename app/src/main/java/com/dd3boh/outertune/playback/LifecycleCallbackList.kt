@@ -1,5 +1,5 @@
-// https://github.com/FoedusProgramme/Gramophone/blob/94baf6aca52ce7ca97715325853cbda555e55ca7/app/src/main/java/org/akanework/gramophone/logic/utils/LifecycleCallbackList.kt
-package com.dd3boh.outertune.playback
+﻿// https://github.com/FoedusProgramme/Gramophone/blob/94baf6aca52ce7ca97715325853cbda555e55ca7/app/src/main/java/org/akanework/gramophone/logic/utils/LifecycleCallbackList.kt
+package com.nohimazin.monotune.playback
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O﻿ute﻿rTu﻿ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.screens.settings
+package com.nohimazin.monotune.ui.screens.settings
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Spacer
@@ -31,16 +31,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.ColumnWithContentPadding
-import com.dd3boh.outertune.ui.component.PreferenceEntry
-import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.screens.settings.fragments.AppearanceMiscFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.ThemeAppFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.ThemePlayerFrag
-import com.dd3boh.outertune.ui.utils.backToMain
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.ColumnWithContentPadding
+import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.PreferenceGroupTitle
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.screens.settings.fragments.AppearanceMiscFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.ThemeAppFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.ThemePlayerFrag
+import com.nohimazin.monotune.ui.utils.backToMain
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -111,3 +111,4 @@ fun AppearanceSettings(
         scrollBehavior = scrollBehavior
     )
 }
+

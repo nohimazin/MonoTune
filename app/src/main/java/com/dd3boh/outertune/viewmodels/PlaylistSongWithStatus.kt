@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 MonoTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -13,7 +13,7 @@ import com.nohimazin.monotune.db.entities.PlaylistSong
 /**
  * Effective Monochrome match state for a single playlist song.
  *
- * Priority mirrors [com.dd3boh.outertune.lyrics.MonochromeLyricsProvider.resolveMonochromeId]:
+ * Priority mirrors [com.nohimazin.monotune.lyrics.MonochromeLyricsProvider.resolveMonochromeId]:
  *  1. [ManualCorrection] wins
  *  2. fallback to [MonochromeTrackMatch]
  */
@@ -60,3 +60,4 @@ data class PlaylistSongWithStatus(
     val effectiveMonochromeId: String?
         get() = manualCorrection?.correctedMonochromeId ?: autoMatch?.monochromeId
 }
+

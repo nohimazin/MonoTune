@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.lyrics
+﻿package com.nohimazin.monotune.lyrics
 
 import android.content.Context
 import com.dd3boh.lrclib.LrcLib
@@ -32,3 +32,4 @@ object LrcLibLyricsProvider : LyricsProvider {
         LrcLib.getAllLyrics(title, artist, duration, null, callback)
     }
 }
+

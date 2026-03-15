@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component.shimmer
+﻿package com.nohimazin.monotune.ui.component.shimmer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
@@ -26,3 +26,4 @@ fun TextPlaceholder(
             .height(height)
     )
 }
+

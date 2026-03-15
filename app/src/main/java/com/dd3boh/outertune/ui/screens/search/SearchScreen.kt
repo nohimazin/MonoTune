@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens.search
+﻿package com.nohimazin.monotune.ui.screens.search
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
@@ -49,27 +49,27 @@ import androidx.compose.ui.util.fastAny
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.DEFAULT_ENABLED_TABS
-import com.dd3boh.outertune.constants.EnabledTabsKey
-import com.dd3boh.outertune.constants.PauseSearchHistoryKey
-import com.dd3boh.outertune.constants.SearchSource
-import com.dd3boh.outertune.constants.SearchSourceKey
-import com.dd3boh.outertune.constants.UpdateAvailableKey
-import com.dd3boh.outertune.db.entities.SearchHistory
-import com.dd3boh.outertune.extensions.tabMode
-import com.dd3boh.outertune.ui.component.SearchBar
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.screens.Screens
-import com.dd3boh.outertune.utils.dataStore
-import com.dd3boh.outertune.utils.get
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
-import com.dd3boh.outertune.utils.urlEncode
-import com.dd3boh.outertune.youtubeNavigator
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.DEFAULT_ENABLED_TABS
+import com.nohimazin.monotune.constants.EnabledTabsKey
+import com.nohimazin.monotune.constants.PauseSearchHistoryKey
+import com.nohimazin.monotune.constants.SearchSource
+import com.nohimazin.monotune.constants.SearchSourceKey
+import com.nohimazin.monotune.constants.UpdateAvailableKey
+import com.nohimazin.monotune.db.entities.SearchHistory
+import com.nohimazin.monotune.extensions.tabMode
+import com.nohimazin.monotune.ui.component.SearchBar
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.screens.Screens
+import com.nohimazin.monotune.utils.dataStore
+import com.nohimazin.monotune.utils.get
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
+import com.nohimazin.monotune.utils.urlEncode
+import com.nohimazin.monotune.youtubeNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -299,3 +299,4 @@ fun SearchBarContainer(
         }
     }
 }
+

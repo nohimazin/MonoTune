@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.menu
+﻿package com.nohimazin.monotune.ui.menu
 
 import android.content.Intent
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,16 +18,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.LocalNetworkConnected
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ArtistSongSortType
-import com.dd3boh.outertune.db.entities.Artist
-import com.dd3boh.outertune.models.toMediaMetadata
-import com.dd3boh.outertune.playback.queues.ListQueue
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.items.ArtistListItem
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.LocalNetworkConnected
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ArtistSongSortType
+import com.nohimazin.monotune.db.entities.Artist
+import com.nohimazin.monotune.models.toMediaMetadata
+import com.nohimazin.monotune.playback.queues.ListQueue
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.items.ArtistListItem
 import com.zionhuang.innertube.YouTube
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -145,3 +145,4 @@ fun ArtistMenu(
         }
     }
 }
+

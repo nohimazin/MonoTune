@@ -1,5 +1,5 @@
-// https://github.com/FoedusProgramme/Gramophone/blob/94baf6aca52ce7ca97715325853cbda555e55ca7/app/src/main/java/org/akanework/gramophone/ui/MediaControllerViewModel.kt
-package com.dd3boh.outertune.playback
+﻿// https://github.com/FoedusProgramme/Gramophone/blob/94baf6aca52ce7ca97715325853cbda555e55ca7/app/src/main/java/org/akanework/gramophone/ui/MediaControllerViewModel.kt
+package com.nohimazin.monotune.playback
 
 import android.app.Application
 import android.content.ComponentName
@@ -18,7 +18,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionResult
 import androidx.media3.session.SessionToken
-import com.dd3boh.outertune.App
+import com.nohimazin.monotune.App
 import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.ExecutionException
 
@@ -228,3 +228,4 @@ fun Player.registerLifecycleCallback(lifecycle: Lifecycle, callback: Player.List
         }
     })
 }
+

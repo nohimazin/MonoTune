@@ -1,11 +1,11 @@
-/*
+﻿/*
  * Copyright (C) 2025 O​u​t​er​Tu​ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import android.content.Context
 import androidx.compose.foundation.clickable
@@ -27,9 +27,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.ui.component.button.ResizableIconButton
-import com.dd3boh.outertune.utils.reportException
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.ui.component.button.ResizableIconButton
+import com.nohimazin.monotune.utils.reportException
 
 @Composable
 fun ContributorCard(

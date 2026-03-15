@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 OuterTune Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.screens
+package com.nohimazin.monotune.ui.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -20,7 +20,7 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.dd3boh.outertune.R
+import com.nohimazin.monotune.R
 
 @Immutable
 sealed class Screens(
@@ -120,3 +120,4 @@ sealed class Screens(
         }
     }
 }
+

@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.component.shimmer
+﻿package com.nohimazin.monotune.ui.component.shimmer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,8 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.constants.AppBarHeight
-import com.dd3boh.outertune.ui.utils.fadingEdge
+import com.nohimazin.monotune.constants.AppBarHeight
+import com.nohimazin.monotune.ui.utils.fadingEdge
 import com.valentinilk.shimmer.shimmer
 
 @Composable

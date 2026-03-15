@@ -1,10 +1,10 @@
-/*
+﻿/*
  * Copyright (C) 2025 MonoTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
  */
 
-package com.dd3boh.outertune.ui.dialog
+package com.nohimazin.monotune.ui.dialog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -48,11 +48,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.monochrome.MonochromeTrack
-import com.dd3boh.outertune.utils.makeTimeString
-import com.dd3boh.outertune.viewmodels.MonochromeFixMatchViewModel
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.db.entities.Song
+import com.nohimazin.monotune.monochrome.MonochromeTrack
+import com.nohimazin.monotune.utils.makeTimeString
+import com.nohimazin.monotune.viewmodels.MonochromeFixMatchViewModel
 
 /** Duration delta in seconds within which a candidate is considered a close match. */
 private const val DURATION_CLOSE_MATCH_SECS = 5
@@ -358,3 +358,4 @@ private fun TrackResultItem(
         }
     }
 }
+

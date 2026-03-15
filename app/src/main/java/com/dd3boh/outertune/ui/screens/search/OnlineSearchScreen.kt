@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens.search
+﻿package com.nohimazin.monotune.ui.screens.search
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -41,29 +41,29 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.LocalSnackbarHostState
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.SuggestionItemHeight
-import com.dd3boh.outertune.constants.SwipeToQueueKey
-import com.dd3boh.outertune.extensions.toMediaItem
-import com.dd3boh.outertune.extensions.togglePlayPause
-import com.dd3boh.outertune.models.toMediaMetadata
-import com.dd3boh.outertune.playback.queues.ListQueue
-import com.dd3boh.outertune.ui.component.LazyColumnScrollbar
-import com.dd3boh.outertune.ui.component.SearchBarIconOffsetX
-import com.dd3boh.outertune.ui.component.SwipeToQueueBox
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.items.YouTubeListItem
-import com.dd3boh.outertune.ui.menu.YouTubeAlbumMenu
-import com.dd3boh.outertune.ui.menu.YouTubeArtistMenu
-import com.dd3boh.outertune.ui.menu.YouTubePlaylistMenu
-import com.dd3boh.outertune.ui.menu.YouTubeSongMenu
-import com.dd3boh.outertune.utils.rememberPreference
-import com.dd3boh.outertune.viewmodels.OnlineSearchSuggestionViewModel
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.LocalSnackbarHostState
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.SuggestionItemHeight
+import com.nohimazin.monotune.constants.SwipeToQueueKey
+import com.nohimazin.monotune.extensions.toMediaItem
+import com.nohimazin.monotune.extensions.togglePlayPause
+import com.nohimazin.monotune.models.toMediaMetadata
+import com.nohimazin.monotune.playback.queues.ListQueue
+import com.nohimazin.monotune.ui.component.LazyColumnScrollbar
+import com.nohimazin.monotune.ui.component.SearchBarIconOffsetX
+import com.nohimazin.monotune.ui.component.SwipeToQueueBox
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.items.YouTubeListItem
+import com.nohimazin.monotune.ui.menu.YouTubeAlbumMenu
+import com.nohimazin.monotune.ui.menu.YouTubeArtistMenu
+import com.nohimazin.monotune.ui.menu.YouTubePlaylistMenu
+import com.nohimazin.monotune.ui.menu.YouTubeSongMenu
+import com.nohimazin.monotune.utils.rememberPreference
+import com.nohimazin.monotune.viewmodels.OnlineSearchSuggestionViewModel
 import com.zionhuang.innertube.models.AlbumItem
 import com.zionhuang.innertube.models.ArtistItem
 import com.zionhuang.innertube.models.PlaylistItem
@@ -352,3 +352,4 @@ fun SuggestionItem(
         }
     }
 }
+

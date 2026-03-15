@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O﻿ute﻿rTu﻿ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.screens.settings
+package com.nohimazin.monotune.ui.screens.settings
 
 import android.content.ClipData
 import android.os.Build
@@ -53,22 +53,22 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.BuildConfig
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ENABLE_FFMETADATAEX
-import com.dd3boh.outertune.constants.LYRIC_FETCH_TIMEOUT
-import com.dd3boh.outertune.constants.OOBE_VERSION
-import com.dd3boh.outertune.constants.SNACKBAR_VERY_SHORT
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.ColumnWithContentPadding
-import com.dd3boh.outertune.ui.component.ContributorCard
-import com.dd3boh.outertune.ui.component.ContributorInfo
-import com.dd3boh.outertune.ui.component.ContributorType.CUSTOM
-import com.dd3boh.outertune.ui.component.PreferenceEntry
-import com.dd3boh.outertune.ui.component.SettingsClickToReveal
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.button.IconLabelButton
-import com.dd3boh.outertune.ui.utils.backToMain
+import com.nohimazin.monotune.BuildConfig
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ENABLE_FFMETADATAEX
+import com.nohimazin.monotune.constants.LYRIC_FETCH_TIMEOUT
+import com.nohimazin.monotune.constants.OOBE_VERSION
+import com.nohimazin.monotune.constants.SNACKBAR_VERY_SHORT
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.ColumnWithContentPadding
+import com.nohimazin.monotune.ui.component.ContributorCard
+import com.nohimazin.monotune.ui.component.ContributorInfo
+import com.nohimazin.monotune.ui.component.ContributorType.CUSTOM
+import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.SettingsClickToReveal
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.button.IconLabelButton
+import com.nohimazin.monotune.ui.utils.backToMain
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -302,3 +302,4 @@ fun AboutScreen(
         scrollBehavior = scrollBehavior
     )
 }
+

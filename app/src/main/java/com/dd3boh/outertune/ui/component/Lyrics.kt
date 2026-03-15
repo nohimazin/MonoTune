@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 OuterTune Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
@@ -76,27 +76,27 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.LyricClickable
-import com.dd3boh.outertune.constants.LyricFontSizeKey
-import com.dd3boh.outertune.constants.LyricKaraokeEnable
-import com.dd3boh.outertune.constants.LyricUpdateSpeed
-import com.dd3boh.outertune.constants.LyricsPosition
-import com.dd3boh.outertune.constants.LyricsTextPositionKey
-import com.dd3boh.outertune.constants.ShowLyricsKey
-import com.dd3boh.outertune.constants.Speed
-import com.dd3boh.outertune.db.entities.LyricsEntity
-import com.dd3boh.outertune.db.entities.LyricsEntity.Companion.uninitializedLyric
-import com.dd3boh.outertune.extensions.isPowerSaver
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.shimmer.ShimmerHost
-import com.dd3boh.outertune.ui.component.shimmer.TextPlaceholder
-import com.dd3boh.outertune.ui.menu.LyricsMenu
-import com.dd3boh.outertune.ui.utils.fadingEdge
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.LyricClickable
+import com.nohimazin.monotune.constants.LyricFontSizeKey
+import com.nohimazin.monotune.constants.LyricKaraokeEnable
+import com.nohimazin.monotune.constants.LyricUpdateSpeed
+import com.nohimazin.monotune.constants.LyricsPosition
+import com.nohimazin.monotune.constants.LyricsTextPositionKey
+import com.nohimazin.monotune.constants.ShowLyricsKey
+import com.nohimazin.monotune.constants.Speed
+import com.nohimazin.monotune.db.entities.LyricsEntity
+import com.nohimazin.monotune.db.entities.LyricsEntity.Companion.uninitializedLyric
+import com.nohimazin.monotune.extensions.isPowerSaver
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.shimmer.ShimmerHost
+import com.nohimazin.monotune.ui.component.shimmer.TextPlaceholder
+import com.nohimazin.monotune.ui.menu.LyricsMenu
+import com.nohimazin.monotune.ui.utils.fadingEdge
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -622,3 +622,4 @@ fun calculateLineProgress(line: LyricLine, currentPositionMs: Long): Float {
 
 const val animateScrollDuration = 300L
 val LyricsPreviewTime = 7.seconds
+

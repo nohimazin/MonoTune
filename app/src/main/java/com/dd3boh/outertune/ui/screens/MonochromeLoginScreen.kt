@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 MonoTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -55,13 +55,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.dialog.InfoLabel
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.utils.backToMain
-import com.dd3boh.outertune.viewmodels.MonochromeLoginViewModel
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.dialog.InfoLabel
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.utils.backToMain
+import com.nohimazin.monotune.viewmodels.MonochromeLoginViewModel
 
 /**
  * Login / account screen for the Monochrome streaming backend.
@@ -275,3 +275,4 @@ fun MonochromeLoginScreen(
         windowInsets = TopBarInsets,
     )
 }
+

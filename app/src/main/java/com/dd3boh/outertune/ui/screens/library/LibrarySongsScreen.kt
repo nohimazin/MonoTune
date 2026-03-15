@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens.library
+﻿package com.nohimazin.monotune.ui.screens.library
 
 import android.content.pm.PackageManager
 import android.util.Log
@@ -55,37 +55,37 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachReversed
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.LocalSnackbarHostState
-import com.dd3boh.outertune.MainActivity
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.CONTENT_TYPE_HEADER
-import com.dd3boh.outertune.constants.CONTENT_TYPE_SONG
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.SongFilter
-import com.dd3boh.outertune.constants.SongFilterKey
-import com.dd3boh.outertune.constants.SongSortDescendingKey
-import com.dd3boh.outertune.constants.SongSortType
-import com.dd3boh.outertune.constants.SongSortTypeKey
-import com.dd3boh.outertune.constants.SwipeToQueueKey
-import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.models.toMediaMetadata
-import com.dd3boh.outertune.playback.queues.ListQueue
-import com.dd3boh.outertune.ui.component.ChipsRow
-import com.dd3boh.outertune.ui.component.EmptyPlaceholder
-import com.dd3boh.outertune.ui.component.FloatingFooter
-import com.dd3boh.outertune.ui.component.LazyColumnScrollbar
-import com.dd3boh.outertune.ui.component.ScrollToTopManager
-import com.dd3boh.outertune.ui.component.SelectHeader
-import com.dd3boh.outertune.ui.component.SortHeader
-import com.dd3boh.outertune.ui.component.items.SongListItem
-import com.dd3boh.outertune.ui.menu.ActionDropdown
-import com.dd3boh.outertune.ui.menu.DropdownItem
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
-import com.dd3boh.outertune.viewmodels.LibrarySongsViewModel
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.LocalSnackbarHostState
+import com.nohimazin.monotune.MainActivity
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.CONTENT_TYPE_HEADER
+import com.nohimazin.monotune.constants.CONTENT_TYPE_SONG
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.constants.SongFilter
+import com.nohimazin.monotune.constants.SongFilterKey
+import com.nohimazin.monotune.constants.SongSortDescendingKey
+import com.nohimazin.monotune.constants.SongSortType
+import com.nohimazin.monotune.constants.SongSortTypeKey
+import com.nohimazin.monotune.constants.SwipeToQueueKey
+import com.nohimazin.monotune.db.entities.Song
+import com.nohimazin.monotune.models.toMediaMetadata
+import com.nohimazin.monotune.playback.queues.ListQueue
+import com.nohimazin.monotune.ui.component.ChipsRow
+import com.nohimazin.monotune.ui.component.EmptyPlaceholder
+import com.nohimazin.monotune.ui.component.FloatingFooter
+import com.nohimazin.monotune.ui.component.LazyColumnScrollbar
+import com.nohimazin.monotune.ui.component.ScrollToTopManager
+import com.nohimazin.monotune.ui.component.SelectHeader
+import com.nohimazin.monotune.ui.component.SortHeader
+import com.nohimazin.monotune.ui.component.items.SongListItem
+import com.nohimazin.monotune.ui.menu.ActionDropdown
+import com.nohimazin.monotune.ui.menu.DropdownItem
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
+import com.nohimazin.monotune.viewmodels.LibrarySongsViewModel
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -389,3 +389,4 @@ fun LibrarySongsScreen(
         )
     }
 }
+

@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.di
+﻿package com.nohimazin.monotune.di
 
 import android.content.Context
 import androidx.media3.database.DatabaseProvider
@@ -74,3 +74,4 @@ object AppModule {
         return constructor()
     }
 }
+

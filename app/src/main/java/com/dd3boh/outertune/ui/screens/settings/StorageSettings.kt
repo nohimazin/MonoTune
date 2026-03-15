@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 OuterTune Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.screens.settings
+package com.nohimazin.monotune.ui.screens.settings
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
@@ -107,3 +107,4 @@ fun StorageSettings(
         scrollBehavior = scrollBehavior
     )
 }
+

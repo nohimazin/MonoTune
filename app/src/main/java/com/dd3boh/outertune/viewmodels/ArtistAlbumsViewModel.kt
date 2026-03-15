@@ -1,9 +1,9 @@
-package com.dd3boh.outertune.viewmodels
+﻿package com.nohimazin.monotune.viewmodels
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dd3boh.outertune.db.MusicDatabase
+import com.nohimazin.monotune.db.MusicDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

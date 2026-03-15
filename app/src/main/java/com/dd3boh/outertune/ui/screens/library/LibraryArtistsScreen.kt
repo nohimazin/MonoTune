@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens.library
+﻿package com.nohimazin.monotune.ui.screens.library
 
 import android.content.pm.PackageManager
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -49,35 +49,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.MainActivity
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ArtistFilter
-import com.dd3boh.outertune.constants.ArtistFilterKey
-import com.dd3boh.outertune.constants.ArtistSortDescendingKey
-import com.dd3boh.outertune.constants.ArtistSortType
-import com.dd3boh.outertune.constants.ArtistSortTypeKey
-import com.dd3boh.outertune.constants.ArtistViewTypeKey
-import com.dd3boh.outertune.constants.CONTENT_TYPE_ARTIST
-import com.dd3boh.outertune.constants.CONTENT_TYPE_HEADER
-import com.dd3boh.outertune.constants.GridThumbnailHeight
-import com.dd3boh.outertune.constants.LibraryViewType
-import com.dd3boh.outertune.constants.LibraryViewTypeKey
-import com.dd3boh.outertune.ui.component.ChipsRow
-import com.dd3boh.outertune.ui.component.EmptyPlaceholder
-import com.dd3boh.outertune.ui.component.LazyColumnScrollbar
-import com.dd3boh.outertune.ui.component.LazyVerticalGridScrollbar
-import com.dd3boh.outertune.ui.component.LibraryArtistGridItem
-import com.dd3boh.outertune.ui.component.LibraryArtistListItem
-import com.dd3boh.outertune.ui.component.ScrollToTopManager
-import com.dd3boh.outertune.ui.component.SortHeader
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.menu.ActionDropdown
-import com.dd3boh.outertune.ui.menu.DropdownItem
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
-import com.dd3boh.outertune.viewmodels.LibraryArtistsViewModel
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.MainActivity
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ArtistFilter
+import com.nohimazin.monotune.constants.ArtistFilterKey
+import com.nohimazin.monotune.constants.ArtistSortDescendingKey
+import com.nohimazin.monotune.constants.ArtistSortType
+import com.nohimazin.monotune.constants.ArtistSortTypeKey
+import com.nohimazin.monotune.constants.ArtistViewTypeKey
+import com.nohimazin.monotune.constants.CONTENT_TYPE_ARTIST
+import com.nohimazin.monotune.constants.CONTENT_TYPE_HEADER
+import com.nohimazin.monotune.constants.GridThumbnailHeight
+import com.nohimazin.monotune.constants.LibraryViewType
+import com.nohimazin.monotune.constants.LibraryViewTypeKey
+import com.nohimazin.monotune.ui.component.ChipsRow
+import com.nohimazin.monotune.ui.component.EmptyPlaceholder
+import com.nohimazin.monotune.ui.component.LazyColumnScrollbar
+import com.nohimazin.monotune.ui.component.LazyVerticalGridScrollbar
+import com.nohimazin.monotune.ui.component.LibraryArtistGridItem
+import com.nohimazin.monotune.ui.component.LibraryArtistListItem
+import com.nohimazin.monotune.ui.component.ScrollToTopManager
+import com.nohimazin.monotune.ui.component.SortHeader
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.menu.ActionDropdown
+import com.nohimazin.monotune.ui.menu.DropdownItem
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
+import com.nohimazin.monotune.viewmodels.LibraryArtistsViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -334,3 +334,4 @@ fun LibraryArtistsScreen(
         )
     }
 }
+

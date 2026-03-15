@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.playback
+﻿package com.nohimazin.monotune.playback
 
 import android.content.ContentResolver
 import android.content.Context
@@ -19,17 +19,17 @@ import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionError
 import androidx.media3.session.SessionResult
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.MediaSessionConstants
-import com.dd3boh.outertune.constants.SongSortType
-import com.dd3boh.outertune.db.MusicDatabase
-import com.dd3boh.outertune.db.entities.PlaylistEntity
-import com.dd3boh.outertune.db.entities.Song
-import com.dd3boh.outertune.extensions.metadata
-import com.dd3boh.outertune.extensions.toMediaItem
-import com.dd3boh.outertune.extensions.toggleRepeatMode
-import com.dd3boh.outertune.extensions.toggleShuffleMode
-import com.dd3boh.outertune.utils.reportException
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.MediaSessionConstants
+import com.nohimazin.monotune.constants.SongSortType
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.db.entities.PlaylistEntity
+import com.nohimazin.monotune.db.entities.Song
+import com.nohimazin.monotune.extensions.metadata
+import com.nohimazin.monotune.extensions.toMediaItem
+import com.nohimazin.monotune.extensions.toggleRepeatMode
+import com.nohimazin.monotune.extensions.toggleShuffleMode
+import com.nohimazin.monotune.utils.reportException
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
@@ -473,7 +473,7 @@ class MediaLibrarySessionCallback @Inject constructor(
             )
             .build()
 
-    private fun com.dd3boh.outertune.models.MediaMetadata.toMediaItem(isPlayable: Boolean = true, isBrowsable: Boolean = false) = MediaItem.Builder()
+    private fun com.nohimazin.monotune.models.MediaMetadata.toMediaItem(isPlayable: Boolean = true, isBrowsable: Boolean = false) = MediaItem.Builder()
         .setMediaId(id)
         .setUri(id)
         .setCustomCacheKey(id)
@@ -492,3 +492,4 @@ class MediaLibrarySessionCallback @Inject constructor(
         )
         .build()
 }
+

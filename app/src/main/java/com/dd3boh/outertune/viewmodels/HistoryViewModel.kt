@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.viewmodels
+﻿package com.nohimazin.monotune.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -84,3 +84,4 @@ sealed class DateAgo {
         override fun hashCode(): Int = date.hashCode()
     }
 }
+

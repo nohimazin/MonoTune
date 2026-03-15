@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O​u​t​er​Tu​ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.utils
+package com.nohimazin.monotune.utils
 
 import androidx.compose.ui.util.fastAny
 import androidx.media3.exoplayer.offline.Download
@@ -85,3 +85,4 @@ fun getDownloadState(localDateTimes: List<LocalDateTime?>): Int {
 fun getThumbnailModel(thumbnailUrl: String, sizeX: Int = -1, sizeY: Int = -1): Any? {
     return thumbnailUrl
 }
+

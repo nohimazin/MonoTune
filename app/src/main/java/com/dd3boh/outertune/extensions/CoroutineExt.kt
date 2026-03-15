@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.extensions
+﻿package com.nohimazin.monotune.extensions
 
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -19,3 +19,4 @@ fun <T> Flow<T>.collectLatest(scope: CoroutineScope, action: suspend (value: T) 
 }
 
 val SilentHandler = CoroutineExceptionHandler { _, _ -> }
+

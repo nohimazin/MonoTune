@@ -1,7 +1,7 @@
-package com.dd3boh.outertune.playback.queues
+﻿package com.nohimazin.monotune.playback.queues
 
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.models.toMediaMetadata
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.models.toMediaMetadata
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.models.WatchEndpoint
 import kotlinx.coroutines.Dispatchers.IO
@@ -53,3 +53,4 @@ class YouTubeQueue(
         fun radio(song: MediaMetadata) = YouTubeQueue(WatchEndpoint(song.id), song)
     }
 }
+

@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.screens.settings.fragments
+﻿package com.nohimazin.monotune.ui.screens.settings.fragments
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
@@ -18,24 +18,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.AudioNormalizationKey
-import com.dd3boh.outertune.constants.AudioQuality
-import com.dd3boh.outertune.constants.AudioQualityKey
-import com.dd3boh.outertune.constants.AutoLoadMoreKey
-import com.dd3boh.outertune.constants.KeepAliveKey
-import com.dd3boh.outertune.constants.SeekIncrement
-import com.dd3boh.outertune.constants.SeekIncrementKey
-import com.dd3boh.outertune.constants.SkipOnErrorKey
-import com.dd3boh.outertune.constants.SkipSilenceKey
-import com.dd3boh.outertune.constants.StopMusicOnTaskClearKey
-import com.dd3boh.outertune.constants.minPlaybackDurKey
-import com.dd3boh.outertune.ui.component.EnumListPreference
-import com.dd3boh.outertune.ui.component.PreferenceEntry
-import com.dd3boh.outertune.ui.component.SwitchPreference
-import com.dd3boh.outertune.ui.dialog.CounterDialog
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.AudioNormalizationKey
+import com.nohimazin.monotune.constants.AudioQuality
+import com.nohimazin.monotune.constants.AudioQualityKey
+import com.nohimazin.monotune.constants.AutoLoadMoreKey
+import com.nohimazin.monotune.constants.KeepAliveKey
+import com.nohimazin.monotune.constants.SeekIncrement
+import com.nohimazin.monotune.constants.SeekIncrementKey
+import com.nohimazin.monotune.constants.SkipOnErrorKey
+import com.nohimazin.monotune.constants.SkipSilenceKey
+import com.nohimazin.monotune.constants.StopMusicOnTaskClearKey
+import com.nohimazin.monotune.constants.minPlaybackDurKey
+import com.nohimazin.monotune.ui.component.EnumListPreference
+import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.SwitchPreference
+import com.nohimazin.monotune.ui.dialog.CounterDialog
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
 
 @Composable
 fun PlayerGeneralFrag() {

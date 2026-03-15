@@ -1,10 +1,10 @@
-/*
+﻿/*
  * Copyright (C) 2025 MonoTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
  */
 
-package com.dd3boh.outertune.lyrics
+package com.nohimazin.monotune.lyrics
 
 import android.content.Context
 import android.util.Log
@@ -108,8 +108,8 @@ class MonochromeLyricsProvider @Inject constructor(
          *
          * Typed as [MonoTuneDao] so that unit tests can supply a lightweight fake
          * without a Room database.  In production code the injected [MonoTuneDao]
-         * is satisfied by the [com.dd3boh.outertune.db.MusicDatabase] binding in
-         * [com.dd3boh.outertune.di.AppModule].
+         * is satisfied by the [com.nohimazin.monotune.db.MusicDatabase] binding in
+         * [com.nohimazin.monotune.di.AppModule].
          */
         internal suspend fun resolveMonochromeId(dao: MonoTuneDao, ytmId: String): String? {
             val correction = dao.getManualCorrection(ytmId)
@@ -136,3 +136,5 @@ class MonochromeLyricsProvider @Inject constructor(
         }
     }
 }
+
+

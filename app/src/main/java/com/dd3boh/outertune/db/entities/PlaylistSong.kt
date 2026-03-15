@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.db.entities
+﻿package com.nohimazin.monotune.db.entities
 
 import androidx.room.Embedded
 import androidx.room.Relation
@@ -12,3 +12,4 @@ data class PlaylistSong(
     )
     val song: Song,
 )
+

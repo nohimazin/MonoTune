@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.menu
+﻿package com.nohimazin.monotune.ui.menu
 
 import android.app.SearchManager
 import android.content.Intent
@@ -50,24 +50,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.LyricTrimKey
-import com.dd3boh.outertune.constants.MultilineLrcKey
-import com.dd3boh.outertune.db.entities.LyricsEntity
-import com.dd3boh.outertune.extensions.isInternetConnected
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
-import com.dd3boh.outertune.ui.component.SettingsClickToReveal
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.dialog.DefaultDialog
-import com.dd3boh.outertune.ui.dialog.ListDialog
-import com.dd3boh.outertune.ui.dialog.TextFieldDialog
-import com.dd3boh.outertune.ui.screens.settings.fragments.LyricFormatFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.LyricParserFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.LyricSourceFrag
-import com.dd3boh.outertune.utils.rememberPreference
-import com.dd3boh.outertune.viewmodels.LyricsMenuViewModel
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.LyricTrimKey
+import com.nohimazin.monotune.constants.MultilineLrcKey
+import com.nohimazin.monotune.db.entities.LyricsEntity
+import com.nohimazin.monotune.extensions.isInternetConnected
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.ui.component.PreferenceGroupTitle
+import com.nohimazin.monotune.ui.component.SettingsClickToReveal
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.dialog.DefaultDialog
+import com.nohimazin.monotune.ui.dialog.ListDialog
+import com.nohimazin.monotune.ui.dialog.TextFieldDialog
+import com.nohimazin.monotune.ui.screens.settings.fragments.LyricFormatFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.LyricParserFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.LyricSourceFrag
+import com.nohimazin.monotune.utils.rememberPreference
+import com.nohimazin.monotune.viewmodels.LyricsMenuViewModel
 import org.akanework.gramophone.logic.utils.SemanticLyrics
 import org.akanework.gramophone.logic.utils.parseLrc
 
@@ -439,3 +439,4 @@ fun LyricsMenu(
         }
     }
 }
+

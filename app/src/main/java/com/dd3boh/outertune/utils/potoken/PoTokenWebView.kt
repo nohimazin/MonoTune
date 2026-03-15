@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.utils.potoken
+﻿package com.nohimazin.monotune.utils.potoken
 
 import android.content.Context
 import android.util.Log
@@ -341,3 +341,4 @@ class PoTokenWebView private constructor(
         }
     }
 }
+

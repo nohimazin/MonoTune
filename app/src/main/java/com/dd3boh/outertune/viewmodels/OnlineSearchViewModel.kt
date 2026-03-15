@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.viewmodels
+﻿package com.nohimazin.monotune.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -147,3 +147,4 @@ class OnlineSearchViewModel @Inject constructor(
         }
     }
 }
+

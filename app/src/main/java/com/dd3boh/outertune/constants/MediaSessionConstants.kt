@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.constants
+﻿package com.nohimazin.monotune.constants
 
 import android.os.Bundle
 import androidx.media3.session.SessionCommand
@@ -15,3 +15,4 @@ object MediaSessionConstants {
     val CommandToggleShuffle = SessionCommand(ACTION_TOGGLE_SHUFFLE, Bundle.EMPTY)
     val CommandToggleRepeatMode = SessionCommand(ACTION_TOGGLE_REPEAT_MODE, Bundle.EMPTY)
 }
+

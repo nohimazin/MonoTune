@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O﻿ute﻿rTu﻿ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.player
+package com.nohimazin.monotune.ui.player
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.fadeIn
@@ -60,15 +60,15 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_READY
 import coil3.compose.AsyncImage
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.MiniPlayerHeight
-import com.dd3boh.outertune.constants.ThumbnailCornerRadius
-import com.dd3boh.outertune.extensions.togglePlayPause
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.ui.component.button.IconButton
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.constants.MiniPlayerHeight
+import com.nohimazin.monotune.constants.ThumbnailCornerRadius
+import com.nohimazin.monotune.extensions.togglePlayPause
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.ui.component.button.IconButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlin.math.roundToInt
@@ -265,3 +265,4 @@ fun MiniMediaInfo(
         }
     }
 }
+

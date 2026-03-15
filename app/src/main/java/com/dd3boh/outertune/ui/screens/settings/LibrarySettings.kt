@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -33,26 +33,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ProxyEnabledKey
-import com.dd3boh.outertune.constants.ProxyTypeKey
-import com.dd3boh.outertune.constants.ProxyUrlKey
-import com.dd3boh.outertune.constants.ShowLikedAndDownloadedPlaylist
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.ColumnWithContentPadding
-import com.dd3boh.outertune.ui.component.EditTextPreference
-import com.dd3boh.outertune.ui.component.ListPreference
-import com.dd3boh.outertune.ui.component.PreferenceEntry
-import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
-import com.dd3boh.outertune.ui.component.SettingsClickToReveal
-import com.dd3boh.outertune.ui.component.SwitchPreference
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.screens.settings.fragments.ListenHistoryFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.LocalizationFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.SearchHistoryFrag
-import com.dd3boh.outertune.ui.utils.backToMain
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ProxyEnabledKey
+import com.nohimazin.monotune.constants.ProxyTypeKey
+import com.nohimazin.monotune.constants.ProxyUrlKey
+import com.nohimazin.monotune.constants.ShowLikedAndDownloadedPlaylist
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.ColumnWithContentPadding
+import com.nohimazin.monotune.ui.component.EditTextPreference
+import com.nohimazin.monotune.ui.component.ListPreference
+import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.PreferenceGroupTitle
+import com.nohimazin.monotune.ui.component.SettingsClickToReveal
+import com.nohimazin.monotune.ui.component.SwitchPreference
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.screens.settings.fragments.ListenHistoryFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.LocalizationFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.SearchHistoryFrag
+import com.nohimazin.monotune.ui.utils.backToMain
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
 import java.net.Proxy
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -184,3 +184,4 @@ fun LibrarySettings(
         scrollBehavior = scrollBehavior
     )
 }
+

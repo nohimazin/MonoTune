@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 OuterTune Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.utils
+package com.nohimazin.monotune.utils
 
 import android.net.ConnectivityManager
 import android.util.Log

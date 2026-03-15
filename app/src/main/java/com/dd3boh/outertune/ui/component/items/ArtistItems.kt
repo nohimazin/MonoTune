@@ -1,11 +1,11 @@
-/*
+﻿/*
  * Copyright (C) 2025 O⁠ute⁠rTu⁠ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.component.items
+package com.nohimazin.monotune.ui.component.items
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,9 +22,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.db.entities.Artist
-import com.dd3boh.outertune.ui.utils.getNSongsString
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.db.entities.Artist
+import com.nohimazin.monotune.ui.utils.getNSongsString
 
 @Composable
 fun ArtistListItem(
@@ -100,4 +100,5 @@ fun ArtistGridItem(
     fillMaxWidth = fillMaxWidth,
     modifier = modifier
 )
+
 

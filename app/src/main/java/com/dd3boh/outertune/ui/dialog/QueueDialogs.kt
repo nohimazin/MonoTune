@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.dialog
+﻿package com.nohimazin.monotune.ui.dialog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -23,12 +23,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.models.MultiQueueObject
-import com.dd3boh.outertune.ui.component.items.ListItem
-import com.dd3boh.outertune.ui.component.items.QueueListItem
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.models.MultiQueueObject
+import com.nohimazin.monotune.ui.component.items.ListItem
+import com.nohimazin.monotune.ui.component.items.QueueListItem
 
 
 @Composable

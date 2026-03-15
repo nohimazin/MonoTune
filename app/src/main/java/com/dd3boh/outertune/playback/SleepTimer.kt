@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.playback
+﻿package com.nohimazin.monotune.playback
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf

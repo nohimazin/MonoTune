@@ -1,4 +1,4 @@
-package com.dd3boh.outertune.ui.dialog
+﻿package com.nohimazin.monotune.ui.dialog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -31,21 +31,21 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.PlaylistFilter
-import com.dd3boh.outertune.constants.PlaylistSortDescendingKey
-import com.dd3boh.outertune.constants.PlaylistSortType
-import com.dd3boh.outertune.constants.PlaylistSortTypeKey
-import com.dd3boh.outertune.constants.SyncMode
-import com.dd3boh.outertune.constants.YtmSyncModeKey
-import com.dd3boh.outertune.db.entities.Playlist
-import com.dd3boh.outertune.ui.component.SortHeader
-import com.dd3boh.outertune.ui.component.items.ListItem
-import com.dd3boh.outertune.ui.component.items.PlaylistListItem
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.constants.PlaylistFilter
+import com.nohimazin.monotune.constants.PlaylistSortDescendingKey
+import com.nohimazin.monotune.constants.PlaylistSortType
+import com.nohimazin.monotune.constants.PlaylistSortTypeKey
+import com.nohimazin.monotune.constants.SyncMode
+import com.nohimazin.monotune.constants.YtmSyncModeKey
+import com.nohimazin.monotune.db.entities.Playlist
+import com.nohimazin.monotune.ui.component.SortHeader
+import com.nohimazin.monotune.ui.component.items.ListItem
+import com.nohimazin.monotune.ui.component.items.PlaylistListItem
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
 import com.zionhuang.innertube.YouTube
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -292,3 +292,4 @@ fun AddToPlaylistDialog(
         }
     }
 }
+

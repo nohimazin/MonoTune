@@ -1,11 +1,11 @@
-/*
+﻿/*
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
  *
  * For any other attributions, refer to the git commit history
  */
-package com.dd3boh.outertune.ui.screens.settings.fragments
+package com.nohimazin.monotune.ui.screens.settings.fragments
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -30,26 +30,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.EnableKugouKey
-import com.dd3boh.outertune.constants.EnableLrcLibKey
-import com.dd3boh.outertune.constants.LyricClickable
-import com.dd3boh.outertune.constants.LyricFontSizeKey
-import com.dd3boh.outertune.constants.LyricKaraokeEnable
-import com.dd3boh.outertune.constants.LyricSourcePrefKey
-import com.dd3boh.outertune.constants.LyricTrimKey
-import com.dd3boh.outertune.constants.LyricUpdateSpeed
-import com.dd3boh.outertune.constants.LyricsPosition
-import com.dd3boh.outertune.constants.LyricsTextPositionKey
-import com.dd3boh.outertune.constants.MultilineLrcKey
-import com.dd3boh.outertune.constants.Speed
-import com.dd3boh.outertune.ui.component.EnumListPreference
-import com.dd3boh.outertune.ui.component.ListPreference
-import com.dd3boh.outertune.ui.component.PreferenceEntry
-import com.dd3boh.outertune.ui.component.SwitchPreference
-import com.dd3boh.outertune.ui.dialog.CounterDialog
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.EnableKugouKey
+import com.nohimazin.monotune.constants.EnableLrcLibKey
+import com.nohimazin.monotune.constants.LyricClickable
+import com.nohimazin.monotune.constants.LyricFontSizeKey
+import com.nohimazin.monotune.constants.LyricKaraokeEnable
+import com.nohimazin.monotune.constants.LyricSourcePrefKey
+import com.nohimazin.monotune.constants.LyricTrimKey
+import com.nohimazin.monotune.constants.LyricUpdateSpeed
+import com.nohimazin.monotune.constants.LyricsPosition
+import com.nohimazin.monotune.constants.LyricsTextPositionKey
+import com.nohimazin.monotune.constants.MultilineLrcKey
+import com.nohimazin.monotune.constants.Speed
+import com.nohimazin.monotune.ui.component.EnumListPreference
+import com.nohimazin.monotune.ui.component.ListPreference
+import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.SwitchPreference
+import com.nohimazin.monotune.ui.dialog.CounterDialog
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
 
 @Composable
 fun ColumnScope.LyricFormatFrag() {

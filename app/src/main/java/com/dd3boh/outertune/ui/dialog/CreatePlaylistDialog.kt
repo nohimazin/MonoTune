@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O⁠ute⁠rTu⁠ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -6,7 +6,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.dialog
+package com.nohimazin.monotune.ui.dialog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,10 +30,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.dd3boh.outertune.LocalDatabase
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.db.entities.PlaylistEntity
-import com.dd3boh.outertune.extensions.isUserLoggedIn
+import com.nohimazin.monotune.LocalDatabase
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.db.entities.PlaylistEntity
+import com.nohimazin.monotune.extensions.isUserLoggedIn
 import com.zionhuang.innertube.YouTube
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

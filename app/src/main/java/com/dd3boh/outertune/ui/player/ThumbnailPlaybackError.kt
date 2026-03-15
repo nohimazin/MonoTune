@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.player
+package com.nohimazin.monotune.ui.player
 
 import android.annotation.SuppressLint
 import android.content.ClipData
@@ -43,15 +43,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.PlaybackException
-import com.dd3boh.outertune.BuildConfig
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.DEFAULT_PLAYER_BACKGROUND
-import com.dd3boh.outertune.constants.DarkMode
-import com.dd3boh.outertune.constants.DarkModeKey
-import com.dd3boh.outertune.constants.PlayerBackgroundStyle
-import com.dd3boh.outertune.constants.PlayerBackgroundStyleKey
-import com.dd3boh.outertune.ui.utils.fadingEdge
-import com.dd3boh.outertune.utils.rememberEnumPreference
+import com.nohimazin.monotune.BuildConfig
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.DEFAULT_PLAYER_BACKGROUND
+import com.nohimazin.monotune.constants.DarkMode
+import com.nohimazin.monotune.constants.DarkModeKey
+import com.nohimazin.monotune.constants.PlayerBackgroundStyle
+import com.nohimazin.monotune.constants.PlayerBackgroundStyleKey
+import com.nohimazin.monotune.ui.utils.fadingEdge
+import com.nohimazin.monotune.utils.rememberEnumPreference
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -148,3 +148,4 @@ fun ThumbnailPlaybackError(
         Spacer(Modifier.height(64.dp))
     }
 }
+

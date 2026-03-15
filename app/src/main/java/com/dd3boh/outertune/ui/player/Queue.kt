@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O⁠ute⁠rTu⁠ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.player
+package com.nohimazin.monotune.ui.player
 
 import android.content.res.Configuration
 import android.util.Log
@@ -111,44 +111,44 @@ import androidx.media3.common.Player.REPEAT_MODE_OFF
 import androidx.media3.common.Player.REPEAT_MODE_ONE
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.navigation.NavController
-import com.dd3boh.outertune.LocalMenuState
-import com.dd3boh.outertune.LocalPlayerAwareWindowInsets
-import com.dd3boh.outertune.LocalPlayerConnection
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.CONTENT_TYPE_SONG
-import com.dd3boh.outertune.constants.InsetsSafeE
-import com.dd3boh.outertune.constants.InsetsSafeS
-import com.dd3boh.outertune.constants.InsetsSafeSE
-import com.dd3boh.outertune.constants.InsetsSafeSTE
-import com.dd3boh.outertune.constants.InsetsSafeT
-import com.dd3boh.outertune.constants.ListItemHeight
-import com.dd3boh.outertune.constants.ListThumbnailSize
-import com.dd3boh.outertune.constants.LockQueueKey
-import com.dd3boh.outertune.constants.MiniPlayerHeight
-import com.dd3boh.outertune.constants.PlayerHorizontalPadding
-import com.dd3boh.outertune.constants.SeekIncrement
-import com.dd3boh.outertune.constants.SeekIncrementKey
-import com.dd3boh.outertune.extensions.metadata
-import com.dd3boh.outertune.extensions.move
-import com.dd3boh.outertune.extensions.supportsWideScreen
-import com.dd3boh.outertune.extensions.tabMode
-import com.dd3boh.outertune.extensions.togglePlayPause
-import com.dd3boh.outertune.extensions.toggleRepeatMode
-import com.dd3boh.outertune.models.MediaMetadata
-import com.dd3boh.outertune.models.MultiQueueObject
-import com.dd3boh.outertune.ui.component.BottomSheet
-import com.dd3boh.outertune.ui.component.BottomSheetState
-import com.dd3boh.outertune.ui.component.EmptyPlaceholder
-import com.dd3boh.outertune.ui.component.LazyColumnScrollbar
-import com.dd3boh.outertune.ui.component.SelectHeader
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.component.button.ResizableIconButton
-import com.dd3boh.outertune.ui.component.items.MediaMetadataListItem
-import com.dd3boh.outertune.ui.menu.PlayerMenu
-import com.dd3boh.outertune.ui.menu.QueueMenu
-import com.dd3boh.outertune.utils.makeTimeString
-import com.dd3boh.outertune.utils.rememberEnumPreference
-import com.dd3boh.outertune.utils.rememberPreference
+import com.nohimazin.monotune.LocalMenuState
+import com.nohimazin.monotune.LocalPlayerAwareWindowInsets
+import com.nohimazin.monotune.LocalPlayerConnection
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.CONTENT_TYPE_SONG
+import com.nohimazin.monotune.constants.InsetsSafeE
+import com.nohimazin.monotune.constants.InsetsSafeS
+import com.nohimazin.monotune.constants.InsetsSafeSE
+import com.nohimazin.monotune.constants.InsetsSafeSTE
+import com.nohimazin.monotune.constants.InsetsSafeT
+import com.nohimazin.monotune.constants.ListItemHeight
+import com.nohimazin.monotune.constants.ListThumbnailSize
+import com.nohimazin.monotune.constants.LockQueueKey
+import com.nohimazin.monotune.constants.MiniPlayerHeight
+import com.nohimazin.monotune.constants.PlayerHorizontalPadding
+import com.nohimazin.monotune.constants.SeekIncrement
+import com.nohimazin.monotune.constants.SeekIncrementKey
+import com.nohimazin.monotune.extensions.metadata
+import com.nohimazin.monotune.extensions.move
+import com.nohimazin.monotune.extensions.supportsWideScreen
+import com.nohimazin.monotune.extensions.tabMode
+import com.nohimazin.monotune.extensions.togglePlayPause
+import com.nohimazin.monotune.extensions.toggleRepeatMode
+import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.models.MultiQueueObject
+import com.nohimazin.monotune.ui.component.BottomSheet
+import com.nohimazin.monotune.ui.component.BottomSheetState
+import com.nohimazin.monotune.ui.component.EmptyPlaceholder
+import com.nohimazin.monotune.ui.component.LazyColumnScrollbar
+import com.nohimazin.monotune.ui.component.SelectHeader
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.component.button.ResizableIconButton
+import com.nohimazin.monotune.ui.component.items.MediaMetadataListItem
+import com.nohimazin.monotune.ui.menu.PlayerMenu
+import com.nohimazin.monotune.ui.menu.QueueMenu
+import com.nohimazin.monotune.utils.makeTimeString
+import com.nohimazin.monotune.utils.rememberEnumPreference
+import com.nohimazin.monotune.utils.rememberPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -1259,3 +1259,4 @@ fun BoxScope.QueueContent(
         }
     }
 }
+

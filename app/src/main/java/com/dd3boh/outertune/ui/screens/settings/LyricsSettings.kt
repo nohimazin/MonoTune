@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
  * SPDX-License-Identifier: GPL-3.0
@@ -29,17 +29,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dd3boh.outertune.R
-import com.dd3boh.outertune.constants.TopBarInsets
-import com.dd3boh.outertune.ui.component.ColumnWithContentPadding
-import com.dd3boh.outertune.ui.component.PreferenceGroupTitle
-import com.dd3boh.outertune.ui.component.SettingsClickToReveal
-import com.dd3boh.outertune.ui.component.button.IconButton
-import com.dd3boh.outertune.ui.screens.settings.fragments.LyricAdvancedFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.LyricFormatFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.LyricParserFrag
-import com.dd3boh.outertune.ui.screens.settings.fragments.LyricSourceFrag
-import com.dd3boh.outertune.ui.utils.backToMain
+import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.TopBarInsets
+import com.nohimazin.monotune.ui.component.ColumnWithContentPadding
+import com.nohimazin.monotune.ui.component.PreferenceGroupTitle
+import com.nohimazin.monotune.ui.component.SettingsClickToReveal
+import com.nohimazin.monotune.ui.component.button.IconButton
+import com.nohimazin.monotune.ui.screens.settings.fragments.LyricAdvancedFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.LyricFormatFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.LyricParserFrag
+import com.nohimazin.monotune.ui.screens.settings.fragments.LyricSourceFrag
+import com.nohimazin.monotune.ui.utils.backToMain
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,3 +110,4 @@ fun LyricsSettings(
         scrollBehavior = scrollBehavior
     )
 }
+

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 O‌ute‌rTu‌ne Project
  *
@@ -7,7 +7,7 @@
  * For any other attributions, refer to the git commit history
  */
 
-package com.dd3boh.outertune.ui.component
+package com.nohimazin.monotune.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -37,8 +37,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.dd3boh.outertune.constants.PlaylistSongSortType
-import com.dd3boh.outertune.ui.component.button.ResizableIconButton
+import com.nohimazin.monotune.constants.PlaylistSongSortType
+import com.nohimazin.monotune.ui.component.button.ResizableIconButton
 
 @Composable
 inline fun <reified T : Enum<T>> SortHeader(
@@ -109,3 +109,4 @@ inline fun <reified T : Enum<T>> SortHeader(
         }
     }
 }
+
