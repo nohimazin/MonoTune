@@ -23,8 +23,7 @@ import com.nohimazin.monotune.constants.AlbumSortType
 import com.nohimazin.monotune.constants.AlbumSortTypeKey
 import com.nohimazin.monotune.constants.ArtistFilter
 import com.nohimazin.monotune.constants.ArtistFilterKey
-package com.nohimazin.monotune.viewmodels
-
+import com.nohimazin.monotune.constants.ArtistSongSortDescendingKey
 import com.nohimazin.monotune.constants.ArtistSongSortType
 import com.nohimazin.monotune.constants.ArtistSongSortTypeKey
 import com.nohimazin.monotune.constants.ArtistSortDescendingKey

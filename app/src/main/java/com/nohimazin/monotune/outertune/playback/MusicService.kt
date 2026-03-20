@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2024 z-huang/InnerTune
  * Copyright (C) 2025 OuterTune Project
  *
@@ -744,12 +744,10 @@ class MusicService : MediaLibraryService(),
             return object : NextRenderersFactory(this@MusicService) {
                 override fun buildAudioSink(
                     context: Context,
-                    pcmEncodingRestrictionLifted: Boolean,
                     enableFloatOutput: Boolean,
                     enableAudioTrackPlaybackParams: Boolean
                 ): AudioSink? {
                     return DefaultAudioSink.Builder(this@MusicService)
-                        .setPcmEncodingRestrictionLifted(pcmEncodingRestrictionLifted)
                         .setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
                         .setAudioProcessorChain(
                             DefaultAudioSink.DefaultAudioProcessorChain(
@@ -773,12 +771,10 @@ class MusicService : MediaLibraryService(),
             return object : DefaultRenderersFactory(this) {
                 override fun buildAudioSink(
                     context: Context,
-                    pcmEncodingRestrictionLifted: Boolean,
                     enableFloatOutput: Boolean,
                     enableAudioTrackPlaybackParams: Boolean
                 ): AudioSink? {
                     return DefaultAudioSink.Builder(this@MusicService)
-                        .setPcmEncodingRestrictionLifted(pcmEncodingRestrictionLifted)
                         .setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
                         .setAudioProcessorChain(
                             DefaultAudioSink.DefaultAudioProcessorChain(
