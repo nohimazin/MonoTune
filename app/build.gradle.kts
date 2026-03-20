@@ -22,9 +22,9 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     // namespace matches the source package so that the generated R and BuildConfig classes
-    // are importable as com.dd3boh.outertune.R / com.dd3boh.outertune.BuildConfig.
+    // are importable as com.nohimazin.monotune.R / com.nohimazin.monotune.BuildConfig.
     // applicationId (below) is the distinct MonoTune store/device identifier.
-    namespace = "com.dd3boh.outertune"
+    namespace = "com.nohimazin.monotune"
     compileSdk = 36
 
     defaultConfig {
