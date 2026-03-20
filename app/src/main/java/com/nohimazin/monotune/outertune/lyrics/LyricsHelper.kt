@@ -1,4 +1,4 @@
-﻿package com.nohimazin.monotune.lyrics
+package com.nohimazin.monotune.outertune.lyrics
 
 typealias LyricsHelper = com.nohimazin.monotune.lyrics.LyricsHelper
 

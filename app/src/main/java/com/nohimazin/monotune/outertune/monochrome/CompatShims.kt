@@ -1,4 +1,4 @@
-﻿package com.nohimazin.monotune.monochrome
+package com.nohimazin.monotune.outertune.monochrome
 
 typealias MonochromeClientApi = com.nohimazin.monotune.monochrome.MonochromeClientApi
 typealias MonochromeClient = com.nohimazin.monotune.monochrome.MonochromeClient

@@ -1,4 +1,4 @@
-﻿package com.nohimazin.monotune.db
+package com.nohimazin.monotune.outertune.db
 
 typealias InternalDatabase = com.nohimazin.monotune.db.InternalDatabase
 typealias MusicDatabase = com.nohimazin.monotune.db.MusicDatabase
