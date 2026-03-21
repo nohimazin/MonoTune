@@ -2,12 +2,17 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+}
+
+kotlin {
+    jvmToolchain(21)
+    explicitApi()
 }
 
 android {
     namespace = "com.kyant.taglib"
-    compileSdk = 36
-    buildToolsVersion = "36.0.0"
+    compileSdk = 35
     ndkVersion = "29.0.13113456"
 
     defaultConfig {
@@ -32,22 +37,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
-        }
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     lint {
         checkReleaseBuilds = false
     }
 }
 
-kotlin {
-    explicitApi()
-}
 
 dependencies {
     androidTestImplementation("androidx.test:runner:1.6.2")

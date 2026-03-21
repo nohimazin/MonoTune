@@ -7,11 +7,20 @@ import java.util.Properties
 
 
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.aboutlibraries)
+}
+
+kotlin {
+    jvmToolchain(21)
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+        freeCompilerArgs.add("-Xannotation-default-target=param-property")
+    }
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -25,12 +34,12 @@ android {
     // are importable as com.nohimazin.monotune.R / com.nohimazin.monotune.BuildConfig.
     // applicationId (below) is the distinct MonoTune store/device identifier.
     namespace = "com.nohimazin.monotune"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.nohimazin.monotune"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 71
         versionName = "0.10.2-b1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -111,16 +120,8 @@ android {
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin {
-        jvmToolchain(17)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-            freeCompilerArgs.add("-Xannotation-default-target=param-property")
-
-        }
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     tasks.withType<KotlinCompile> {
