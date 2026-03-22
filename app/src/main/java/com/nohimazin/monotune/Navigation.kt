@@ -7,6 +7,8 @@
  * For any other attributions, refer to the git commit history
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.nohimazin.monotune
 
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,60 +27,56 @@ import com.nohimazin.monotune.ui.screens.playlist.*
 import com.nohimazin.monotune.ui.screens.search.*
 import com.nohimazin.monotune.ui.screens.settings.*
 
-@OptIn(ExperimentalMaterial3Api::class)
-fun mainGraph(
-    builder: NavGraphBuilder,
+fun NavGraphBuilder.mainGraph(
     navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior,
     getNavPadding: () -> Dp
 ) {
-    builder.composable(Screens.Home.route) { HomeScreen(navController) }
-    builder.composable(Screens.Songs.route) { LibrarySongsScreen(navController) }
-    builder.composable(Screens.Artists.route) { LibraryArtistsScreen(navController) }
-    builder.composable(Screens.Albums.route) { LibraryAlbumsScreen(navController) }
-    builder.composable(Screens.Playlists.route) { LibraryPlaylistsScreen(navController) }
-    builder.composable(Screens.Library.route) { LibraryScreen(navController, scrollBehavior) }
-    builder.composable(Screens.Player.route) { PlayerScreen(navController, bottomPadding = getNavPadding()) }
-    builder.composable("history") { HistoryScreen(navController) }
-    builder.composable("stats") { StatsScreen(navController) }
-    builder.composable("mood_and_genres") { MoodAndGenresScreen(navController, scrollBehavior) }
-    builder.composable("account") { AccountScreen(navController, scrollBehavior) }
+    composable(Screens.Home.route) { HomeScreen(navController) }
+    composable(Screens.Songs.route) { LibrarySongsScreen(navController) }
+    composable(Screens.Artists.route) { LibraryArtistsScreen(navController) }
+    composable(Screens.Albums.route) { LibraryAlbumsScreen(navController) }
+    composable(Screens.Playlists.route) { LibraryPlaylistsScreen(navController) }
+    composable(Screens.Library.route) { LibraryScreen(navController, scrollBehavior) }
+    composable(Screens.Player.route) { PlayerScreen(navController, bottomPadding = getNavPadding()) }
+    composable("history") { HistoryScreen(navController) }
+    composable("stats") { StatsScreen(navController) }
+    composable("mood_and_genres") { MoodAndGenresScreen(navController, scrollBehavior) }
+    composable("account") { AccountScreen(navController, scrollBehavior) }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-fun mediaGraph(
-    builder: NavGraphBuilder,
+fun NavGraphBuilder.mediaGraph(
     navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    builder.composable(
+    composable(
         route = "browse/{browseId}",
         arguments = listOf(navArgument("browseId") { type = NavType.StringType })
     ) {
         BrowseScreen(navController, scrollBehavior, it.arguments?.getString("browseId"))
     }
-    builder.composable(route = "search") { SearchBarContainer(navController, scrollBehavior) }
-    builder.composable(
+    composable(route = "search") { SearchBarContainer(navController, scrollBehavior) }
+    composable(
         route = "search/{query}",
         arguments = listOf(navArgument("query") { type = NavType.StringType })
     ) { OnlineSearchResult(navController) }
-    builder.composable(
+    composable(
         route = "album/{albumId}",
         arguments = listOf(navArgument("albumId") { type = NavType.StringType })
     ) { AlbumScreen(navController, scrollBehavior) }
-    builder.composable(
+    composable(
         route = "artist/{artistId}",
         arguments = listOf(navArgument("artistId") { type = NavType.StringType })
     ) { ArtistScreen(navController, scrollBehavior) }
-    builder.composable(
+    composable(
         route = "artist/{artistId}/songs",
         arguments = listOf(navArgument("artistId") { type = NavType.StringType })
     ) { ArtistSongsScreen(navController, scrollBehavior) }
-    builder.composable(
+    composable(
         route = "artist/{artistId}/albums",
         arguments = listOf(navArgument("artistId") { type = NavType.StringType })
     ) { ArtistAlbumsScreen(navController, scrollBehavior) }
-    builder.composable(
+    composable(
         route = "artist/{artistId}/items?browseId={browseId}?params={params}",
         arguments = listOf(
             navArgument("artistId") { type = NavType.StringType },
@@ -88,25 +86,23 @@ fun mediaGraph(
     ) { ArtistItemsScreen(navController, scrollBehavior) }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-fun playlistGraph(
-    builder: NavGraphBuilder,
+fun NavGraphBuilder.playlistGraph(
     navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    builder.composable(
+    composable(
         route = "online_playlist/{playlistId}",
         arguments = listOf(navArgument("playlistId") { type = NavType.StringType })
     ) { OnlinePlaylistScreen(navController, scrollBehavior) }
-    builder.composable(
+    composable(
         route = "local_playlist/{playlistId}",
         arguments = listOf(navArgument("playlistId") { type = NavType.StringType })
     ) { LocalPlaylistScreen(navController, scrollBehavior) }
-    builder.composable(
+    composable(
         route = "auto_playlist/{playlistId}",
         arguments = listOf(navArgument("playlistId") { type = NavType.StringType })
     ) { AutoPlaylistScreen(navController, scrollBehavior) }
-    builder.composable(
+    composable(
         route = "youtube_browse/{browseId}?params={params}",
         arguments = listOf(
             navArgument("browseId") { type = NavType.StringType; nullable = true },
@@ -115,29 +111,27 @@ fun playlistGraph(
     ) { YouTubeBrowseScreen(navController, scrollBehavior) }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-fun settingsGraph(
-    builder: NavGraphBuilder,
+fun NavGraphBuilder.settingsGraph(
     navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    builder.composable("settings") { SettingsScreen(navController, scrollBehavior) }
-    builder.composable("settings/appearance") { AppearanceSettings(navController, scrollBehavior) }
-    builder.composable("settings/interface") { InterfaceSettings(navController, scrollBehavior) }
-    builder.composable("settings/library") { LibrarySettings(navController, scrollBehavior) }
-    builder.composable("settings/library/lyrics") { LyricsSettings(navController, scrollBehavior) }
-    builder.composable("settings/account_sync") { AccountSyncSettings(navController, scrollBehavior) }
-    builder.composable("settings/player") { PlayerSettings(navController, scrollBehavior) }
-    builder.composable("settings/storage") { StorageSettings(navController, scrollBehavior) }
-    builder.composable("settings/backup_restore") { BackupAndRestore(navController, scrollBehavior) }
-    builder.composable("settings/experimental") { ExperimentalSettings(navController, scrollBehavior) }
-    builder.composable("settings/about") { AboutScreen(navController, scrollBehavior) }
-    builder.composable(route = "settings/about/attribution") { AttributionScreen(navController, scrollBehavior) }
-    builder.composable(route = "settings/about/oss_licenses") { LibrariesScreen(navController, scrollBehavior) }
+    composable("settings") { SettingsScreen(navController, scrollBehavior) }
+    composable("settings/appearance") { AppearanceSettings(navController, scrollBehavior) }
+    composable("settings/interface") { InterfaceSettings(navController, scrollBehavior) }
+    composable("settings/library") { LibrarySettings(navController, scrollBehavior) }
+    composable("settings/library/lyrics") { LyricsSettings(navController, scrollBehavior) }
+    composable("settings/account_sync") { AccountSyncSettings(navController, scrollBehavior) }
+    composable("settings/player") { PlayerSettings(navController, scrollBehavior) }
+    composable("settings/storage") { StorageSettings(navController, scrollBehavior) }
+    composable("settings/backup_restore") { BackupAndRestore(navController, scrollBehavior) }
+    composable("settings/experimental") { ExperimentalSettings(navController, scrollBehavior) }
+    composable("settings/about") { AboutScreen(navController, scrollBehavior) }
+    composable(route = "settings/about/attribution") { AttributionScreen(navController, scrollBehavior) }
+    composable(route = "settings/about/oss_licenses") { LibrariesScreen(navController, scrollBehavior) }
 }
 
-fun authGraph(builder: NavGraphBuilder, navController: NavController) {
-    builder.composable(route = "login") { LoginScreen(navController) }
-    builder.composable(route = "monochrome_login") { MonochromeLoginScreen(navController) }
-    builder.composable(route = "setup_wizard") { SetupWizard(navController) }
+fun NavGraphBuilder.authGraph(navController: NavController) {
+    composable(route = "login") { LoginScreen(navController) }
+    composable(route = "monochrome_login") { MonochromeLoginScreen(navController) }
+    composable(route = "setup_wizard") { SetupWizard(navController) }
 }

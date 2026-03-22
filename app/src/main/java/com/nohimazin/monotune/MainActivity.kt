@@ -7,6 +7,8 @@
  * For any other attributions, refer to the git commit history
  */
 
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package com.nohimazin.monotune
 
 import android.annotation.SuppressLint
@@ -459,15 +461,15 @@ class MainActivity : ComponentActivity() {
                                         else
                                             slideOutHorizontally { it / 8 } + fadeOut(tween(100))
                                     },
-                                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                                    builder = {
+                                        authGraph(navController)
+                                        mainGraph(navController, scrollBehavior) { getNavPadding() }
+                                        mediaGraph(navController, scrollBehavior)
+                                        playlistGraph(navController, scrollBehavior)
+                                        settingsGraph(navController, scrollBehavior)
+                                    }
                                 )
-                                {
-                                    authGraph(this, navController)
-                                    mainGraph(this, navController, scrollBehavior) { getNavPadding() }
-                                    mediaGraph(this, navController, scrollBehavior)
-                                    playlistGraph(this, navController, scrollBehavior)
-                                    settingsGraph(this, navController, scrollBehavior)
-                                }
                             }
 
                             val navbar: @Composable() (() -> Unit) = @Composable {
