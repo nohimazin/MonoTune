@@ -136,46 +136,10 @@ import com.nohimazin.monotune.ui.component.shimmer.ShimmerTheme
 import com.nohimazin.monotune.ui.menu.BottomSheetMenu
 import com.nohimazin.monotune.ui.menu.MenuState
 import com.nohimazin.monotune.ui.player.BottomSheetPlayer
-import com.nohimazin.monotune.ui.screens.AccountScreen
-import com.nohimazin.monotune.ui.screens.AlbumScreen
-import com.nohimazin.monotune.ui.screens.BrowseScreen
-import com.nohimazin.monotune.ui.screens.HistoryScreen
-import com.nohimazin.monotune.ui.screens.HomeScreen
-import com.nohimazin.monotune.ui.screens.LoginScreen
-import com.nohimazin.monotune.ui.screens.MonochromeLoginScreen
-import com.nohimazin.monotune.ui.screens.MoodAndGenresScreen
 import com.nohimazin.monotune.ui.screens.PlayerScreen
 import com.nohimazin.monotune.ui.screens.Screens
-import com.nohimazin.monotune.ui.screens.SetupWizard
-import com.nohimazin.monotune.ui.screens.StatsScreen
-import com.nohimazin.monotune.ui.screens.YouTubeBrowseScreen
-import com.nohimazin.monotune.ui.screens.artist.ArtistAlbumsScreen
-import com.nohimazin.monotune.ui.screens.artist.ArtistItemsScreen
-import com.nohimazin.monotune.ui.screens.artist.ArtistScreen
-import com.nohimazin.monotune.ui.screens.artist.ArtistSongsScreen
-import com.nohimazin.monotune.ui.screens.library.LibraryAlbumsScreen
-import com.nohimazin.monotune.ui.screens.library.LibraryArtistsScreen
-import com.nohimazin.monotune.ui.screens.library.LibraryPlaylistsScreen
-import com.nohimazin.monotune.ui.screens.library.LibraryScreen
-import com.nohimazin.monotune.ui.screens.library.LibrarySongsScreen
-import com.nohimazin.monotune.ui.screens.playlist.AutoPlaylistScreen
-import com.nohimazin.monotune.ui.screens.playlist.LocalPlaylistScreen
-import com.nohimazin.monotune.ui.screens.playlist.OnlinePlaylistScreen
-import com.nohimazin.monotune.ui.screens.search.OnlineSearchResult
 import com.nohimazin.monotune.ui.screens.search.SearchBarContainer
-import com.nohimazin.monotune.ui.screens.settings.AboutScreen
-import com.nohimazin.monotune.ui.screens.settings.AccountSyncSettings
-import com.nohimazin.monotune.ui.screens.settings.AppearanceSettings
-import com.nohimazin.monotune.ui.screens.settings.AttributionScreen
-import com.nohimazin.monotune.ui.screens.settings.BackupAndRestore
-import com.nohimazin.monotune.ui.screens.settings.ExperimentalSettings
-import com.nohimazin.monotune.ui.screens.settings.InterfaceSettings
-import com.nohimazin.monotune.ui.screens.settings.LibrariesScreen
-import com.nohimazin.monotune.ui.screens.settings.LibrarySettings
-import com.nohimazin.monotune.ui.screens.settings.LyricsSettings
-import com.nohimazin.monotune.ui.screens.settings.PlayerSettings
-import com.nohimazin.monotune.ui.screens.settings.SettingsScreen
-import com.nohimazin.monotune.ui.screens.settings.StorageSettings
+import androidx.navigation.NavGraphBuilder
 import com.nohimazin.monotune.ui.theme.OuterTuneTheme
 import com.nohimazin.monotune.ui.utils.appBarScrollBehavior
 import com.nohimazin.monotune.utils.ActivityLauncherHelper
@@ -498,11 +462,11 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                                 )
                                 {
-                                    authGraph(navController)
-                                    mainGraph(navController, scrollBehavior) { getNavPadding() }
-                                    mediaGraph(navController, scrollBehavior)
-                                    playlistGraph(navController, scrollBehavior)
-                                    settingsGraph(navController, scrollBehavior)
+                                    authGraph(this, navController)
+                                    mainGraph(this, navController, scrollBehavior) { getNavPadding() }
+                                    mediaGraph(this, navController, scrollBehavior)
+                                    playlistGraph(this, navController, scrollBehavior)
+                                    settingsGraph(this, navController, scrollBehavior)
                                 }
                             }
 
@@ -825,115 +789,7 @@ class MainActivity : ComponentActivity() {
         const val ACTION_ALBUMS = "com.nohimazin.monotune.action.ALBUMS"
         const val ACTION_PLAYLISTS = "com.nohimazin.monotune.action.PLAYLISTS"
     }
-}
 
-private fun NavGraphBuilder.mainGraph(
-    navController: NavController,
-    scrollBehavior: TopAppBarScrollBehavior,
-    getNavPadding: () -> Dp
-) {
-    composable(Screens.Home.route) { HomeScreen(navController) }
-    composable(Screens.Songs.route) { LibrarySongsScreen(navController) }
-    composable(Screens.Artists.route) { LibraryArtistsScreen(navController) }
-    composable(Screens.Albums.route) { LibraryAlbumsScreen(navController) }
-    composable(Screens.Playlists.route) { LibraryPlaylistsScreen(navController) }
-    composable(Screens.Library.route) { LibraryScreen(navController, scrollBehavior) }
-    composable(Screens.Player.route) { PlayerScreen(navController, bottomPadding = getNavPadding()) }
-    composable("history") { HistoryScreen(navController) }
-    composable("stats") { StatsScreen(navController) }
-    composable("mood_and_genres") { MoodAndGenresScreen(navController, scrollBehavior) }
-    composable("account") { AccountScreen(navController, scrollBehavior) }
-}
-
-private fun NavGraphBuilder.mediaGraph(
-    navController: NavController,
-    scrollBehavior: TopAppBarScrollBehavior
-) {
-    composable(
-        route = "browse/{browseId}",
-        arguments = listOf(navArgument("browseId") { type = NavType.StringType })
-    ) {
-        BrowseScreen(navController, scrollBehavior, it.arguments?.getString("browseId"))
-    }
-    composable(route = "search") { SearchBarContainer(navController, scrollBehavior) }
-    composable(
-        route = "search/{query}",
-        arguments = listOf(navArgument("query") { type = NavType.StringType })
-    ) { OnlineSearchResult(navController) }
-    composable(
-        route = "album/{albumId}",
-        arguments = listOf(navArgument("albumId") { type = NavType.StringType })
-    ) { AlbumScreen(navController, scrollBehavior) }
-    composable(
-        route = "artist/{artistId}",
-        arguments = listOf(navArgument("artistId") { type = NavType.StringType })
-    ) { ArtistScreen(navController, scrollBehavior) }
-    composable(
-        route = "artist/{artistId}/songs",
-        arguments = listOf(navArgument("artistId") { type = NavType.StringType })
-    ) { ArtistSongsScreen(navController, scrollBehavior) }
-    composable(
-        route = "artist/{artistId}/albums",
-        arguments = listOf(navArgument("artistId") { type = NavType.StringType })
-    ) { ArtistAlbumsScreen(navController, scrollBehavior) }
-    composable(
-        route = "artist/{artistId}/items?browseId={browseId}?params={params}",
-        arguments = listOf(
-            navArgument("artistId") { type = NavType.StringType },
-            navArgument("browseId") { type = NavType.StringType; nullable = true },
-            navArgument("params") { type = NavType.StringType; nullable = true }
-        )
-    ) { ArtistItemsScreen(navController, scrollBehavior) }
-}
-
-private fun NavGraphBuilder.playlistGraph(
-    navController: NavController,
-    scrollBehavior: TopAppBarScrollBehavior
-) {
-    composable(
-        route = "online_playlist/{playlistId}",
-        arguments = listOf(navArgument("playlistId") { type = NavType.StringType })
-    ) { OnlinePlaylistScreen(navController, scrollBehavior) }
-    composable(
-        route = "local_playlist/{playlistId}",
-        arguments = listOf(navArgument("playlistId") { type = NavType.StringType })
-    ) { LocalPlaylistScreen(navController, scrollBehavior) }
-    composable(
-        route = "auto_playlist/{playlistId}",
-        arguments = listOf(navArgument("playlistId") { type = NavType.StringType })
-    ) { AutoPlaylistScreen(navController, scrollBehavior) }
-    composable(
-        route = "youtube_browse/{browseId}?params={params}",
-        arguments = listOf(
-            navArgument("browseId") { type = NavType.StringType; nullable = true },
-            navArgument("params") { type = NavType.StringType; nullable = true }
-        )
-    ) { YouTubeBrowseScreen(navController, scrollBehavior) }
-}
-
-private fun NavGraphBuilder.settingsGraph(
-    navController: NavController,
-    scrollBehavior: TopAppBarScrollBehavior
-) {
-    composable("settings") { SettingsScreen(navController, scrollBehavior) }
-    composable("settings/appearance") { AppearanceSettings(navController, scrollBehavior) }
-    composable("settings/interface") { InterfaceSettings(navController, scrollBehavior) }
-    composable("settings/library") { LibrarySettings(navController, scrollBehavior) }
-    composable("settings/library/lyrics") { LyricsSettings(navController, scrollBehavior) }
-    composable("settings/account_sync") { AccountSyncSettings(navController, scrollBehavior) }
-    composable("settings/player") { PlayerSettings(navController, scrollBehavior) }
-    composable("settings/storage") { StorageSettings(navController, scrollBehavior) }
-    composable("settings/backup_restore") { BackupAndRestore(navController, scrollBehavior) }
-    composable("settings/experimental") { ExperimentalSettings(navController, scrollBehavior) }
-    composable("settings/about") { AboutScreen(navController, scrollBehavior) }
-    composable(route = "settings/about/attribution") { AttributionScreen(navController, scrollBehavior) }
-    composable(route = "settings/about/oss_licenses") { LibrariesScreen(navController, scrollBehavior) }
-}
-
-private fun NavGraphBuilder.authGraph(navController: NavController) {
-    composable(route = "login") { LoginScreen(navController) }
-    composable(route = "monochrome_login") { MonochromeLoginScreen(navController) }
-    composable(route = "setup_wizard") { SetupWizard(navController) }
 }
 
 val LocalDatabase = staticCompositionLocalOf<MusicDatabase> { error("No database provided") }

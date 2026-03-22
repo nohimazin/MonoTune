@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
-<!-- These strings are the upstream InnerTune strings. Do not add strings from OuterTune features here. InnerTune wording is replaced with OuterTune.
+<!-- These strings are the upstream InnerTune strings. Do not add strings from MonoTune features here. InnerTune wording is replaced with MonoTune.
 We recycle translations from upstream, they are pulled periodically. -->
 
 <resources>
