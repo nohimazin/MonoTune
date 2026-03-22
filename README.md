@@ -1,4 +1,4 @@
-# MonoTune
+# [WIP]MonoTune
 
 [Monochrome](https://github.com/nohimazin/Monochrome) をバックエンドとして統合することを目指した、Android 向け Material 3 YouTube Music クライアントです。
 
