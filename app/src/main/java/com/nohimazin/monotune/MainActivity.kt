@@ -409,58 +409,6 @@ class MainActivity : ComponentActivity() {
                                     startDestination = (Screens.getAllScreens()
                                         .find { it.route == defaultOpenTab })?.route
                                         ?: Screens.Home.route,
-                                    enterTransition = {
-                                        val currentRouteIndex = navigationItems.indexOfFirst {
-                                            it.route == targetState.destination.route
-                                        }
-                                        val previousRouteIndex = navigationItems.indexOfFirst {
-                                            it.route == initialState.destination.route
-                                        }
-
-                                        if (currentRouteIndex == -1 || currentRouteIndex > previousRouteIndex)
-                                            slideInHorizontally { it / 8 } + fadeIn(tween(200))
-                                        else
-                                            slideInHorizontally { -it / 8 } + fadeIn(tween(200))
-                                    },
-                                    exitTransition = {
-                                        val currentRouteIndex = navigationItems.indexOfFirst {
-                                            it.route == initialState.destination.route
-                                        }
-                                        val targetRouteIndex = navigationItems.indexOfFirst {
-                                            it.route == targetState.destination.route
-                                        }
-
-                                        if (targetRouteIndex == -1 || targetRouteIndex > currentRouteIndex)
-                                            slideOutHorizontally { -it / 8 } + fadeOut(tween(100))
-                                        else
-                                            slideOutHorizontally { it / 8 } + fadeOut(tween(100))
-                                    },
-                                    popEnterTransition = {
-                                        val currentRouteIndex = navigationItems.indexOfFirst {
-                                            it.route == targetState.destination.route
-                                        }
-                                        val previousRouteIndex = navigationItems.indexOfFirst {
-                                            it.route == initialState.destination.route
-                                        }
-
-                                        if (previousRouteIndex != -1 && previousRouteIndex < currentRouteIndex)
-                                            slideInHorizontally { it / 8 } + fadeIn(tween(200))
-                                        else
-                                            slideInHorizontally { -it / 8 } + fadeIn(tween(200))
-                                    },
-                                    popExitTransition = {
-                                        val currentRouteIndex = navigationItems.indexOfFirst {
-                                            it.route == initialState.destination.route
-                                        }
-                                        val targetRouteIndex = navigationItems.indexOfFirst {
-                                            it.route == targetState.destination.route
-                                        }
-
-                                        if (currentRouteIndex != -1 && currentRouteIndex < targetRouteIndex)
-                                            slideOutHorizontally { -it / 8 } + fadeOut(tween(100))
-                                        else
-                                            slideOutHorizontally { it / 8 } + fadeOut(tween(100))
-                                    },
                                     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                                     builder = {
                                         authGraph(navController)
