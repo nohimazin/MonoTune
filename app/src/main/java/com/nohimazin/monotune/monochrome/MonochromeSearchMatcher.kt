@@ -113,7 +113,7 @@ class MonochromeSearchMatcher @Inject constructor(
                         candArtist.contains(normArtist) ||
                         normArtist.contains(candArtist)
 
-                val durationMatch = songDuration == null ||
+                val durationMatch = songDuration == null || songDuration < 0 ||
                         candidate.durationSecs < 0 ||
                         kotlin.math.abs(songDuration - candidate.durationSecs) <= DURATION_TOLERANCE_SECS
 
@@ -184,7 +184,7 @@ class MonochromeSearchMatcher @Inject constructor(
                 candArtist.contains(normArtist) ||
                 normArtist.contains(candArtist)
 
-            val durationMatch = songDuration == null ||
+            val durationMatch = songDuration == null || songDuration < 0 ||
                 candidate.durationSecs < 0 ||
                 kotlin.math.abs(songDuration - candidate.durationSecs) <= DURATION_TOLERANCE_SECS
 

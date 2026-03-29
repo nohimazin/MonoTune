@@ -8,6 +8,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nohimazin.monotune.models.ItemsPage
+import com.nohimazin.monotune.db.MusicDatabase
+import com.nohimazin.monotune.db.entities.MonochromeTrackMatch
 import com.nohimazin.monotune.monochrome.MonochromeSearchMatcher
 import com.nohimazin.monotune.monochrome.MonochromeTrack
 import com.nohimazin.monotune.utils.reportException
@@ -24,6 +26,7 @@ import javax.inject.Inject
 class OnlineSearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val monochromeSearchMatcher: MonochromeSearchMatcher,
+    private val database: MusicDatabase,
 ) : ViewModel() {
     val query = savedStateHandle.get<String>("query")!!
     val filter = MutableStateFlow<YouTube.SearchFilter?>(null)
@@ -60,6 +63,17 @@ class OnlineSearchViewModel @Inject constructor(
                                     try {
                                         val matches = monochromeSearchMatcher.matchSongs(songs)
                                         matchedMonochromeTracks.putAll(matches)
+                                        val trackMatches = matches.map { (ytmId, track) ->
+                                            MonochromeTrackMatch(
+                                                ytmId = ytmId,
+                                                monochromeId = track.monochromeId,
+                                                confidence = 0.8f,
+                                                matchedAt = System.currentTimeMillis()
+                                            )
+                                        }
+                                        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                                            trackMatches.forEach { database.upsertTrackMatch(it) }
+                                        }
                                         // Keep only summaries that contain at least one item after
                                         // filtering songs to matched-only.
                                         val filteredSummaries = page.summaries
@@ -96,6 +110,17 @@ class OnlineSearchViewModel @Inject constructor(
                                     try {
                                         val matches = monochromeSearchMatcher.matchSongs(songs)
                                         matchedMonochromeTracks.putAll(matches)
+                                        val trackMatches = matches.map { (ytmId, track) ->
+                                            MonochromeTrackMatch(
+                                                ytmId = ytmId,
+                                                monochromeId = track.monochromeId,
+                                                confidence = 0.8f,
+                                                matchedAt = System.currentTimeMillis()
+                                            )
+                                        }
+                                        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                                            trackMatches.forEach { database.upsertTrackMatch(it) }
+                                        }
                                         val filtered = allItems.filter { item ->
                                             item !is SongItem || matches.containsKey(item.id)
                                         }
@@ -133,6 +158,17 @@ class OnlineSearchViewModel @Inject constructor(
                 try {
                     val matches = monochromeSearchMatcher.matchSongs(newSongs)
                     matchedMonochromeTracks.putAll(matches)
+                    val trackMatches = matches.map { (ytmId, track) ->
+                        MonochromeTrackMatch(
+                            ytmId = ytmId,
+                            monochromeId = track.monochromeId,
+                            confidence = 0.8f,
+                            matchedAt = System.currentTimeMillis()
+                        )
+                    }
+                    viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                        trackMatches.forEach { database.upsertTrackMatch(it) }
+                    }
                     val filteredNew = newItems.filter { item ->
                         item !is SongItem || matches.containsKey(item.id)
                     }

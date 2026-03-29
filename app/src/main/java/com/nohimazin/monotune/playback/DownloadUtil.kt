@@ -25,6 +25,7 @@ import com.nohimazin.monotune.db.entities.SongEntity
 import com.nohimazin.monotune.di.AppModule.PlayerCache
 import com.nohimazin.monotune.di.DownloadCache
 import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.models.toMediaMetadata
 import com.nohimazin.monotune.playback.DownloadUtil.Companion.STATE_DOWNLOADING
 import com.nohimazin.monotune.playback.DownloadUtil.Companion.STATE_INVALID
 import com.nohimazin.monotune.playback.downloadManager.DownloadDirectoryManagerOt
@@ -71,6 +72,7 @@ class DownloadUtil @Inject constructor(
     @DownloadCache val downloadCache: SimpleCache,
     @PlayerCache val playerCache: SimpleCache,
     val monochromeClient: MonochromeClientApi,
+    val monochromeSearchMatcher: com.nohimazin.monotune.monochrome.MonochromeSearchMatcher,
 ) {
     val TAG = DownloadUtil::class.simpleName.toString()
 
@@ -87,12 +89,39 @@ class DownloadUtil @Inject constructor(
             return@Factory dataSpec
         }
 
-        // Resolve stream URL from Monochrome only  Eno YouTube fallback.
-        val monochromeId: String? = runBlocking(Dispatchers.IO) {
+        // Resolve stream URL from Monochrome only - no YouTube fallback.
+        var monochromeId: String? = runBlocking(Dispatchers.IO) {
             val manual = database.getManualCorrection(mediaId)
             when {
                 manual != null -> manual.correctedMonochromeId
                 else -> database.getTrackMatch(mediaId)?.monochromeId
+            }
+        }
+
+        // Just-in-time matching
+        if (monochromeId == null) {
+            Log.d(TAG, "DOWNLOAD: No Monochrome ID for mediaId=$mediaId, attempting just-in-time match")
+            val song = runBlocking(Dispatchers.IO) {
+                database.song(mediaId).first()?.toMediaMetadata()
+            }
+            if (song != null) {
+                val match = runBlocking(Dispatchers.IO) {
+                    monochromeSearchMatcher.matchSong(song)
+                }
+                if (match != null) {
+                    monochromeId = match.monochromeId
+                    // Persist the match for future use
+                    runBlocking(Dispatchers.IO) {
+                        database.upsertTrackMatch(
+                            com.nohimazin.monotune.db.entities.MonochromeTrackMatch(
+                                ytmId = mediaId,
+                                monochromeId = match.monochromeId,
+                                confidence = 0.7f, // JIT match confidence
+                                matchedAt = System.currentTimeMillis()
+                            )
+                        )
+                    }
+                }
             }
         }
 
