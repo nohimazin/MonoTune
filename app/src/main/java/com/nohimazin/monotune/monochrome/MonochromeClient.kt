@@ -122,12 +122,12 @@ sealed class MonochromeResult<out T> {
 // ---------------------------------------------------------------------------
 
 /**
- * Build a TIDAL cover-art URL from [coverUuid] (dash-separated UUID) at [size]×[size] px.
+ * Build a TIDAL cover-art URL from [coverUuid] (dash-separated UUID) at [size]~[size] px.
  *
  * Example:
  * ```
  * tidalCoverUrl("e77e4cc0-6cd0-4522-807d-88aeac488065", 320)
- * // → "https://resources.tidal.com/images/e77e4cc0/6cd0/4522/807d/88aeac488065/320x320.jpg"
+ * //  "https://resources.tidal.com/images/e77e4cc0/6cd0/4522/807d/88aeac488065/320x320.jpg"
  * ```
  */
 fun tidalCoverUrl(coverUuid: String, size: Int = 320): String =
@@ -163,7 +163,7 @@ fun tidalCoverUrl(coverUuid: String, size: Int = 320): String =
  * | Logout         | `DELETE /v1/account/sessions/current`       |
  *
  * ### Lyrics (LRCLib)
- * `GET https://lrclib.net/api/get?artist_name=…&track_name=…&album_name=…&duration=…`
+ * `GET https://lrclib.net/api/get?artist_name=c&track_name=c&album_name=c&duration=c`
  */
 interface MonochromeClientApi {
 
@@ -247,7 +247,7 @@ interface MonochromeClientApi {
      * Calls `GET {streamingUrl}/track/?id={tidalId}&quality={quality}`, decodes
      * the base64 manifest, and returns either:
      * - a direct audio URL (for `application/vnd.tidal.bts` manifests), or
-     * - a `data:application/dash+xml;base64,…` URI (for MPEG-DASH manifests)
+     * - a `data:application/dash+xml;base64,c` URI (for MPEG-DASH manifests)
      *   that can be passed directly to ExoPlayer.
      *
      * @param tidalId The TIDAL track ID.
@@ -533,9 +533,13 @@ class MonochromeClient @Inject constructor() : MonochromeClientApi {
         tidalId: String,
         quality: String,
     ): MonochromeResult<String> = withContext(Dispatchers.IO) {
-        // Use the configured API endpoint as the streaming base. Many hifi-api instances
-        // serve both the API (search/info) and streaming (/track/) endpoints.
-        val streamingUrl = _apiEndpoint
+        // Use the dedicated streaming endpoint if using the default official API.
+        // The official API (api.monochrome.tf) disables /track/ streaming to save bandwidth.
+        val streamingUrl = if (_apiEndpoint == DEFAULT_MONOCHROME_API_URL) {
+            DEFAULT_MONOCHROME_STREAMING_URL
+        } else {
+            _apiEndpoint
+        }
         try {
             val request = Request.Builder()
                 .url("$streamingUrl/track/?id=$tidalId&quality=$quality")
