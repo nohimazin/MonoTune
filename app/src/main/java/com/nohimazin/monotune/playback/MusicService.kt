@@ -717,14 +717,19 @@ class MusicService : MediaLibraryService(),
                     monochromeId = match.monochromeId
                     // Persist the match for future use
                     runBlocking(Dispatchers.IO) {
-                        database.upsertTrackMatch(
-                            MonochromeTrackMatch(
-                                ytmId = mediaId,
-                                monochromeId = match.monochromeId,
-                                confidence = 0.7f, // JIT match confidence
-                                matchedAt = System.currentTimeMillis()
+                        try {
+                            song?.let { database.insert(it) }
+                            database.upsertTrackMatch(
+                                MonochromeTrackMatch(
+                                    ytmId = mediaId,
+                                    monochromeId = match.monochromeId,
+                                    confidence = 0.7f, // JIT match confidence
+                                    matchedAt = System.currentTimeMillis()
+                                )
                             )
-                        )
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Failed to persist JIT match", e)
+                        }
                     }
                 }
             }

@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.nohimazin.monotune.models.ItemsPage
 import com.nohimazin.monotune.db.MusicDatabase
 import com.nohimazin.monotune.db.entities.MonochromeTrackMatch
+import com.nohimazin.monotune.models.toMediaMetadata
 import com.nohimazin.monotune.monochrome.MonochromeSearchMatcher
 import com.nohimazin.monotune.monochrome.MonochromeTrack
 import com.nohimazin.monotune.utils.reportException
@@ -72,7 +73,13 @@ class OnlineSearchViewModel @Inject constructor(
                                             )
                                         }
                                         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                                            trackMatches.forEach { database.upsertTrackMatch(it) }
+                                            try {
+                                                songs.filter { matches.containsKey(it.id) }
+                                                    .forEach { database.insert(it.toMediaMetadata()) }
+                                                trackMatches.forEach { database.upsertTrackMatch(it) }
+                                            } catch (e: Exception) {
+                                                reportException(e)
+                                            }
                                         }
                                         // Keep only summaries that contain at least one item after
                                         // filtering songs to matched-only.
@@ -119,7 +126,13 @@ class OnlineSearchViewModel @Inject constructor(
                                             )
                                         }
                                         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                                            trackMatches.forEach { database.upsertTrackMatch(it) }
+                                            try {
+                                                songs.filter { matches.containsKey(it.id) }
+                                                    .forEach { database.insert(it.toMediaMetadata()) }
+                                                trackMatches.forEach { database.upsertTrackMatch(it) }
+                                            } catch (e: Exception) {
+                                                reportException(e)
+                                            }
                                         }
                                         val filtered = allItems.filter { item ->
                                             item !is SongItem || matches.containsKey(item.id)
@@ -167,7 +180,13 @@ class OnlineSearchViewModel @Inject constructor(
                         )
                     }
                     viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                        trackMatches.forEach { database.upsertTrackMatch(it) }
+                        try {
+                            newSongs.filter { matches.containsKey(it.id) }
+                                .forEach { database.insert(it.toMediaMetadata()) }
+                            trackMatches.forEach { database.upsertTrackMatch(it) }
+                        } catch (e: Exception) {
+                            reportException(e)
+                        }
                     }
                     val filteredNew = newItems.filter { item ->
                         item !is SongItem || matches.containsKey(item.id)
