@@ -39,14 +39,7 @@ jobs:
         run: ./gradlew assembleCoreRelease
 
       - name: Resolve ffmpeg libs
-        run: |
-          git clone https://github.com/mikooomich/ffmpeg-android-maker-prebuilt/ -b audio ffMetadataEx/ffmpeg-android-maker
-          cd ffMetadataEx/ffmpeg-android-maker
-          if [ -x "./gradlew" ]; then
-            ./gradlew publishToMavenLocal
-          else
-            gradle publishToMavenLocal
-          fi
+        run: git clone https://github.com/mikooomich/ffmpeg-android-maker-prebuilt/ -b audio ffMetadataEx/ffmpeg-android-maker
 
       - name: Build full release APK
         run: ./gradlew assembleFullRelease
