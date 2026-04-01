@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <!-- These strings are the upstream InnerTune strings. Do not add strings from MonoTune features here. InnerTune wording is replaced with MonoTune.
 We recycle translations from upstream, they are pulled periodically. -->
@@ -273,8 +273,10 @@ We recycle translations from upstream, they are pulled periodically. -->
     <string name="player_and_audio">Player and audio</string>
     <string name="audio_quality">Audio quality</string>
     <string name="audio_quality_auto">Auto</string>
-    <string name="audio_quality_high">High</string>
-    <string name="audio_quality_low">Low</string>
+    <string name="audio_quality_low">Low (96kbps)</string>
+    <string name="audio_quality_high">High (320kbps)</string>
+    <string name="audio_quality_lossless">Lossless (FLAC)</string>
+    <string name="audio_quality_hi_res">Hi-Res (24-bit FLAC)</string>
     <string name="queue">Queue</string>
     <string name="persistent_queue">Persistent queue</string>
     <string name="persistent_queue_desc">Restore your last queue when the app starts</string>

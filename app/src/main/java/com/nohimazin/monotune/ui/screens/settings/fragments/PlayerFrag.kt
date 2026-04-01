@@ -85,8 +85,10 @@ fun AudioQualityFrag() {
         valueText = {
             when (it) {
                 AudioQuality.AUTO -> stringResource(R.string.audio_quality_auto)
-                AudioQuality.HIGH -> stringResource(R.string.audio_quality_high)
                 AudioQuality.LOW -> stringResource(R.string.audio_quality_low)
+                AudioQuality.HIGH -> stringResource(R.string.audio_quality_high)
+                AudioQuality.LOSSLESS -> stringResource(R.string.audio_quality_lossless)
+                AudioQuality.HI_RES_LOSSLESS -> stringResource(R.string.audio_quality_hi_res)
             }
         }
     )

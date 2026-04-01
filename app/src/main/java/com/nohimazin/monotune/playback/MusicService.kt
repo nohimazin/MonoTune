@@ -103,6 +103,7 @@ import com.nohimazin.monotune.extensions.currentMetadata
 import com.nohimazin.monotune.extensions.findNextMediaItemById
 import com.nohimazin.monotune.extensions.metadata
 import com.nohimazin.monotune.extensions.setOffloadEnabled
+import com.nohimazin.monotune.extensions.toEnum
 import com.nohimazin.monotune.lyrics.LyricsHelper
 import com.nohimazin.monotune.models.HybridCacheDataSinkFactory
 import com.nohimazin.monotune.models.MediaMetadata
@@ -744,10 +745,21 @@ class MusicService : MediaLibraryService(),
 
             Log.d(TAG, "PLAYING: remote song (online fetch)")
 
-            // 6. Attempt to resolve the official Monochrome stream URL.
-            Log.d(TAG, "PLAYING: attempting Monochrome stream for monochromeId=$monochromeId")
+            // 6. Attempt to resolve the official Monochrome stream URL with user-selected quality.
+            val quality = runBlocking(Dispatchers.IO) {
+                dataStore.data.first()[AudioQualityKey]?.toEnum(AudioQuality.AUTO) ?: AudioQuality.AUTO
+            }
+            val qualityToken = when (quality) {
+                AudioQuality.AUTO -> "LOSSLESS"
+                AudioQuality.LOW -> "LOW"
+                AudioQuality.HIGH -> "HIGH"
+                AudioQuality.LOSSLESS -> "LOSSLESS"
+                AudioQuality.HI_RES_LOSSLESS -> "HI_RES_LOSSLESS"
+            }
+
+            Log.d(TAG, "PLAYING: attempting Monochrome stream for monochromeId=$monochromeId (quality=$qualityToken)")
             val monochromeResult = runBlocking(Dispatchers.IO) {
-                monochromeClient.resolveStreamUrl(monochromeId!!)
+                monochromeClient.resolveStreamUrl(monochromeId!!, quality = qualityToken)
             }
             when (monochromeResult) {
                 is MonochromeResult.Success -> {

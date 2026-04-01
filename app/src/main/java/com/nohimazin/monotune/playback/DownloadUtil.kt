@@ -16,6 +16,8 @@ import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadNotificationHelper
 import androidx.media3.exoplayer.offline.DownloadRequest
 import androidx.media3.exoplayer.offline.DownloadService
+import com.nohimazin.monotune.constants.AudioQuality
+import com.nohimazin.monotune.constants.AudioQualityKey
 import com.nohimazin.monotune.constants.DownloadExtraPathKey
 import com.nohimazin.monotune.constants.DownloadPathKey
 import com.nohimazin.monotune.db.MusicDatabase
@@ -39,6 +41,7 @@ import com.nohimazin.monotune.monochrome.MonochromeClientApi
 import com.nohimazin.monotune.monochrome.MonochromeResult
 import com.nohimazin.monotune.utils.fileFromUri
 import com.nohimazin.monotune.utils.uriListFromString
+import com.nohimazin.monotune.extensions.toEnum
 import com.zionhuang.innertube.YouTube
 import com.zionhuang.innertube.models.SongItem
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -130,9 +133,20 @@ class DownloadUtil @Inject constructor(
             return@Factory dataSpec
         }
 
-        // 4. Resolve the Monochrome stream URL.
+        // 4. Resolve the Monochrome stream URL with user-selected quality.
+        val quality = runBlocking(Dispatchers.IO) {
+            context.dataStore.data.first()[AudioQualityKey]?.toEnum(AudioQuality.AUTO) ?: AudioQuality.AUTO
+        }
+        val qualityToken = when (quality) {
+            AudioQuality.AUTO -> "LOSSLESS"
+            AudioQuality.LOW -> "LOW"
+            AudioQuality.HIGH -> "HIGH"
+            AudioQuality.LOSSLESS -> "LOSSLESS"
+            AudioQuality.HI_RES_LOSSLESS -> "HI_RES_LOSSLESS"
+        }
+
         val monochromeResult = runBlocking(Dispatchers.IO) {
-            monochromeClient.resolveStreamUrl(monochromeId!!)
+            monochromeClient.resolveStreamUrl(monochromeId!!, quality = qualityToken)
         }
         when (monochromeResult) {
             is MonochromeResult.Success -> {
