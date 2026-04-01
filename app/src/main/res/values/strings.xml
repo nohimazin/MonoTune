@@ -302,6 +302,15 @@ We recycle translations from upstream, they are pulled periodically. -->
     <string name="max_song_cache_size">Max song cache size</string>
     <string name="clear_song_cache">Clear song cache</string>
     <string name="size_used">%s used</string>
+    <string name="transcoding">Transcoding</string>
+    <string name="enable_transcoding">Enable transcoding</string>
+    <string name="transcoding_desc">Automatically transcode downloads to save space</string>
+    <string name="transcode_format">Target format</string>
+    <string name="transcode_bitrate">Target bitrate (kbps)</string>
+    <string name="batch_transcode">Batch transcode downloads</string>
+    <string name="batch_transcode_desc">Transcode all existing downloads to the selected format</string>
+    <string name="transcoding_progress">Transcoding: %1$d/%2$d</string>
+    <string name="transcoding_complete">Transcoding complete</string>
 
     <string name="privacy">Privacy</string>
     <string name="listen_history">Listen history</string>

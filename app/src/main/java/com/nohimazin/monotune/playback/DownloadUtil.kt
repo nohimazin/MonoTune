@@ -77,6 +77,7 @@ class DownloadUtil @Inject constructor(
     @PlayerCache val playerCache: SimpleCache,
     val monochromeClient: MonochromeClientApi,
     val monochromeSearchMatcher: com.nohimazin.monotune.monochrome.MonochromeSearchMatcher,
+    val audioTranscoder: AudioTranscoder,
 ) {
     val TAG = DownloadUtil::class.simpleName.toString()
 
@@ -459,6 +460,14 @@ class DownloadUtil @Inject constructor(
             rescanDownloads()
         }
 
+        CoroutineScope(dlCoroutine).launch {
+            downloadMgr.events.collect { event ->
+                if (event is DownloadEvent.Success) {
+                    handlePostDownload(event.mediaId, event.file)
+                }
+            }
+        }
+
         downloadManager.addListener(
             object : DownloadManager.Listener {
                 override fun onDownloadChanged(
@@ -490,6 +499,52 @@ class DownloadUtil @Inject constructor(
                 }
             }
         )
+    }
+
+    private suspend fun handlePostDownload(mediaId: String, fileUri: Uri) {
+        val enabled = context.dataStore.data.first()[TranscodeEnabledKey] ?: false
+        if (!enabled) return
+
+        val format = context.dataStore.data.first()[TranscodeFormatKey] ?: "AAC"
+        val bitrate = context.dataStore.data.first()[TranscodeBitrateKey] ?: 128
+
+        withContext(Dispatchers.IO) {
+            val sourceFile = fileFromUri(context, fileUri) ?: return@withContext
+            // Use a temporary file for transcoding
+            val tempFile = File(sourceFile.parent, "${sourceFile.nameWithoutExtension}.tmp")
+
+            val success = audioTranscoder.transcode(sourceFile, tempFile, format, bitrate)
+
+            if (success && tempFile.exists()) {
+                // Delete original and rename temp
+                if (sourceFile.delete()) {
+                    if (!tempFile.renameTo(sourceFile)) {
+                        // If rename fails, try copying
+                        try {
+                            tempFile.copyTo(sourceFile, overwrite = true)
+                            tempFile.delete()
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Failed to replace original file with transcoded one: ${e.message}")
+                        }
+                    }
+                }
+                Log.d(TAG, "Transcoding successful for $mediaId. Format: $format, Bitrate: ${bitrate}k")
+            } else {
+                Log.e(TAG, "Transcoding failed for $mediaId")
+                if (tempFile.exists()) tempFile.delete()
+            }
+        }
+    }
+
+    suspend fun batchTranscode(onProgress: (Int, Int) -> Unit) {
+        val downloadedSongs = database.downloadedOrQueuedSongs().first().filter { it.song.localPath != null }
+        val total = downloadedSongs.size
+        downloadedSongs.forEachIndexed { index, song ->
+            onProgress(index + 1, total)
+            song.song.localPath?.let { path ->
+                handlePostDownload(song.song.id, File(path).toUri())
+            }
+        }
     }
 }
 

@@ -265,5 +265,6 @@ dependencies {
 afterEvaluate {
     dependencies {
         add("fullImplementation", project(":ffMetadataEx"))
+        add("fullImplementation", libs.ffmpeg.kit)
     }
 }

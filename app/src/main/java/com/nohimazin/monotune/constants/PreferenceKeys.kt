@@ -1,4 +1,4 @@
-﻿package com.nohimazin.monotune.constants
+package com.nohimazin.monotune.constants
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.floatPreferencesKey
@@ -53,7 +53,10 @@ val LastRecentActivitySyncKey = longPreferencesKey("lastRecentActivitySync")
  */
 val AudioDecoderKey = intPreferencesKey("audioDecoder")
 val AudioQualityKey = stringPreferencesKey("audioQuality")
-val DownloadAudioQualityKey = stringPreferencesKey("downloadAudioQuality")
+val DownloadAudioQualityKey = stringPreferencesKey("download_audio_quality")
+val TranscodeEnabledKey = booleanPreferencesKey("transcode_enabled")
+val TranscodeFormatKey = stringPreferencesKey("transcode_format")
+val TranscodeBitrateKey = intPreferencesKey("transcode_bitrate")
 val AudioOffloadKey = booleanPreferencesKey("enableOffload")
 val AudioGaplessOffloadKey = booleanPreferencesKey("enableGaplessOffload")
 

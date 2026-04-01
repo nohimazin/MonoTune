@@ -27,7 +27,10 @@ import androidx.compose.material.icons.rounded.Downloading
 import androidx.compose.material.icons.rounded.FolderCopy
 import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.Restore
+import androidx.compose.material.icons.rounded.Speed
 import androidx.compose.material.icons.rounded.Sync
+import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.rounded.AutoFixHigh
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -66,12 +69,16 @@ import com.nohimazin.monotune.constants.DownloadPathKey
 import com.nohimazin.monotune.constants.MaxImageCacheSizeKey
 import com.nohimazin.monotune.constants.MaxSongCacheSizeKey
 import com.nohimazin.monotune.constants.ThumbnailCornerRadius
+import com.nohimazin.monotune.constants.TranscodeBitrateKey
+import com.nohimazin.monotune.constants.TranscodeEnabledKey
+import com.nohimazin.monotune.constants.TranscodeFormatKey
 import com.nohimazin.monotune.db.MusicDatabase
 import com.nohimazin.monotune.extensions.tryOrNull
 import com.nohimazin.monotune.ui.component.EnumListPreference
 import com.nohimazin.monotune.ui.component.ListPreference
 import com.nohimazin.monotune.ui.component.PreferenceEntry
 import com.nohimazin.monotune.ui.component.SettingsClickToReveal
+import com.nohimazin.monotune.ui.component.SwitchPreference
 import com.nohimazin.monotune.ui.component.button.IconButton
 import com.nohimazin.monotune.ui.component.button.ResizableIconButton
 import com.nohimazin.monotune.ui.dialog.ActionPromptDialog
@@ -148,6 +155,7 @@ fun ColumnScope.DownloadsFrag() {
 
     val (downloadPath, onDownloadPathChange) = rememberPreference(DownloadPathKey, "")
     DownloadAudioQualityFrag()
+    TranscodingFrag()
 
     // size stats
     var downloadCacheSize by remember {
@@ -933,6 +941,69 @@ fun ColumnScope.ImageCacheFrag() {
                     }
                 ) {
                     Text(text = stringResource(android.R.string.ok))
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun TranscodingFrag() {
+    val downloadUtil = LocalDownloadUtil.current
+    val coroutineScope = rememberCoroutineScope()
+
+    val (transcodeEnabled, onTranscodeEnabledChange) = rememberPreference(TranscodeEnabledKey, false)
+    val (transcodeFormat, onTranscodeFormatChange) = rememberPreference(TranscodeFormatKey, "AAC")
+    val (transcodeBitrate, onTranscodeBitrateChange) = rememberPreference(TranscodeBitrateKey, 128)
+
+    var isBatchProcessing by remember { mutableStateOf(false) }
+    var batchProgress by remember { mutableStateOf(0 to 0) }
+
+    PreferenceGroupTitle(title = stringResource(R.string.transcoding))
+
+    SwitchPreference(
+        title = { Text(stringResource(R.string.enable_transcoding)) },
+        description = stringResource(R.string.transcoding_desc),
+        checked = transcodeEnabled,
+        onCheckedChange = onTranscodeEnabledChange
+    )
+
+    if (transcodeEnabled) {
+        ListPreference(
+            title = { Text(stringResource(R.string.transcode_format)) },
+            icon = { Icon(Icons.Rounded.Description, null) },
+            selectedValue = transcodeFormat,
+            values = listOf("AAC", "OPUS", "MP3"),
+            valueText = { it },
+            onValueSelected = onTranscodeFormatChange
+        )
+
+        ListPreference(
+            title = { Text(stringResource(R.string.transcode_bitrate)) },
+            icon = { Icon(Icons.Rounded.Speed, null) },
+            selectedValue = transcodeBitrate,
+            values = listOf(64, 96, 128, 192, 256, 320),
+            valueText = { "${it} kbps" },
+            onValueSelected = onTranscodeBitrateChange
+        )
+
+        PreferenceEntry(
+            title = { Text(stringResource(R.string.batch_transcode)) },
+            description = if (isBatchProcessing) {
+                stringResource(R.string.transcoding_progress, batchProgress.first, batchProgress.second)
+            } else {
+                stringResource(R.string.batch_transcode_desc)
+            },
+            icon = { Icon(Icons.Rounded.AutoFixHigh, null) },
+            onClick = {
+                if (!isBatchProcessing) {
+                    isBatchProcessing = true
+                    coroutineScope.launch {
+                        downloadUtil.batchTranscode { current, total ->
+                            batchProgress = current to total
+                        }
+                        isBatchProcessing = false
+                    }
                 }
             }
         )
