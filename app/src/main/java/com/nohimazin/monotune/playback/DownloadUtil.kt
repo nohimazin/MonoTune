@@ -85,11 +85,7 @@ class DownloadUtil @Inject constructor(
     ) { dataSpec ->
         val mediaId = dataSpec.key ?: error("No media id")
         val length = if (dataSpec.length >= 0) dataSpec.length else 1
-        if (playerCache.isCached(mediaId, dataSpec.position, length)) {
-            return@Factory dataSpec
-        }
-
-        // Resolve stream URL from Monochrome only - no YouTube fallback.
+        // 1. Resolve Monochrome ID - playback/download is forbidden without it.
         var monochromeId: String? = runBlocking(Dispatchers.IO) {
             val manual = database.getManualCorrection(mediaId)
             when {
@@ -98,7 +94,7 @@ class DownloadUtil @Inject constructor(
             }
         }
 
-        // Just-in-time matching
+        // 2. Just-in-time matching if no metadata link exists
         if (monochromeId == null) {
             Log.d(TAG, "DOWNLOAD: No Monochrome ID for mediaId=$mediaId, attempting just-in-time match")
             val song = runBlocking(Dispatchers.IO) {
@@ -110,13 +106,12 @@ class DownloadUtil @Inject constructor(
                 }
                 if (match != null) {
                     monochromeId = match.monochromeId
-                    // Persist the match for future use
                     runBlocking(Dispatchers.IO) {
                         database.upsertTrackMatch(
                             com.nohimazin.monotune.db.entities.MonochromeTrackMatch(
                                 ytmId = mediaId,
                                 monochromeId = match.monochromeId,
-                                confidence = 0.7f, // JIT match confidence
+                                confidence = 0.7f,
                                 matchedAt = System.currentTimeMillis()
                             )
                         )
@@ -130,8 +125,14 @@ class DownloadUtil @Inject constructor(
             throw IOException("No Monochrome stream available for $mediaId")
         }
 
+        // 3. Check cache only AFTER confirming we have a valid Monochrome match.
+        if (playerCache.isCached(mediaId, dataSpec.position, length)) {
+            return@Factory dataSpec
+        }
+
+        // 4. Resolve the Monochrome stream URL.
         val monochromeResult = runBlocking(Dispatchers.IO) {
-            monochromeClient.resolveStreamUrl(monochromeId)
+            monochromeClient.resolveStreamUrl(monochromeId!!)
         }
         when (monochromeResult) {
             is MonochromeResult.Success -> {

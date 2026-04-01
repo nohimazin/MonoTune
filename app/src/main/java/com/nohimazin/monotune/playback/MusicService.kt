@@ -679,35 +679,16 @@ class MusicService : MediaLibraryService(),
                 }
             }
 
-            val isDownload =
-                downloadCache.isCached(mediaId, dataSpec.position, if (dataSpec.length >= 0) dataSpec.length else 1)
-            val isCache = playerCache.isCached(mediaId, dataSpec.position, CHUNK_LENGTH)
-            if (isDownload || isCache) {
-                Log.d(TAG, "PLAYING: remote song (cache = ${isCache}, download = ${isDownload})")
-                offloadScope.launch { recoverSong(mediaId) }
-                return@Factory dataSpec
-            }
-
-            // Check Monochrome stream URL cache
-            monochromeUrlCache[mediaId]?.takeIf { it.second > System.currentTimeMillis() }?.let {
-                Log.d(TAG, "PLAYING: Monochrome stream (cached)")
-                offloadScope.launch { recoverSong(mediaId) }
-                return@Factory dataSpec.withUri(it.first.toUri())
-            }
-
-            Log.d(TAG, "PLAYING: remote song (online fetch)")
-
-            // Determine if this track has a Monochrome ID (manual correction takes precedence).
-            // This callback runs on ExoPlayer's loader thread, not the main thread.
+            // 1. Determine if this track has a Monochrome ID (manual correction takes precedence).
             var monochromeId: String? = runBlocking(Dispatchers.IO) {
                 val manual = database.getManualCorrection(mediaId)
                 when {
-                    manual != null -> manual.correctedMonochromeId // may be null (explicitly unavailable)
+                    manual != null -> manual.correctedMonochromeId
                     else -> database.getTrackMatch(mediaId)?.monochromeId
                 }
             }
 
-            // Just-in-time matching
+            // 2. Just-in-time matching if no metadata link exists yet.
             if (monochromeId == null) {
                 Log.d(TAG, "PLAYING: No Monochrome ID for mediaId=$mediaId, attempting just-in-time match")
                 val match = runBlocking(Dispatchers.IO) {
@@ -715,7 +696,7 @@ class MusicService : MediaLibraryService(),
                 }
                 if (match != null) {
                     monochromeId = match.monochromeId
-                    // Persist the match for future use
+                    // Persist match for future use
                     runBlocking(Dispatchers.IO) {
                         try {
                             song?.let { database.insert(it) }
@@ -723,7 +704,7 @@ class MusicService : MediaLibraryService(),
                                 MonochromeTrackMatch(
                                     ytmId = mediaId,
                                     monochromeId = match.monochromeId,
-                                    confidence = 0.7f, // JIT match confidence
+                                    confidence = 0.7f,
                                     matchedAt = System.currentTimeMillis()
                                 )
                             )
@@ -734,35 +715,60 @@ class MusicService : MediaLibraryService(),
                 }
             }
 
-            // Only play via Monochrome stream. No fallback to YouTube.
-            if (monochromeId != null) {
-                Log.d(TAG, "PLAYING: attempting Monochrome stream for monochromeId=$monochromeId")
-                val monochromeResult = runBlocking(Dispatchers.IO) {
-                    monochromeClient.resolveStreamUrl(monochromeId)
+            // 3. If still no Monochrome match, playback is forbidden.
+            if (monochromeId == null) {
+                Log.w(TAG, "PLAYING: No Monochrome ID for mediaId=$mediaId, playback unavailable")
+                throw PlaybackException(
+                    getString(R.string.error_no_stream),
+                    null,
+                    PlaybackException.ERROR_CODE_REMOTE_ERROR
+                )
+            }
+
+            // 4. Check if the song is already downloaded or cached (only valid if we have a match).
+            val isDownload =
+                downloadCache.isCached(mediaId, dataSpec.position, if (dataSpec.length >= 0) dataSpec.length else 1)
+            val isCache = playerCache.isCached(mediaId, dataSpec.position, CHUNK_LENGTH)
+            if (isDownload || isCache) {
+                Log.d(TAG, "PLAYING: remote song (cache = ${isCache}, download = ${isDownload})")
+                offloadScope.launch { recoverSong(mediaId) }
+                return@Factory dataSpec
+            }
+
+            // 5. Check Monochrome stream URL cache for online streaming.
+            monochromeUrlCache[mediaId]?.takeIf { it.second > System.currentTimeMillis() }?.let {
+                Log.d(TAG, "PLAYING: Monochrome stream (cached)")
+                offloadScope.launch { recoverSong(mediaId) }
+                return@Factory dataSpec.withUri(it.first.toUri())
+            }
+
+            Log.d(TAG, "PLAYING: remote song (online fetch)")
+
+            // 6. Attempt to resolve the official Monochrome stream URL.
+            Log.d(TAG, "PLAYING: attempting Monochrome stream for monochromeId=$monochromeId")
+            val monochromeResult = runBlocking(Dispatchers.IO) {
+                monochromeClient.resolveStreamUrl(monochromeId!!)
+            }
+            when (monochromeResult) {
+                is MonochromeResult.Success -> {
+                    val streamUrl = monochromeResult.data
+                    Log.d(TAG, "PLAYING: Monochrome stream resolved (${if (streamUrl.startsWith("data:")) "data URI" else streamUrl})")
+                    // Cache the URL (1 hour TTL)
+                    monochromeUrlCache[mediaId] =
+                        streamUrl to System.currentTimeMillis() + 3_600_000L
+                    offloadScope.launch { recoverSong(mediaId) }
+                    return@Factory dataSpec.withUri(streamUrl.toUri())
                 }
-                when (monochromeResult) {
-                    is MonochromeResult.Success -> {
-                        val streamUrl = monochromeResult.data
-                        Log.d(TAG, "PLAYING: Monochrome stream resolved (${if (streamUrl.startsWith("data:")) "data URI" else streamUrl})")
-                        // Cache with 1 hour TTL (Monochrome URLs don't provide explicit expiry)
-                        monochromeUrlCache[mediaId] =
-                            streamUrl to System.currentTimeMillis() + 3_600_000L
-                        offloadScope.launch { recoverSong(mediaId) }
-                        return@Factory dataSpec.withUri(streamUrl.toUri())
-                    }
-                    is MonochromeResult.Error -> {
-                        Log.w(TAG, "PLAYING: Monochrome stream resolution failed for monochromeId=$monochromeId: ${monochromeResult.message}")
-                        throw PlaybackException(
-                            getString(R.string.error_no_stream),
-                            null,
-                            PlaybackException.ERROR_CODE_REMOTE_ERROR
-                        )
-                    }
+                is MonochromeResult.Error -> {
+                    Log.w(TAG, "PLAYING: Monochrome stream resolution failed: ${monochromeResult.message}")
+                    throw PlaybackException(
+                        getString(R.string.error_no_stream),
+                        null,
+                        PlaybackException.ERROR_CODE_REMOTE_ERROR
+                    )
                 }
             }
 
-            // No Monochrome match found for this track  Eplayback unavailable.
-            Log.w(TAG, "PLAYING: No Monochrome ID for mediaId=$mediaId, playback unavailable")
             throw PlaybackException(
                 getString(R.string.error_no_stream),
                 null,
