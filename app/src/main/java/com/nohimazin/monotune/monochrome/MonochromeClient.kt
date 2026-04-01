@@ -45,7 +45,13 @@ const val DEFAULT_MONOCHROME_API_URL = "https://monochrome-api.samidy.com"
  * Default hifi-api streaming instance (used for `/track/` requests that return manifests).
  * Source: public/instances.json in monochrome-music/monochrome.
  */
-const val DEFAULT_MONOCHROME_STREAMING_URL = "https://monochrome-api.samidy.com"
+const val DEFAULT_MONOCHROME_STREAMING_URL = "https://ohio-1.monochrome.tf"
+
+/**
+ * Uptime tracker URL that returns live-status JSON for hifi-api instances.
+ * Response shape: { "streaming": [{"url": "https://...", "version": "2.7"}, ...], ... }
+ */
+const val UPTIME_TRACKER_URL = "https://tidal-uptime.jiffy-puffs-1j.workers.dev/"
 
 /** Base URL for TIDAL album/track cover art. */
 const val TIDAL_IMAGE_BASE_URL = "https://resources.tidal.com/images"
@@ -330,6 +336,59 @@ class MonochromeClient @Inject constructor() : MonochromeClientApi {
     override fun getApiEndpoint(): String = _apiEndpoint
 
     // -----------------------------------------------------------------------
+    // Dynamic streaming endpoint (from uptime tracker)
+    // -----------------------------------------------------------------------
+
+    /** Cached streaming endpoint URL and its fetch timestamp (ms). */
+    @Volatile private var _streamingEndpoint: String = DEFAULT_MONOCHROME_STREAMING_URL
+    @Volatile private var _streamingEndpointFetchedAt: Long = 0L
+
+    /** Cache duration for the streaming endpoint (1 hour). */
+    private val STREAMING_ENDPOINT_TTL_MS = 3_600_000L
+
+    /**
+     * Returns a working streaming endpoint URL.
+     * Fetches the uptime tracker on first call or after [STREAMING_ENDPOINT_TTL_MS] has elapsed.
+     * Falls back to [DEFAULT_MONOCHROME_STREAMING_URL] if the tracker is unreachable.
+     */
+    private suspend fun resolveStreamingEndpoint(): String = withContext(Dispatchers.IO) {
+        val now = System.currentTimeMillis()
+        if (now - _streamingEndpointFetchedAt < STREAMING_ENDPOINT_TTL_MS) {
+            return@withContext _streamingEndpoint
+        }
+        try {
+            val request = Request.Builder().url(UPTIME_TRACKER_URL).get().build()
+            val response = httpClient.newCall(request).execute()
+            val body = response.body?.string() ?: ""
+            if (response.isSuccessful && body.isNotEmpty()) {
+                val streamingArray = org.json.JSONObject(body).optJSONArray("streaming")
+                if (streamingArray != null && streamingArray.length() > 0) {
+                    val first = streamingArray.optJSONObject(0)?.optString("url")
+                    if (!first.isNullOrEmpty()) {
+                        // Prioritize official monochrome.tf streaming nodes if available
+                        var selected = first
+                        for (i in 0 until streamingArray.length()) {
+                            val url = streamingArray.optJSONObject(i)?.optString("url")
+                            if (url != null && url.contains("monochrome.tf")) {
+                                selected = url
+                                break
+                            }
+                        }
+                        
+                        _streamingEndpoint = selected!!.trimEnd('/')
+                        _streamingEndpointFetchedAt = now
+                        Log.d(TAG, "Streaming endpoint updated to: $_streamingEndpoint")
+                        return@withContext _streamingEndpoint
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to fetch streaming endpoint from uptime tracker", e)
+        }
+        _streamingEndpoint
+    }
+
+    // -----------------------------------------------------------------------
     // Authentication
     // -----------------------------------------------------------------------
 
@@ -533,9 +592,8 @@ class MonochromeClient @Inject constructor() : MonochromeClientApi {
         tidalId: String,
         quality: String,
     ): MonochromeResult<String> = withContext(Dispatchers.IO) {
-        // Use the configured API endpoint for streaming.
-        // The official API (monochrome-api.samidy.com) supports both /search/ and /track/.
-        val streamingUrl = _apiEndpoint
+        // Dynamically resolve a working streaming endpoint from the uptime tracker.
+        val streamingUrl = resolveStreamingEndpoint()
         try {
             val request = Request.Builder()
                 .url("$streamingUrl/track/?id=$tidalId&quality=$quality")
