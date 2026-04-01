@@ -39,7 +39,10 @@ jobs:
         run: ./gradlew assembleCoreUserdebug
 
       - name: Resolve ffmpeg libs
-        run: git clone https://github.com/mikooomich/ffmpeg-android-maker-prebuilt/ -b audio ffMetadataEx/ffmpeg-android-maker
+        run: |
+          git clone https://github.com/mikooomich/ffmpeg-android-maker-prebuilt/ -b audio ffMetadataEx/ffmpeg-android-maker
+          cd ffMetadataEx/ffmpeg-android-maker
+          ./gradlew publishToMavenLocal
 
       - name: Build full userdebug APK
         run: ./gradlew assembleFullUserdebug

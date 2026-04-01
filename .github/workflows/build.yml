@@ -32,8 +32,11 @@ jobs:
           pip3 install cmake
           echo "$(python3 -c 'import cmake; print(cmake.CMAKE_BIN_DIR)')" >> $GITHUB_PATH
 
-      - name: Resolve ffmpeg libs for full variant
-        run: git clone https://github.com/mikooomich/ffmpeg-android-maker-prebuilt/ -b audio ffMetadataEx/ffmpeg-android-maker
+      - name: Resolve ffmpeg libs
+        run: |
+          git clone https://github.com/mikooomich/ffmpeg-android-maker-prebuilt/ -b audio ffMetadataEx/ffmpeg-android-maker
+          cd ffMetadataEx/ffmpeg-android-maker
+          ./gradlew publishToMavenLocal
 
       - name: Build debug APKs and run jvm tests
         run: ./gradlew assembleCoreDebug assembleFullDebug lintCoreDebug testCoreDebugUnitTest --stacktrace -DskipFormatKtlint
