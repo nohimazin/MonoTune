@@ -39,13 +39,13 @@ const val APPWRITE_PROJECT_ID = "auth-for-monochrome"
  * Default hifi-api instance for search and metadata.
  * Source: public/instances.json in monochrome-music/monochrome.
  */
-const val DEFAULT_MONOCHROME_API_URL = "https://api.monochrome.tf"
+const val DEFAULT_MONOCHROME_API_URL = "https://monochrome-api.samidy.com"
 
 /**
  * Default hifi-api streaming instance (used for `/track/` requests that return manifests).
  * Source: public/instances.json in monochrome-music/monochrome.
  */
-const val DEFAULT_MONOCHROME_STREAMING_URL = "https://arran.monochrome.tf"
+const val DEFAULT_MONOCHROME_STREAMING_URL = "https://monochrome-api.samidy.com"
 
 /** Base URL for TIDAL album/track cover art. */
 const val TIDAL_IMAGE_BASE_URL = "https://resources.tidal.com/images"
@@ -533,13 +533,9 @@ class MonochromeClient @Inject constructor() : MonochromeClientApi {
         tidalId: String,
         quality: String,
     ): MonochromeResult<String> = withContext(Dispatchers.IO) {
-        // Use the dedicated streaming endpoint if using the default official API.
-        // The official API (api.monochrome.tf) disables /track/ streaming to save bandwidth.
-        val streamingUrl = if (_apiEndpoint == DEFAULT_MONOCHROME_API_URL) {
-            DEFAULT_MONOCHROME_STREAMING_URL
-        } else {
-            _apiEndpoint
-        }
+        // Use the configured API endpoint for streaming.
+        // The official API (monochrome-api.samidy.com) supports both /search/ and /track/.
+        val streamingUrl = _apiEndpoint
         try {
             val request = Request.Builder()
                 .url("$streamingUrl/track/?id=$tidalId&quality=$quality")
