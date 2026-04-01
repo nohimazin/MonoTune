@@ -14,7 +14,7 @@ room = "2.6.1"
 hilt = "2.51.1"
 ktor = "3.0.3"
 ksp = "2.0.21-1.0.25"
-ffmpeg-kit = "6.0-2"
+ffmpeg-kit = "6.0-2.LTS"
 
 [libraries]
 annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
