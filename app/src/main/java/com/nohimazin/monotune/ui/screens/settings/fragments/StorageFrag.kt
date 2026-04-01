@@ -25,6 +25,7 @@ import androidx.compose.material.icons.rounded.Backup
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Downloading
 import androidx.compose.material.icons.rounded.FolderCopy
+import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material3.Button
@@ -58,6 +59,8 @@ import coil3.imageLoader
 import com.nohimazin.monotune.LocalDownloadUtil
 import com.nohimazin.monotune.LocalPlayerConnection
 import com.nohimazin.monotune.R
+import com.nohimazin.monotune.constants.AudioQuality
+import com.nohimazin.monotune.constants.DownloadAudioQualityKey
 import com.nohimazin.monotune.constants.DownloadExtraPathKey
 import com.nohimazin.monotune.constants.DownloadPathKey
 import com.nohimazin.monotune.constants.MaxImageCacheSizeKey
@@ -65,6 +68,7 @@ import com.nohimazin.monotune.constants.MaxSongCacheSizeKey
 import com.nohimazin.monotune.constants.ThumbnailCornerRadius
 import com.nohimazin.monotune.db.MusicDatabase
 import com.nohimazin.monotune.extensions.tryOrNull
+import com.nohimazin.monotune.ui.component.EnumListPreference
 import com.nohimazin.monotune.ui.component.ListPreference
 import com.nohimazin.monotune.ui.component.PreferenceEntry
 import com.nohimazin.monotune.ui.component.SettingsClickToReveal
@@ -75,6 +79,7 @@ import com.nohimazin.monotune.ui.dialog.DefaultDialog
 import com.nohimazin.monotune.ui.dialog.InfoLabel
 import com.nohimazin.monotune.utils.dlCoroutine
 import com.nohimazin.monotune.utils.formatFileSize
+import com.nohimazin.monotune.utils.rememberEnumPreference
 import com.nohimazin.monotune.utils.rememberPreference
 import com.nohimazin.monotune.utils.absoluteFilePathFromUri
 import com.nohimazin.monotune.utils.stringFromUriList
@@ -142,6 +147,7 @@ fun ColumnScope.DownloadsFrag() {
     val downloadUtil = LocalDownloadUtil.current
 
     val (downloadPath, onDownloadPathChange) = rememberPreference(DownloadPathKey, "")
+    DownloadAudioQualityFrag()
 
     // size stats
     var downloadCacheSize by remember {
@@ -682,6 +688,30 @@ fun ColumnScope.DownloadsFrag() {
         )
     }
 
+}
+
+@Composable
+fun DownloadAudioQualityFrag() {
+    val (audioQuality, onAudioQualityChange) = rememberEnumPreference(
+        key = DownloadAudioQualityKey,
+        defaultValue = AudioQuality.AUTO
+    )
+
+    EnumListPreference(
+        title = { Text(stringResource(R.string.download_audio_quality)) },
+        icon = { Icon(Icons.Rounded.GraphicEq, null) },
+        selectedValue = audioQuality,
+        onValueSelected = onAudioQualityChange,
+        valueText = {
+            when (it) {
+                AudioQuality.AUTO -> stringResource(R.string.audio_quality_auto)
+                AudioQuality.LOW -> stringResource(R.string.audio_quality_low)
+                AudioQuality.HIGH -> stringResource(R.string.audio_quality_high)
+                AudioQuality.LOSSLESS -> stringResource(R.string.audio_quality_lossless)
+                AudioQuality.HI_RES_LOSSLESS -> stringResource(R.string.audio_quality_hi_res)
+            }
+        }
+    )
 }
 
 @Composable

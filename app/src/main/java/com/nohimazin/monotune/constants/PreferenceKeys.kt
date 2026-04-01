@@ -1,4 +1,4 @@
-package com.nohimazin.monotune.constants
+Ôªøpackage com.nohimazin.monotune.constants
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.floatPreferencesKey
@@ -53,6 +53,7 @@ val LastRecentActivitySyncKey = longPreferencesKey("lastRecentActivitySync")
  */
 val AudioDecoderKey = intPreferencesKey("audioDecoder")
 val AudioQualityKey = stringPreferencesKey("audioQuality")
+val DownloadAudioQualityKey = stringPreferencesKey("downloadAudioQuality")
 val AudioOffloadKey = booleanPreferencesKey("enableOffload")
 val AudioGaplessOffloadKey = booleanPreferencesKey("enableGaplessOffload")
 
@@ -206,7 +207,7 @@ val LanguageCodeToName = mapOf(
     "nl" to "Nederlands",
     "no" to "Norsk",
     "or" to "Odia",
-    "uz" to "OÅezbe",
+    "uz" to "O‚Äòzbe",
     "pl" to "Polski",
     "pt-PT" to "Portugues",
     "pt" to "Portugues (Brasil)",
@@ -219,15 +220,15 @@ val LanguageCodeToName = mapOf(
     "bo" to "Tibetan ????????",
     "vi" to "Ti?ng Vi?t",
     "tr" to "Turkce",
-    "bg" to "ÑAÑåÑ|ÑsÑpÑÇÑÉÑ{Ñy",
-    "ky" to "ÑKÑçÑÇÑsÑçÑxÑâÑp",
-    "kk" to "?ÑpÑxÑp? ÑS?Ñ|?",
-    "mk" to "ÑMÑpÑ{ÑuÑtÑÄÑ~ÑÉÑ{Ñy",
-    "mn" to "ÑMÑÄÑ~ÑsÑÄÑ|",
-    "ru" to "ÑQÑÖÑÉÑÉÑ{ÑyÑz",
-    "sr" to "ÑRÑÇÑÅÑÉÑ{Ñy",
-    "uk" to "ÑTÑ{ÑÇÑp?Ñ~ÑÉÑéÑ{Ñp",
-    "el" to "É£É…É…É≈ÉÀÉ«É»?",
+    "bg" to "–ë—ä–ª–≥–∞—Ä—Å–∫–∏",
+    "ky" to "–ö—ã—Ä–≥—ã–∑—á–∞",
+    "kk" to "?–∞–∑–∞? –¢?–ª?",
+    "mk" to "–ú–∞–∫–µ–¥–æ–Ω—Å–∫–∏",
+    "mn" to "–ú–æ–Ω–≥–æ–ª",
+    "ru" to "–†—É—Å—Å–∫–∏–π",
+    "sr" to "–°—Ä–ø—Å–∫–∏",
+    "uk" to "–£–∫—Ä–∞?–Ω—Å—å–∫–∞",
+    "el" to "ŒïŒªŒªŒ∑ŒΩŒπŒ∫?",
     "hy" to "???????",
     "iw" to "?????",
     "ur" to "????",
@@ -250,10 +251,10 @@ val LanguageCodeToName = mapOf(
     "ka" to "???????",
     "am" to "????",
     "km" to "?????",
-    "zh-CN" to "íÜï∂ (?ëÃ)",
-    "zh-TW" to "íÜï∂ (î…Èì)",
-    "zh-HK" to "íÜï∂ (çÅç`)",
-    "ja" to "ì˙ñ{åÍ",
+    "zh-CN" to "‰∏≠Êñá (?‰Ωì)",
+    "zh-TW" to "‰∏≠Êñá (ÁπÅÈ´î)",
+    "zh-HK" to "‰∏≠Êñá (È¶ôÊ∏Ø)",
+    "ja" to "Êó•Êú¨Ë™û",
     "ko" to "???",
 )
 
@@ -368,5 +369,6 @@ val CountryCodeToName = mapOf(
     "YE" to "Yemen",
     "ZW" to "Zimbabwe",
 )
+
 
 

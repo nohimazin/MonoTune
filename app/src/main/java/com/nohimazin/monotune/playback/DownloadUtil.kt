@@ -18,6 +18,7 @@ import androidx.media3.exoplayer.offline.DownloadRequest
 import androidx.media3.exoplayer.offline.DownloadService
 import com.nohimazin.monotune.constants.AudioQuality
 import com.nohimazin.monotune.constants.AudioQualityKey
+import com.nohimazin.monotune.constants.DownloadAudioQualityKey
 import com.nohimazin.monotune.constants.DownloadExtraPathKey
 import com.nohimazin.monotune.constants.DownloadPathKey
 import com.nohimazin.monotune.db.MusicDatabase
@@ -135,7 +136,7 @@ class DownloadUtil @Inject constructor(
 
         // 4. Resolve the Monochrome stream URL with user-selected quality.
         val quality = runBlocking(Dispatchers.IO) {
-            context.dataStore.data.first()[AudioQualityKey]?.toEnum(AudioQuality.AUTO) ?: AudioQuality.AUTO
+            context.dataStore.data.first()[DownloadAudioQualityKey]?.toEnum(AudioQuality.AUTO) ?: AudioQuality.AUTO
         }
         val qualityToken = when (quality) {
             AudioQuality.AUTO -> "LOSSLESS"

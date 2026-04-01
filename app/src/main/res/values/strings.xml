@@ -277,6 +277,7 @@ We recycle translations from upstream, they are pulled periodically. -->
     <string name="audio_quality_high">High (320kbps)</string>
     <string name="audio_quality_lossless">Lossless (FLAC)</string>
     <string name="audio_quality_hi_res">Hi-Res (24-bit FLAC)</string>
+    <string name="download_audio_quality">Download quality</string>
     <string name="queue">Queue</string>
     <string name="persistent_queue">Persistent queue</string>
     <string name="persistent_queue_desc">Restore your last queue when the app starts</string>
