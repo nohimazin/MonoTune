@@ -42,7 +42,11 @@ jobs:
         run: |
           git clone https://github.com/mikooomich/ffmpeg-android-maker-prebuilt/ -b audio ffMetadataEx/ffmpeg-android-maker
           cd ffMetadataEx/ffmpeg-android-maker
-          ./gradlew publishToMavenLocal
+          if [ -x "./gradlew" ]; then
+            ./gradlew publishToMavenLocal
+          else
+            gradle publishToMavenLocal
+          fi
 
       - name: Build full userdebug APK
         run: ./gradlew assembleFullUserdebug
