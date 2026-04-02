@@ -105,9 +105,9 @@ object LyricsPlusPublicLyricsProvider : LyricsProvider {
         extractQuotedValue(raw, "plainLyrics")?.let { return it }
         extractQuotedValue(raw, "lyrics")?.let { return it }
         extractQuotedValue(raw, "lrc")?.let { return it }
-        extractQuotedValue(raw, "text")?.let { return it }
 
         extractLineArrayFromRaw(raw)?.let { return it }
+        extractQuotedValue(raw, "text")?.let { return it }
 
         return runCatching {
             val root = JSONObject(raw)
