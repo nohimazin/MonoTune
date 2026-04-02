@@ -22,10 +22,10 @@ class LyricsHelper @Inject constructor(
     val database: MusicDatabase,
     private val monochromeLyricsProvider: MonochromeLyricsProvider,
 ) {
-    // Monochrome is tried first (uses accurate TIDAL metadata + album for LRCLib lookup).
-    // If no Monochrome match exists or the request fails, subsequent providers are attempted.
+    // Public LyricsPlus is tried first, then existing providers continue as fallback.
     private val lyricsProviders: List<LyricsProvider> by lazy {
         listOf(
+            LyricsPlusPublicLyricsProvider,
             monochromeLyricsProvider,
             YouTubeSubtitleLyricsProvider,
             LrcLibLyricsProvider,
