@@ -1,6 +1,7 @@
 package com.nohimazin.monotune.playback
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
@@ -29,6 +30,7 @@ import com.nohimazin.monotune.di.AppModule.PlayerCache
 import com.nohimazin.monotune.di.DownloadCache
 import com.nohimazin.monotune.models.MediaMetadata
 import com.nohimazin.monotune.models.toMediaMetadata
+import com.nohimazin.monotune.playback.downloadManager.DownloadEvent
 import com.nohimazin.monotune.playback.DownloadUtil.Companion.STATE_DOWNLOADING
 import com.nohimazin.monotune.playback.DownloadUtil.Companion.STATE_INVALID
 import com.nohimazin.monotune.playback.downloadManager.DownloadDirectoryManagerOt

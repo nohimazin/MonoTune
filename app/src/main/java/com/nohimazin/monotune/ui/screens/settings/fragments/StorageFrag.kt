@@ -77,6 +77,7 @@ import com.nohimazin.monotune.extensions.tryOrNull
 import com.nohimazin.monotune.ui.component.EnumListPreference
 import com.nohimazin.monotune.ui.component.ListPreference
 import com.nohimazin.monotune.ui.component.PreferenceEntry
+import com.nohimazin.monotune.ui.component.PreferenceGroupTitle
 import com.nohimazin.monotune.ui.component.SettingsClickToReveal
 import com.nohimazin.monotune.ui.component.SwitchPreference
 import com.nohimazin.monotune.ui.component.button.IconButton
