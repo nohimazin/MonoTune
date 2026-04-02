@@ -72,7 +72,17 @@ class TranscodeMetadataVerifierTest {
         assertTrue(command.contains("-b:a 192k"))
         assertTrue(command.contains("-c:v copy"))
         assertTrue(command.contains("-c:s copy"))
+        assertTrue(command.contains("-f mp3"))
         assertTrue(command.contains(sourceFile.absolutePath))
         assertTrue(command.contains(targetFile.absolutePath))
+    }
+
+    @Test
+    fun `profileForFormat returns stable extension and muxer`() {
+        val profile = AudioTranscoder.profileForFormat("OPUS")
+
+        assertEquals("libopus", profile.codec)
+        assertEquals("opus", profile.muxer)
+        assertEquals("opus", profile.extension)
     }
 }

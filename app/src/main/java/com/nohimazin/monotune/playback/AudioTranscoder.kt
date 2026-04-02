@@ -58,28 +58,38 @@ class AudioTranscoder @Inject constructor(
     }
 
     internal companion object {
+        internal data class FormatProfile(
+            val codec: String,
+            val muxer: String,
+            val extension: String,
+        )
+
+        internal fun profileForFormat(format: String): FormatProfile = when (format.uppercase()) {
+            "AAC" -> FormatProfile(codec = "aac", muxer = "adts", extension = "aac")
+            "OPUS" -> FormatProfile(codec = "libopus", muxer = "opus", extension = "opus")
+            "MP3" -> FormatProfile(codec = "libmp3lame", muxer = "mp3", extension = "mp3")
+            "OGG" -> FormatProfile(codec = "libvorbis", muxer = "ogg", extension = "ogg")
+            else -> FormatProfile(codec = "aac", muxer = "adts", extension = "aac")
+        }
+
         internal fun buildCommand(
             sourceFile: File,
             targetFile: File,
             format: String,
             bitrate: Int,
         ): String {
-            val codec = when (format.uppercase()) {
-                "AAC" -> "aac"
-                "OPUS" -> "libopus"
-                "MP3" -> "libmp3lame"
-                "OGG" -> "libvorbis"
-                else -> "aac"
-            }
+            val profile = profileForFormat(format)
 
             return buildString {
                 append("-y -i \"")
                 append(sourceFile.absolutePath)
                 append("\" -map 0 -map_metadata 0 -map_chapters 0 -c:a ")
-                append(codec)
+                append(profile.codec)
                 append(" -b:a ")
                 append(bitrate)
-                append("k -c:v copy -c:s copy \"")
+                append("k -c:v copy -c:s copy -f ")
+                append(profile.muxer)
+                append(" \"")
                 append(targetFile.absolutePath)
                 append("\"")
             }
