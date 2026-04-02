@@ -14,7 +14,7 @@ room = "2.6.1"
 hilt = "2.51.1"
 ktor = "3.0.3"
 ksp = "2.0.21-1.0.25"
-ffmpeg-kit = "6.0-2.LTS"
+ffmpeg-kit = "6.1.4"
 
 [libraries]
 annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
@@ -84,7 +84,7 @@ desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version =
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 
 newpipe-extractor = { group = "com.github.TeamNewPipe", name = "NewPipeExtractor", version = "v0.25.1" }
-ffmpeg-kit = { group = "com.arthenica", name = "ffmpeg-kit-full-gpl", version.ref = "ffmpeg-kit" }
+ffmpeg-kit = { group = "io.github.jamaismagic.ffmpeg", name = "ffmpeg-kit-main-full-gpl-16kb", version.ref = "ffmpeg-kit" }
 
 [plugins]
 aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
