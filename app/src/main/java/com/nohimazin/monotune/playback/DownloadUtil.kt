@@ -22,6 +22,9 @@ import com.nohimazin.monotune.constants.AudioQualityKey
 import com.nohimazin.monotune.constants.DownloadAudioQualityKey
 import com.nohimazin.monotune.constants.DownloadExtraPathKey
 import com.nohimazin.monotune.constants.DownloadPathKey
+import com.nohimazin.monotune.constants.TranscodeBitrateKey
+import com.nohimazin.monotune.constants.TranscodeEnabledKey
+import com.nohimazin.monotune.constants.TranscodeFormatKey
 import com.nohimazin.monotune.db.MusicDatabase
 import com.nohimazin.monotune.db.entities.PlaylistSong
 import com.nohimazin.monotune.db.entities.Song
