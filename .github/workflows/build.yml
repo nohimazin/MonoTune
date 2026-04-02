@@ -25,18 +25,25 @@ jobs:
           cache: 'gradle'
 
       - name: Accept SDK licenses
-        run: yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+        run: |
+          mkdir -p "$ANDROID_HOME/licenses"
+          echo "24333f8a63b6825ea9c5513f83cff73d40ff9f00" > "$ANDROID_HOME/licenses/android-sdk-license"
+          echo "84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
 
       - name: Install CMake 4.x
         run: |
           pip3 install cmake
           echo "$(python3 -c 'import cmake; print(cmake.CMAKE_BIN_DIR)')" >> $GITHUB_PATH
 
-      - name: Build debug APK and run jvm tests
-        run: ./gradlew assembleCoreDebug lintCoreDebug testCoreDebugUnitTest --stacktrace -DskipFormatKtlint
+      - name: Resolve ffmpeg libs
+        run: git clone https://github.com/mikooomich/ffmpeg-android-maker-prebuilt/ -b audio ffMetadataEx/ffmpeg-android-maker
 
-      - name: Upload APK
+      - name: Build debug APKs and run jvm tests
+        run: ./gradlew assembleCoreDebug assembleFullDebug lintCoreDebug testCoreDebugUnitTest --stacktrace --no-configuration-cache -DskipFormatKtlint
+
+      - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
           name: app
-          path: app/build/outputs/apk/core/debug/*.apk
+          path: app/build/outputs/apk/*/debug/*.apk

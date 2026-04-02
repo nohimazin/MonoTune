@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="android_auto">Android Auto</string>
     <string name="folders">Pastas</string>
@@ -109,7 +109,7 @@
     <string name="audio_offload">Ativar descarga</string>
     <string name="audio_offload_description">Utilize o caminho de áudio de descarga para a reprodução. A ativação desta opção pode reduzir o consumo de energia, mas pode causar problemas com a reprodução ou pós-processamento. Esta preferência não tem qualquer efeito em codificadores ou dispositivos não suportados.</string>
     <string name="keep_alive_title">Prevenir término da aplicação</string>
-    <string name="keep_alive_description">Utilizar um serviço persistente para evitar que OuterTune seja encerrado em segundo plano</string>
+    <string name="keep_alive_description">Utilizar um serviço persistente para evitar que MonoTune seja encerrado em segundo plano</string>
     <string name="persistent_queue_desc_ot">Ao iniciar, recuperar filas abertas</string>
     <string name="min_playback_duration">Duração mínima de reprodução</string>
     <string name="min_playback_duration_description">A duração mínima que uma música deve ser reproduzida antes que seja considerada como reproduzida</string>
@@ -205,7 +205,7 @@
     <string name="dev_settings_description">Ativa as definições avançadas, criadas a pensar nos programdores</string>
     <string name="swipe_to_skip_title">Deslize horizontal para mudar de música</string>
     <string name="swipe_to_skip_description">Ativar deslize horizontal no reprodutor para mudar de música</string>
-    <string name="oobe_welcome_message">Boas vindas ao OuterTune</string>
+    <string name="oobe_welcome_message">Boas vindas ao MonoTune</string>
     <string name="oobe_ytm_integration">Integração com YouTube Music</string>
     <string name="oobe_ytm_integration_description">Aceda às suas músicas favoritas</string>
     <string name="oobe_ad_free_exp">YouTube Music sem anúncios</string>
@@ -215,7 +215,7 @@
     <string name="oobe_cross_platform_sync">Sincronização entre plataformas</string>
     <string name="oobe_cross_platform_sync_description">Mantenha a sua música entre vários dispositivos</string>
     <string name="oobe_use_backup">Tenho um backup</string>
-    <string name="oobe_interface_subtitle">Personalize o aspeto e o conteúdo mostrado em OuterTune.</string>
+    <string name="oobe_interface_subtitle">Personalize o aspeto e o conteúdo mostrado em MonoTune.</string>
     <string name="oobe_ytm_logon_title">Conta</string>
     <string name="oobe_ytm_logon_subtitle">Ligue-se à sua conta YouTube Music para sincronizar e aceder ao conteúdo privado da conta. OPCIONAL.</string>
     <string name="oobe_local_media_title">Ficheiros locais</string>
@@ -223,7 +223,7 @@
     <string name="oobe_downloads_title">Descargas de músicas</string>
     <string name="oobe_downloads_subtitle">Selecione a pasta na qual as músicas descarregadas serão gravadas.</string>
     <string name="oobe_complete_title">Tudo pronto!</string>
-    <string name="oobe_complete">OuterTune está configurado e pronto para ser usado. Explore as suas músicas, descubra novas faixas e aproveite a experiência!</string>
+    <string name="oobe_complete">MonoTune está configurado e pronto para ser usado. Explore as suas músicas, descubra novas faixas e aproveite a experiência!</string>
     <string name="import_failed_songs">Não foi possível importar</string>
     <string name="import_success_songs">Importadas com sucesso</string>
     <string name="m3u_export">Exportar como um ficheiro M3U</string>

@@ -99,7 +99,7 @@ class LyricsHelper @Inject constructor(
                 ).onSuccess { lyrics ->
                     return lyrics
                 }.onFailure {
-                    // LyricsNotFoundException is an expected "no match" signal — not a true error.
+                    // LyricsNotFoundException is an expected "no match" signal  Enot a true error.
                     if (it !is LyricsNotFoundException) {
                         reportException(it)
                     }

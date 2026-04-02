@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- These strings are the upstream InnerTune strings. Do not add strings from OuterTune features here. InnerTune wording is replaced with OuterTune.
+<!-- These strings are the upstream InnerTune strings. Do not add strings from MonoTune features here. InnerTune wording is replaced with MonoTune.
 We recycle translations from upstream, they are pulled periodically. -->
 
 <resources>
@@ -273,8 +273,11 @@ We recycle translations from upstream, they are pulled periodically. -->
     <string name="player_and_audio">Player and audio</string>
     <string name="audio_quality">Audio quality</string>
     <string name="audio_quality_auto">Auto</string>
-    <string name="audio_quality_high">High</string>
-    <string name="audio_quality_low">Low</string>
+    <string name="audio_quality_low">Low (96kbps)</string>
+    <string name="audio_quality_high">High (320kbps)</string>
+    <string name="audio_quality_lossless">Lossless (FLAC)</string>
+    <string name="audio_quality_hi_res">Hi-Res (24-bit FLAC)</string>
+    <string name="download_audio_quality">Download quality</string>
     <string name="queue">Queue</string>
     <string name="persistent_queue">Persistent queue</string>
     <string name="persistent_queue_desc">Restore your last queue when the app starts</string>
@@ -299,6 +302,15 @@ We recycle translations from upstream, they are pulled periodically. -->
     <string name="max_song_cache_size">Max song cache size</string>
     <string name="clear_song_cache">Clear song cache</string>
     <string name="size_used">%s used</string>
+    <string name="transcoding">Transcoding</string>
+    <string name="enable_transcoding">Enable transcoding</string>
+    <string name="transcoding_desc">Automatically transcode downloads to save space</string>
+    <string name="transcode_format">Target format</string>
+    <string name="transcode_bitrate">Target bitrate (kbps)</string>
+    <string name="batch_transcode">Batch transcode downloads</string>
+    <string name="batch_transcode_desc">Transcode all existing downloads to the selected format</string>
+    <string name="transcoding_progress">Transcoding: %1$d/%2$d</string>
+    <string name="transcoding_complete">Transcoding complete</string>
 
     <string name="privacy">Privacy</string>
     <string name="listen_history">Listen history</string>
@@ -326,7 +338,7 @@ We recycle translations from upstream, they are pulled periodically. -->
     <string name="restore_failed">Failed to restore backup</string>
 
     <string name="discord_integration">Discord Integration</string>
-    <string name="discord_information">OuterTune uses the KizzyRPC library to set your Discord account\'s status. This involves using the Discord Gateway connection, which may be considered a violation of Discord\'s TOS. However, there are no known cases of user accounts being suspended for this reason. Use at your own risk.\n\nOuterTune will only extract your token, and everything else is stored locally.</string>
+    <string name="discord_information">MonoTune uses the KizzyRPC library to set your Discord account\'s status. This involves using the Discord Gateway connection, which may be considered a violation of Discord\'s TOS. However, there are no known cases of user accounts being suspended for this reason. Use at your own risk.\n\nMonoTune will only extract your token, and everything else is stored locally.</string>
     <string name="dismiss">Dismiss</string>
     <string name="options">Options</string>
     <string name="preview">Preview</string>

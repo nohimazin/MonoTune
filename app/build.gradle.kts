@@ -7,11 +7,19 @@ import java.util.Properties
 
 
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.aboutlibraries)
+}
+
+kotlin {
+    jvmToolchain(21)
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+    }
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -25,12 +33,12 @@ android {
     // are importable as com.nohimazin.monotune.R / com.nohimazin.monotune.BuildConfig.
     // applicationId (below) is the distinct MonoTune store/device identifier.
     namespace = "com.nohimazin.monotune"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.nohimazin.monotune"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 71
         versionName = "0.10.2-b1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -111,16 +119,8 @@ android {
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin {
-        jvmToolchain(17)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-            freeCompilerArgs.add("-Xannotation-default-target=param-property")
-
-        }
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     tasks.withType<KotlinCompile> {
@@ -152,7 +152,7 @@ android {
             // Define the strict mode, will fail if the project uses licenses not allowed
             strictMode = com.mikepenz.aboutlibraries.plugin.StrictMode.FAIL
             // Allowed set of licenses, this project will be able to use without build failure
-            allowedLicenses.addAll("Apache-2.0", "BSD-3-Clause", "GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1", "GNU GENERAL PUBLIC LICENSE, Version 3", "GPL-3.0-only", "EPL-2.0", "MIT", "MPL-2.0", "Public Domain")
+            allowedLicenses.addAll("Apache-2.0", "BSD-3-Clause", "GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1", "GNU LESSER GENERAL PUBLIC LICENSE Version 3", "GNU GENERAL PUBLIC LICENSE, Version 3", "GPL-3.0-only", "EPL-2.0", "MIT", "MPL-2.0", "Public Domain")
 
             // Full license text for license IDs mentioned here will be included, even if no detected dependency uses them.
              additionalLicenses.addAll("apache_2_0", "gpl_2_1") // taglib, ffMpeg in ffMetadataEx
@@ -183,6 +183,20 @@ android {
 
     androidResources {
         generateLocaleConfig = true
+    }
+
+    packaging {
+        jniLibs {
+            pickFirsts += setOf(
+                "**/libavcodec.so",
+                "**/libavdevice.so",
+                "**/libavfilter.so",
+                "**/libavformat.so",
+                "**/libavutil.so",
+                "**/libswresample.so",
+                "**/libswscale.so",
+            )
+        }
     }
 }
 
@@ -264,5 +278,6 @@ dependencies {
 afterEvaluate {
     dependencies {
         add("fullImplementation", project(":ffMetadataEx"))
+        add("fullImplementation", libs.ffmpeg.kit)
     }
 }

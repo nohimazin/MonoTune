@@ -1,12 +1,18 @@
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version("0.9.0")
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
 }
+
 
 @file:Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
     repositories {
+        mavenLocal()
         google()
         mavenCentral()
         maven { setUrl("https://jitpack.io") }

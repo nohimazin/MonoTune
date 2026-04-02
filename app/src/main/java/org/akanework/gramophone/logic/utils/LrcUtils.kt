@@ -78,8 +78,9 @@ object LrcUtils {
                     meta.values.joinToString("\n")
                 else null
             if (plainTextData != null) {
-                parseLyrics(plainTextData, audioMimeType, parserOptions, null)?.let {
-                    out.add(it)
+                val lyrics = parseLyrics(plainTextData, audioMimeType, parserOptions, null)
+                if (lyrics != null) {
+                    out.add(lyrics)
                     continue
                 }
             }
