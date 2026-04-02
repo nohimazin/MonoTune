@@ -1,12 +1,21 @@
 package com.nohimazin.monotune.lyrics
 
 import android.content.Context
+import com.nohimazin.monotune.constants.EnableLyricsPlusPublicKey
+import com.nohimazin.monotune.utils.dataStore
+import com.nohimazin.monotune.utils.get
+import kotlinx.coroutines.suspendCancellableCoroutine
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.IOException
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.resume
 
 /**
  * Public LyricsPlus endpoint provider.
@@ -30,7 +39,8 @@ object LyricsPlusPublicLyricsProvider : LyricsProvider {
         "https://lyrics-plus-backend.vercel.app",
     )
 
-    override fun isEnabled(context: Context): Boolean = true
+    override fun isEnabled(context: Context): Boolean =
+        context.dataStore[EnableLyricsPlusPublicKey] ?: true
 
     override suspend fun getLyrics(
         id: String,
@@ -40,31 +50,45 @@ object LyricsPlusPublicLyricsProvider : LyricsProvider {
     ): Result<String> {
         val query = buildQuery(title, artist, duration)
         for (base in baseUrls) {
-            val url = "$base/v2/lyrics/get?$query"
-            val request = Request.Builder()
-                .url(url)
-                .get()
-                .build()
-
-            val response = try {
-                httpClient.newCall(request).execute()
-            } catch (_: Exception) {
-                continue
-            }
-            val parsed = response.use {
-                if (!it.isSuccessful) {
-                    null
-                } else {
-                    val body = it.body?.string().orEmpty()
-                    parseLyrics(body)
-                }
-            }
+            val parsed = fetchLyricsFromBase(base, query)
             if (!parsed.isNullOrBlank()) {
                 return Result.success(parsed)
             }
         }
         return Result.failure(LyricsNotFoundException("No result from public LyricsPlus endpoints"))
     }
+
+    private suspend fun fetchLyricsFromBase(base: String, query: String): String? =
+        suspendCancellableCoroutine { continuation ->
+            val request = Request.Builder()
+                .url("$base/v2/lyrics/get?$query")
+                .get()
+                .build()
+
+            val call = httpClient.newCall(request)
+            continuation.invokeOnCancellation { call.cancel() }
+
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    if (continuation.isActive) {
+                        continuation.resume(null)
+                    }
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val parsed = response.use {
+                        if (!it.isSuccessful) {
+                            null
+                        } else {
+                            parseLyrics(it.body?.string().orEmpty())
+                        }
+                    }
+                    if (continuation.isActive) {
+                        continuation.resume(parsed)
+                    }
+                }
+            })
+        }
 
     private fun buildQuery(title: String, artist: String, duration: Int): String {
         val encodedTitle = URLEncoder.encode(title, "UTF-8")
@@ -73,7 +97,7 @@ object LyricsPlusPublicLyricsProvider : LyricsProvider {
         return "title=$encodedTitle&artist=$encodedArtist&duration=$durationMs"
     }
 
-    private fun parseLyrics(raw: String): String? {
+    internal fun parseLyrics(raw: String): String? {
         if (raw.isBlank()) return null
         return runCatching {
             val root = JSONObject(raw)

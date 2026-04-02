@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nohimazin.monotune.R
 import com.nohimazin.monotune.constants.EnableKugouKey
+import com.nohimazin.monotune.constants.EnableLyricsPlusPublicKey
 import com.nohimazin.monotune.constants.EnableLrcLibKey
 import com.nohimazin.monotune.constants.LyricClickable
 import com.nohimazin.monotune.constants.LyricFontSizeKey
@@ -135,9 +136,17 @@ fun ColumnScope.LyricParserFrag() {
 
 @Composable
 fun ColumnScope.LyricSourceFrag() {
+    val (enableLyricsPlusPublic, onEnableLyricsPlusPublicChange) = rememberPreference(key = EnableLyricsPlusPublicKey, defaultValue = true)
     val (enableKugou, onEnableKugouChange) = rememberPreference(key = EnableKugouKey, defaultValue = true)
     val (enableLrcLib, onEnableLrcLibChange) = rememberPreference(key = EnableLrcLibKey, defaultValue = true)
     val (preferLocalLyric, onPreferLocalLyric) = rememberPreference(LyricSourcePrefKey, defaultValue = true)
+
+    SwitchPreference(
+        title = { Text(stringResource(R.string.enable_lyricsplus_public)) },
+        icon = { Icon(Icons.Rounded.Lyrics, null) },
+        checked = enableLyricsPlusPublic,
+        onCheckedChange = onEnableLyricsPlusPublicChange
+    )
 
     SwitchPreference(
         title = { Text(stringResource(R.string.enable_lrclib)) },
