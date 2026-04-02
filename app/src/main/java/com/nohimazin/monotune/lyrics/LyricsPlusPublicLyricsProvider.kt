@@ -99,10 +99,50 @@ object LyricsPlusPublicLyricsProvider : LyricsProvider {
 
     internal fun parseLyrics(raw: String): String? {
         if (raw.isBlank()) return null
+
+        // Fast-path extraction that does not depend on a specific JSON implementation.
+        extractQuotedValue(raw, "syncedLyrics")?.let { return it }
+        extractQuotedValue(raw, "plainLyrics")?.let { return it }
+        extractQuotedValue(raw, "lyrics")?.let { return it }
+        extractQuotedValue(raw, "lrc")?.let { return it }
+        extractQuotedValue(raw, "text")?.let { return it }
+
+        extractLineArrayFromRaw(raw)?.let { return it }
+
         return runCatching {
             val root = JSONObject(raw)
             extractText(root)
         }.getOrNull()
+    }
+
+    private fun extractQuotedValue(raw: String, key: String): String? {
+        val regex = Regex("\\\"$key\\\"\\s*:\\s*\\\"((?:\\\\.|[^\\\"\\\\])*)\\\"")
+        val value = regex.find(raw)?.groupValues?.getOrNull(1) ?: return null
+        val decoded = value
+            .replace("\\\\n", "\n")
+            .replace("\\\\r", "\r")
+            .replace("\\\\t", "\t")
+            .replace("\\\\\"", "\"")
+            .replace("\\\\\\\\", "\\")
+            .trim()
+        return decoded.ifBlank { null }
+    }
+
+    private fun extractLineArrayFromRaw(raw: String): String? {
+        val regex = Regex("\\\"(?:text|line)\\\"\\s*:\\s*\\\"((?:\\\\.|[^\\\"\\\\])*)\\\"")
+        val lines = regex.findAll(raw)
+            .map { it.groupValues[1] }
+            .map {
+                it.replace("\\\\n", "\n")
+                    .replace("\\\\r", "\r")
+                    .replace("\\\\t", "\t")
+                    .replace("\\\\\"", "\"")
+                    .replace("\\\\\\\\", "\\")
+                    .trim()
+            }
+            .filter { it.isNotBlank() }
+            .toList()
+        return lines.joinToString("\n").ifBlank { null }
     }
 
     private fun extractText(json: JSONObject): String? {
