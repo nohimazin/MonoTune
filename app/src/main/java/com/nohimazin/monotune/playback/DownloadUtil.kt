@@ -515,6 +515,7 @@ class DownloadUtil @Inject constructor(
 
         withContext(Dispatchers.IO) {
             val sourceFile = fileFromUri(context, fileUri) ?: return@withContext
+            val sourceMetadataSnapshot = TranscodeMetadataVerifier.snapshotFrom(sourceFile)
             // Use a temporary file for transcoding
             val tempFile = File(sourceFile.parent, "${sourceFile.nameWithoutExtension}.tmp")
 
@@ -532,6 +533,16 @@ class DownloadUtil @Inject constructor(
                             Log.e(TAG, "Failed to replace original file with transcoded one: ${e.message}")
                         }
                     }
+                }
+
+                val transcodedMetadataSnapshot = TranscodeMetadataVerifier.snapshotFrom(sourceFile)
+                if (sourceMetadataSnapshot != null && transcodedMetadataSnapshot != null) {
+                    val verificationResult = TranscodeMetadataVerifier.verify(sourceMetadataSnapshot, transcodedMetadataSnapshot)
+                    if (!verificationResult.isSuccess) {
+                        Log.w(TAG, "Metadata mismatch after transcoding for $mediaId: ${verificationResult.describe()}")
+                    }
+                } else {
+                    Log.d(TAG, "Skipped metadata verification for $mediaId because snapshot extraction was unavailable")
                 }
                 Log.d(TAG, "Transcoding successful for $mediaId. Format: $format, Bitrate: ${bitrate}k")
             } else {

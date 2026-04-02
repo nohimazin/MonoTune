@@ -32,16 +32,7 @@ class AudioTranscoder @Inject constructor(
             return false
         }
 
-        val codec = when (format.uppercase()) {
-            "AAC" -> "aac"
-            "OPUS" -> "libopus"
-            "MP3" -> "libmp3lame"
-            "OGG" -> "libvorbis"
-            else -> "aac"
-        }
-
-        // -y to overwrite output file if it exists
-        val command = "-y -i \"${sourceFile.absolutePath}\" -c:a $codec -b:a ${bitrate}k \"${targetFile.absolutePath}\""
+        val command = buildCommand(sourceFile, targetFile, format, bitrate)
 
         Log.d(TAG, "Executing FFmpeg command: $command")
 
@@ -63,6 +54,35 @@ class AudioTranscoder @Inject constructor(
         } catch (e: Throwable) {
             Log.e(TAG, "FFmpeg runtime not available or transcoding failed", e)
             false
+        }
+    }
+
+    internal companion object {
+        internal fun buildCommand(
+            sourceFile: File,
+            targetFile: File,
+            format: String,
+            bitrate: Int,
+        ): String {
+            val codec = when (format.uppercase()) {
+                "AAC" -> "aac"
+                "OPUS" -> "libopus"
+                "MP3" -> "libmp3lame"
+                "OGG" -> "libvorbis"
+                else -> "aac"
+            }
+
+            return buildString {
+                append("-y -i \"")
+                append(sourceFile.absolutePath)
+                append("\" -map 0 -map_metadata 0 -map_chapters 0 -c:a ")
+                append(codec)
+                append(" -b:a ")
+                append(bitrate)
+                append("k -c:v copy -c:s copy \"")
+                append(targetFile.absolutePath)
+                append("\"")
+            }
         }
     }
 }
