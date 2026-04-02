@@ -184,6 +184,20 @@ android {
     androidResources {
         generateLocaleConfig = true
     }
+
+    packaging {
+        jniLibs {
+            pickFirsts += setOf(
+                "**/libavcodec.so",
+                "**/libavdevice.so",
+                "**/libavfilter.so",
+                "**/libavformat.so",
+                "**/libavutil.so",
+                "**/libswresample.so",
+                "**/libswscale.so",
+            )
+        }
+    }
 }
 
 ksp {
