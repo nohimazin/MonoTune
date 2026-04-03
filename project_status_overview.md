@@ -30,7 +30,9 @@
 - [x] ダウンロード音質の独立設定 (設定 UI とキー追加)。
 - [x] 音声変換エンジン実装 (FFmpeg-kit ベースの変換処理)。
 - [x] ダウンロード後の自動トランスコード統合。
+- [x] トランスコード後ファイルのメタデータ継承検証の自動化。
 - [x] 一括変換 UI と進捗表示の追加。
+- [x] LyricsPlus 公開 API 優先化の実装と関連ビルド修正。
 - [x] AboutLibraries の strict license 検査対応。
 	- `GNU LESSER GENERAL PUBLIC LICENSE Version 3` を許可リストに追加済み。
 - [x] `full` ビルドの native ライブラリ競合解消。
@@ -40,8 +42,8 @@
 	- `--warning-mode all` でも致命的な警告なし。
 
 ### 進行中
-- [ ] トランスコード後ファイルのメタデータ継承品質検証 (タグ、カバー、歌詞)。
 - [ ] 変換ジョブ失敗時のリトライと中断復旧の最終確認。
+- [ ] LyricsPlus パーサーの実運用確認とフォールバック動作の継続監視。
 
 ---
 
@@ -52,7 +54,12 @@
 - 対応: AboutLibraries の許可ライセンスへ LGPLv3 を追加。
 - 状態: 解消済み。
 
-### 2. Native `.so` 重複起因の `mergeFullDebugNativeLibs` 失敗
+### 2. LyricsPlus パーサー起因の unit test 失敗
+- 事象: `:app:testCoreDebugUnitTest` の `LyricsPlusPublicLyricsProviderTest` で nested line array の検証が失敗。
+- 対応: 配列抽出を単一 `text` 抽出より優先するように修正。
+- 状態: 解消済み。
+
+### 3. Native `.so` 重複起因の `mergeFullDebugNativeLibs` 失敗
 - 事象: `ffMetadataEx` と `ffmpeg-kit` の両方から `libav*.so` が流入し競合。
 - 対応: app 側で `jniLibs.pickFirsts` を設定し、同名ライブラリの統合ルールを明示。
 - 状態: 解消済み。
@@ -80,3 +87,5 @@
 - Android 13+ のメディア権限周辺で、変換後置換時の権限維持確認を継続。
 - 長時間トランスコード時の発熱/電池消費は引き続き監視。
 - 外部依存 (ffmpeg fork, AboutLibraries) の更新でライセンス表記や ABI 構成が変わる可能性に注意。
+- LyricsPlus 公開 API の応答形式差異が残る可能性があるため、例外時のフォールバック経路は継続監視。
+- トランスコードの検証は標準タグと埋め込み画像を中心に自動化済みで、歌詞タグは実装依存のため継続観測。
