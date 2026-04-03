@@ -144,27 +144,32 @@ class DownloadUtil @Inject constructor(
         val quality = runBlocking(Dispatchers.IO) {
             context.dataStore.data.first()[DownloadAudioQualityKey]?.toEnum(AudioQuality.AUTO) ?: AudioQuality.AUTO
         }
-        val qualityToken = when (quality) {
-            AudioQuality.AUTO -> "LOSSLESS"
-            AudioQuality.LOW -> "LOW"
-            AudioQuality.HIGH -> "HIGH"
-            AudioQuality.LOSSLESS -> "LOSSLESS"
-            AudioQuality.HI_RES_LOSSLESS -> "HI_RES_LOSSLESS"
+        val qualityTokens = quality.toMonochromeQualityTokens()
+        var lastResolveError: String? = null
+
+        for (qualityToken in qualityTokens) {
+            val monochromeResult = runBlocking(Dispatchers.IO) {
+                monochromeClient.resolveStreamUrl(monochromeId!!, quality = qualityToken)
+            }
+            when (monochromeResult) {
+                is MonochromeResult.Success -> {
+                    if (qualityToken != qualityTokens.first()) {
+                        Log.w(TAG, "DOWNLOAD: quality fallback applied ${qualityTokens.first()} -> $qualityToken")
+                    }
+                    Log.d(TAG, "DOWNLOAD: Monochrome stream resolved for monochromeId=$monochromeId")
+                    return@Factory dataSpec.withUri(monochromeResult.data.toUri())
+                }
+                is MonochromeResult.Error -> {
+                    lastResolveError = monochromeResult.message
+                    Log.w(
+                        TAG,
+                        "DOWNLOAD: Monochrome stream resolution failed for monochromeId=$monochromeId (quality=$qualityToken): ${monochromeResult.message}"
+                    )
+                }
+            }
         }
 
-        val monochromeResult = runBlocking(Dispatchers.IO) {
-            monochromeClient.resolveStreamUrl(monochromeId!!, quality = qualityToken)
-        }
-        when (monochromeResult) {
-            is MonochromeResult.Success -> {
-                Log.d(TAG, "DOWNLOAD: Monochrome stream resolved for monochromeId=$monochromeId")
-                return@Factory dataSpec.withUri(monochromeResult.data.toUri())
-            }
-            is MonochromeResult.Error -> {
-                Log.w(TAG, "DOWNLOAD: Monochrome stream resolution failed for monochromeId=$monochromeId: ${monochromeResult.message}")
-                throw IOException("Monochrome stream resolution failed: ${monochromeResult.message}")
-            }
-        }
+        throw IOException("Monochrome stream resolution failed: $lastResolveError")
     }
     val downloadNotificationHelper = DownloadNotificationHelper(context, ExoDownloadService.CHANNEL_ID)
     val downloadManager: DownloadManager =

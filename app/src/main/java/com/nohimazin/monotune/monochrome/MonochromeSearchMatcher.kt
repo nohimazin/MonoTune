@@ -30,7 +30,8 @@ import javax.inject.Singleton
  * 3. **Selection**: first candidate where
  *    - normalized title contains or equals the YTM title, AND
  *    - normalized artist string contains or equals the primary YTM artist, AND
- *    - duration is within ±[DURATION_TOLERANCE_SECS] seconds (when both are known).
+ *    - duration is within ±[DURATION_TOLERANCE_SECS] seconds (when both are known),
+ *      with a second-pass fallback of ±[RELAXED_DURATION_TOLERANCE_SECS] seconds.
  *
  * ### Caching
  * Search results are cached in memory keyed by the normalized query string.
@@ -104,12 +105,12 @@ class MonochromeSearchMatcher @Inject constructor(
             val normArtist = normalize(artistName)
             val songDuration: Int? = metadata.duration
 
-                selectBestCandidate(
+            selectBestCandidate(
                 normTitle = normTitle,
                 normArtist = normArtist,
                 songDuration = songDuration,
                 candidates = candidates
-                )
+            )
         }
 
     // -------------------------------------------------------------------------

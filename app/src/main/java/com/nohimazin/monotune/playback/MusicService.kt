@@ -749,13 +749,7 @@ class MusicService : MediaLibraryService(),
             val quality = runBlocking(Dispatchers.IO) {
                 dataStore.data.first()[AudioQualityKey]?.toEnum(AudioQuality.AUTO) ?: AudioQuality.AUTO
             }
-            val qualityTokens = when (quality) {
-                AudioQuality.AUTO -> listOf("LOSSLESS", "HIGH", "LOW")
-                AudioQuality.LOW -> listOf("LOW")
-                AudioQuality.HIGH -> listOf("HIGH", "LOW")
-                AudioQuality.LOSSLESS -> listOf("LOSSLESS", "HIGH", "LOW")
-                AudioQuality.HI_RES_LOSSLESS -> listOf("HI_RES_LOSSLESS", "LOSSLESS", "HIGH", "LOW")
-            }
+            val qualityTokens = quality.toMonochromeQualityTokens()
 
             var lastResolveError: String? = null
             for (qualityToken in qualityTokens) {
@@ -784,12 +778,6 @@ class MusicService : MediaLibraryService(),
             }
 
             Log.w(TAG, "PLAYING: Monochrome stream resolution failed for all qualities: $lastResolveError")
-            throw PlaybackException(
-                getString(R.string.error_no_stream),
-                null,
-                PlaybackException.ERROR_CODE_REMOTE_ERROR
-            )
-
             throw PlaybackException(
                 getString(R.string.error_no_stream),
                 null,
