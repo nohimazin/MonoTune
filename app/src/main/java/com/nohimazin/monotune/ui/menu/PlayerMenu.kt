@@ -136,6 +136,7 @@ fun PlayerMenu(
     val queueBoard by playerConnection.queueBoard.collectAsState()
     val currentFormatState = database.format(mediaMetadata.id).collectAsState(initial = null)
     val currentFormat = currentFormatState.value
+    val currentAudioFormat by playerConnection.currentAudioFormat.collectAsState()
     val librarySong by database.song(mediaMetadata.id).collectAsState(initial = null)
     val coroutineScope = rememberCoroutineScope()
 
@@ -382,6 +383,7 @@ fun PlayerMenu(
         DetailsDialog(
             mediaMetadata = mediaMetadata,
             currentFormat = currentFormat,
+            playerAudioFormat = currentAudioFormat,
             currentPlayCount = librarySong?.playCount?.fastSumBy { it.count } ?: 0,
             clipboardManager = clipboardManager,
             setVisibility = { showDetailsDialog = it }
