@@ -11,6 +11,7 @@ package com.nohimazin.monotune.playback
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.Format
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -20,6 +21,7 @@ import androidx.media3.common.Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM
 import androidx.media3.common.Player.REPEAT_MODE_OFF
 import androidx.media3.common.Player.STATE_ENDED
 import androidx.media3.common.Timeline
+import androidx.media3.common.Tracks
 import com.nohimazin.monotune.db.MusicDatabase
 import com.nohimazin.monotune.db.entities.LyricsEntity.Companion.uninitializedLyric
 import com.nohimazin.monotune.extensions.currentMetadata
@@ -60,6 +62,7 @@ class PlayerConnection(
     }.stateIn(scope, SharingStarted.Lazily, player.playWhenReady && player.playbackState != STATE_ENDED)
     val waitingForNetworkConnection: StateFlow<Boolean> = service.waitingForNetworkConnection.asStateFlow()
     val mediaMetadata = MutableStateFlow(player.currentMetadata)
+    val currentAudioFormat = MutableStateFlow<Format?>(player.audioFormat)
     val currentSong = mediaMetadata.flatMapLatest {
         database.song(it?.id)
     }
@@ -162,6 +165,7 @@ class PlayerConnection(
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         mediaMetadata.value = mediaItem?.metadata
+        currentAudioFormat.value = player.audioFormat
         currentMediaItemIndex.value = player.currentMediaItemIndex
         currentWindowIndex.value = player.getCurrentQueueIndex()
         updateCanSkipPreviousAndNext()
@@ -170,9 +174,14 @@ class PlayerConnection(
     override fun onTimelineChanged(timeline: Timeline, reason: Int) {
         queueWindows.value = player.getQueueWindows()
         queuePlaylistId.value = service.queuePlaylistId
+        currentAudioFormat.value = player.audioFormat
         currentMediaItemIndex.value = player.currentMediaItemIndex
         currentWindowIndex.value = player.getCurrentQueueIndex()
         updateCanSkipPreviousAndNext()
+    }
+
+    override fun onTracksChanged(tracks: Tracks) {
+        currentAudioFormat.value = player.audioFormat
     }
 
     /**
