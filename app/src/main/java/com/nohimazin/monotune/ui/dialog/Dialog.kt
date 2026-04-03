@@ -76,6 +76,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.media3.common.Format
 import com.nohimazin.monotune.LocalSnackbarHostState
 import com.nohimazin.monotune.R
 import com.nohimazin.monotune.constants.DialogCornerRadius
@@ -492,6 +493,7 @@ fun CounterDialog(
 fun DetailsDialog(
     mediaMetadata: MediaMetadata,
     currentFormat: FormatEntity?,
+    playerAudioFormat: Format? = null,
     currentPlayCount: Int?,
     clipboardManager: Clipboard,
     setVisibility: (newState: Boolean) -> Unit,
@@ -527,17 +529,21 @@ fun DetailsDialog(
                     stringResource(R.string.song_title) to mediaMetadata.title,
                     stringResource(R.string.song_artists) to mediaMetadata.artists?.joinToString { it.name },
                     stringResource(R.string.media_id) to mediaMetadata.id,
-                    stringResource(R.string.play_count) to currentPlayCount.toString()
+                    stringResource(R.string.play_count) to currentPlayCount?.toString()
                 )
 
                 details.add("Itag" to currentFormat?.itag?.toString())
 
                 details.addAll(
                     mutableListOf(
-                        stringResource(R.string.mime_type) to currentFormat?.mimeType,
-                        stringResource(R.string.codecs) to currentFormat?.codecs,
-                        stringResource(R.string.bitrate) to currentFormat?.bitrate?.let { "${it / 1000} Kbps" },
-                        stringResource(R.string.sample_rate) to currentFormat?.sampleRate?.let { "$it Hz" },
+                        stringResource(R.string.mime_type) to (currentFormat?.mimeType ?: playerAudioFormat?.sampleMimeType),
+                        stringResource(R.string.codecs) to (currentFormat?.codecs ?: playerAudioFormat?.codecs),
+                        stringResource(R.string.bitrate) to (currentFormat?.bitrate ?: playerAudioFormat?.bitrate)
+                            ?.takeIf { it > 0 }
+                            ?.let { "${it / 1000} Kbps" },
+                        stringResource(R.string.sample_rate) to (currentFormat?.sampleRate ?: playerAudioFormat?.sampleRate)
+                            ?.takeIf { it > 0 }
+                            ?.let { "$it Hz" },
                         stringResource(R.string.bits_per_sample) to (currentFormat?.bitsPerSample?.toString()
                             ?: stringResource(R.string.unknown)),
                     )
