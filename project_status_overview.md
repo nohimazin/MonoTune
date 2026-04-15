@@ -82,7 +82,7 @@
 - 対応:
   - PlayerConnection に `currentAudioFormat: MutableStateFlow<Format?>` を追加し listener で更新。
   - Dialog.kt で `(currentFormat?.mimeType ?: playerAudioFormat?.sampleMimeType)` フォールバック追加。
-- 관련파일: [PlayerConnection.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/PlayerConnection.kt), [Dialog.kt](app/src/main/kotlin/com/nohimazin/monotune/ui/screens/player/Dialog.kt), [PlayerMenu.kt](app/src/main/kotlin/com/nohimazin/monotune/ui/screens/player/PlayerMenu.kt)
+- 関連ファイル: [PlayerConnection.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/PlayerConnection.kt), [Dialog.kt](app/src/main/kotlin/com/nohimazin/monotune/ui/screens/player/Dialog.kt), [PlayerMenu.kt](app/src/main/kotlin/com/nohimazin/monotune/ui/screens/player/PlayerMenu.kt)
 - 状態: 解消済み。
 
 ### 5. Hi-Res (24-bit FLAC) 再生失敗
