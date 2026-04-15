@@ -109,6 +109,138 @@
 
 ---
 
+## 発見された保留課題（コード走査検証結果）
+
+### 1. 高優先度課題 🔴
+
+#### 1.1 DownloadUtil.kt - フォールバックループの例外ハンドリング不足
+- **問題**: `ResolvingDataSource.Factory` 内のフォールバックループで IOException、JSONException、socket timeout などが完全に未処理。
+- **影響**: ダウンロード失敗時に適切なエラー処理ができず、ユーザーへのフィードバック不足。
+- **対応**: ループ内に try-catch を追加し、例外ごとにログを記録＆フォールバック重試行。
+- **関連ファイル**: [DownloadUtil.kt](app/src/main/kotlin/com/nohimazin/monotune/download/DownloadUtil.kt#L144-L172)
+- **状態**: 未対応
+
+#### 1.2 MusicService.kt - Coroutine scope 管理と runBlocking() 濫用
+- **問題**: 
+  - `playQueue()` で新規の `CoroutineScope(Dispatchers.Main)` を生成し、cleanup が不確実。
+  - 複数の `runBlocking {}` で Main thread をブロック（ANR リスク）。
+  - MusicService 破棄時に起動した coroutine が cleanup されない。
+- **影響**: UI フリーズ、メモリリーク、ANR （Application Not Responding）エラー。
+- **対応**: `scope` (viewmodel scope or service scope) に統一し、lifecycle-aware cleanup を実装。`runBlocking` を async/await で置換。
+- **関連ファイル**: [MusicService.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/MusicService.kt#L750-L791)
+- **状態**: 未対応
+
+### 2. 中優先度課題 🟡
+
+#### 2.1 PlayerConnection.kt - StateFlow 初期化タイミング問題
+- **問題**: `player.addListener()` 登録時に、既に設定されている `player.audioFormat` が同期されない。リスナー登録前の値が失われる。
+- **影響**: プレイヤー起動直後にフォーマット情報が正しく反映されない場合がある。
+- **対応**: `init {}` ブロック内で `player.addListener()` の直後に `currentAudioFormat.value = player.audioFormat` を明示的に設定。
+- **関連ファイル**: [PlayerConnection.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/PlayerConnection.kt#L65-L183)
+- **状態**: 未対応
+
+#### 2.2 MonochromeSearchMatcher.kt - キャッシュ戦略の原始性（全キャッシュクリア）
+- **問題**: `MAX_CACHE_ENTRIES = 200` で満杯時に全キャッシュをクリアしている（全削除戦略）。メモリ効率が低く、キャッシュ率の低下につながる。
+- **影響**: 同じ曲の JIT マッチングが頻繁に再実行され、API リクエスト数増加とレイテンシ悪化。
+- **対応**: LRU（Least Recently Used）エビクション戦略を実装（例：LinkedHashMap or Google's EvictingQueue）。
+- **関連ファイル**: [MonochromeSearchMatcher.kt](app/src/main/kotlin/com/nohimazin/monotune/service/Monochrome/MonochromeSearchMatcher.kt#L44-L55)
+- **状態**: 未対応
+
+#### 2.3 MonochromeSearchMatcher.kt - Unicode 正規化の完全性不足
+- **問題**: `text.lowercase()` + `\p{L}` は言語固有の正規化（Turkishの İ/i など）や結合文字を処理していない。
+- **影響**: 特殊言語や結合文字を含む曲名で マッチング精度が低下する可能性。
+- **対応**: Java の `Normalizer.normalize(text, Form.NFKD)` を使用し、Unicode正規化を仕上げる。
+  ```kotlin
+  private fun normalize(text: String): String =
+      Normalizer.normalize(text, Normalizer.Form.NFKD)
+          .lowercase(Locale.ENGLISH)
+          .replace(Regex("[^\\p{L}\\p{N}\\s]"), " ")
+          .replace(Regex("\\s+"), " ")
+          .trim()
+  ```
+- **関連ファイル**: [MonochromeSearchMatcher.kt](app/src/main/kotlin/com/nohimazin/monotune/service/Monochrome/MonochromeSearchMatcher.kt#L152-L158)
+- **状態**: 未対応
+
+#### 2.4 MusicService.kt - recoverSong() のネットワーク例外処理不足
+- **問題**: `YTPlayerUtils.playerResponseForMetadata()` などが NetworkException を投げた場合、捕捉されない。
+- **影響**: ネットワーク障害時に曲復旧ロジックが中断する。
+- **対応**: try-catch で NetworkException をキャッチし、リトライロジックまたはフォールバックを実装。
+- **関連ファイル**: [MusicService.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/MusicService.kt#L400-L430)
+- **状態**: 未対応
+
+### 3. 低優先度課題 🟢
+
+#### 3.1 PlayerConnection.kt - StateFlow SharingStarted 戦略の見直し
+- **問題**: `isPlaying` で `SharingStarted.Lazily` を使用しているため、最初の subscriber まで emit が遅延される。
+- **影響**: UI アタッチ前に初期値がセットされない可能性（見落としにくい）。
+- **対応**: `SharingStarted.Eagerly` への変更検討（ただしメモリとのトレードオフ）。
+- **関連ファイル**: [PlayerConnection.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/PlayerConnection.kt#L67)
+- **状態**: 検討中
+
+#### 3.2 PlayerMenu.kt・Dialog.kt - Recomposition 最適化
+- **問題**: 複数の `collectAsState()` が呼ばれており、各変更時に PlayerMenu 全体が recomposition される。特に `currentAudioFormat` が頻繁に変わる場合、UI パフォーマンス低下。
+- **影響**: 再生中の frame drop や UI 反応遅延。
+- **対応**: Flow.combine() で複数 state をマージし、バッチ購読を実装。Composition の構造を細粒化。
+- **関連ファイル**: [PlayerMenu.kt](app/src/main/kotlin/com/nohimazin/monotune/ui/screens/player/PlayerMenu.kt#L139-L150)
+- **状態**: 検討中
+
+### 4. コード品質総合スコア
+
+| 領域 | スコア | 状態 |
+|------|--------|------|
+| エラーハンドリング | 68% | ⚠️ DownloadUtil・MusicService で漏れあり |
+| リソース管理 | 64% | ⚠️ coroutine scope cleanup・キャッシュ戦略で改善必要 |
+| Null Safety・型安全性 | 85% | ✅ Kotlin null safety に準拠 |
+| ログ出力 | 72% | ⚠️ 冗長なログが複数箇所 |
+| UI パフォーマンス | 70% | ⚠️ recomposition の最適化余地あり |
+
+---
+
+## 発見された課題への対応計画 (Priority-based Implementation)
+
+### Phase 1: 高優先度リスク排除 (即対応)
+
+#### Week 1-2: DownloadUtil.kt 例外処理強化
+- `ResolvingDataSource.Factory` 内のフォールバックループに try-catch を追加
+- ネットワーク例外、JSON 解析例外を個別に処理
+- エラーログを構造化し、ユーザー向けフィードバック改善
+- テスト: ネットワーク遮断時、不正レスポンス時の挙動検証
+
+#### Week 2-3: MusicService.kt Coroutine scope 管理
+- `playQueue()` で新規 scope 生成を廃止し、サービス scope に統一
+- `runBlocking` を suspend/async/await に置換（または改善戦略を検討）
+- cancellation token / job tracking を実装
+- ANR 回避のため Main thread block を完全排除
+
+### Phase 2: 中程度安定性向上 (次月)
+
+#### Week 4-5: PlayerConnection 初期化修正
+- `init {}` で `currentAudioFormat.value = player.audioFormat` を明示設定
+- リスナー登録前の値損失を防止
+- UI テスト: 起動直後のフォーマット表示確認
+
+#### Week 5-6: MonochromeSearchMatcher LRU キャッシュ導入
+- LinkedHashMap or Apache Commons EvictingQueue へ移行
+- キャッシュ効率指標を計測・ログ
+- API リクエスト削減の効果を測定
+
+#### Week 6-7: Unicode 正規化完全化
+- `java.text.Normalizer` 導入して NFKD 正規化
+- 言語別テストケース追加（Turkish, 日本語等）
+- マッチング精度の向上を検証
+
+### Phase 3: 生産性・パフォーマンス改善 (来月以降)
+
+#### Week 8+: MusicService.kt ネットワーク例外処理
+- NetworkException キャッチと自動リトライロジック
+- exponential backoff 実装
+
+#### Week 9+: PlayerMenu recomposition 最適化
+- Flow.combine() で複数 state をバッチ購読
+- Composition 細粒化による frame drop 削減
+
+---
+
 ## 次の実装計画 (Next Steps)
 
 ### 1. トランスコード品質検証の自動化
