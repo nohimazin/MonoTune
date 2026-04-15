@@ -1,6 +1,6 @@
 # プロジェクト状況概要 (MonoTune)
 
-更新日: 2026-04-02
+更新日: 2026-04-15
 
 ## 要件定義 (Requirement Definition)
 
@@ -40,6 +40,18 @@
 - [x] ローカル検証結果。
 	- `:app:assembleFullDebug` 成功。
 	- `--warning-mode all` でも致命的な警告なし。
+- [x] 音質選択時の再生信頼性向上（フォールバックチェーン導入）。
+	- HI_RES_LOSSLESS → LOSSLESS → HIGH → LOW 自動降級。
+	- 再生・ダウンロード処理で一元化された品質トークン機能（MonochromeQualityTokens.kt）。
+- [x] プレイヤー詳細表示の「unknown」フォーマット情報補完。
+	- PlayerConnection で audioFormat を StateFlow 化し、実行時フォーマット監視。
+	- PlayerMenu・DetailsDialog で DB フォーマット不在時に実行時フォーマットにフォールバック。
+- [x] Monochrome JIT マッチング精度向上（非ラテン言語対応）。
+	- Unicode 対応正規化（`[\p{L}\p{N}\s]`）で日本語等の言語に対応。
+	- 2-pass duration tolerance (5s strict + 20s relaxed) で緩和マッチング実装。
+- [x] ExoPlayer 互換性修正（DASH マニフェスト対応）。
+	- MonochromeClient で DASH/unknown manifest を Error 返却に変更。
+	- Progressive media source への unsupported format 渡却を防止。
 
 ### 進行中
 - [ ] 変換ジョブ失敗時のリトライと中断復旧の最終確認。
@@ -62,6 +74,37 @@
 ### 3. Native `.so` 重複起因の `mergeFullDebugNativeLibs` 失敗
 - 事象: `ffMetadataEx` と `ffmpeg-kit` の両方から `libav*.so` が流入し競合。
 - 対応: app 側で `jniLibs.pickFirsts` を設定し、同名ライブラリの統合ルールを明示。
+- 状態: 解消済み。
+
+### 4. プレイヤー詳細表示が常に「unknown」フォーマット表示
+- 事象: PlayerMenu の DetailsDialog で format 情報が "unknown" と表示される。
+- 原因: DB フォーマット情報が全曲に保存されていない（YTM 曲は runtime のみ）。
+- 対応:
+  - PlayerConnection に `currentAudioFormat: MutableStateFlow<Format?>` を追加し listener で更新。
+  - Dialog.kt で `(currentFormat?.mimeType ?: playerAudioFormat?.sampleMimeType)` フォールバック追加。
+- 관련파일: [PlayerConnection.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/PlayerConnection.kt), [Dialog.kt](app/src/main/kotlin/com/nohimazin/monotune/ui/screens/player/Dialog.kt), [PlayerMenu.kt](app/src/main/kotlin/com/nohimazin/monotune/ui/screens/player/PlayerMenu.kt)
+- 状態: 解消済み。
+
+### 5. Hi-Res (24-bit FLAC) 再生失敗
+- 事象: HI_RES_LOSSLESS 選択時に curl または "unsupported stream" エラーで再生失敗。
+- 原因（複数）:
+  1. Monochrome JIT マッチングで非ラテン文字（日本語等）の曲が TIDAL 側で見つからない。
+  2. HI-Res 配信がない場合、フォールバック機構がなく即エラー。
+  3. DASH manifest 返却時に base64 data URI でラップされ、ExoPlayer の progressive source で処理不可。
+- 対応:
+  1. MonochromeSearchMatcher で Unicode 対応正規化を実装、2-pass duration matching (5s strict → 20s relaxed)。
+  2. MusicService・DownloadUtil に quality fallback loop を導入。
+  3. MonochromeQualityTokens.kt を新規作成し、品質トークン列を一元化。
+  4. MonochromeClient の resolveStreamUrl() で DASH/unknown manifest を Error 返却に変更。
+- 関連ファイル: [MonochromeSearchMatcher.kt](app/src/main/kotlin/com/nohimazin/monotune/service/Monochrome/MonochromeSearchMatcher.kt), [MusicService.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/MusicService.kt), [DownloadUtil.kt](app/src/main/kotlin/com/nohimazin/monotune/download/DownloadUtil.kt), [MonochromeQualityTokens.kt](app/src/main/kotlin/com/nohimazin/monotune/service/Monochrome/MonochromeQualityTokens.kt), [MonochromeClient.kt](app/src/main/kotlin/com/nohimazin/monotune/service/Monochrome/MonochromeClient.kt)
+- 状態: 解消済み。
+
+### 6. Copilot PR #36 レビューフィードバック対応
+- 事象: PR に Copilot から複数コメント（インデント、KDoc、一貫性）。
+- 対応:
+  - MonochromeSearchMatcher.kt のインデント修正。
+  - RELAXED_DURATION_TOLERANCE_SECS の 2-pass matching を KDoc に明示。
+  - 品質トークン定義を MonochromeQualityTokens.kt に一元化し、MusicService・DownloadUtil で共用。
 - 状態: 解消済み。
 
 ---
