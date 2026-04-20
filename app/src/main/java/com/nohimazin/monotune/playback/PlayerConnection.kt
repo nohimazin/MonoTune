@@ -91,6 +91,7 @@ class PlayerConnection(
 
     init {
         player.addListener(this)
+        currentAudioFormat.value = player.audioFormat
 
         playbackState.value = player.playbackState
         playWhenReady.value = player.playWhenReady

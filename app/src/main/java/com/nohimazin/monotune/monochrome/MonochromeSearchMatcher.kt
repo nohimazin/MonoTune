@@ -17,6 +17,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
+import java.text.Normalizer
+import java.util.Collections
 import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
@@ -36,8 +38,7 @@ import javax.inject.Singleton
  *
  * ### Caching
  * Search results are cached in memory keyed by the normalized query string.
- * The cache is bounded to [MAX_CACHE_ENTRIES]; when it is full the entire cache
- * is cleared to keep memory bounded (simple eviction strategy).
+ * The cache is bounded to [MAX_CACHE_ENTRIES] using LRU eviction.
  *
  * ### Concurrency
  * At most [MAX_CONCURRENT_REQUESTS] monochrome search calls run in parallel.
@@ -62,7 +63,13 @@ class MonochromeSearchMatcher @Inject constructor(
     private val MAX_CACHE_ENTRIES = 200
 
     /** In-memory cache: normalized query string ↁElist of monochrome tracks (may be empty). */
-    private val cache = ConcurrentHashMap<String, List<MonochromeTrack>>()
+    private val cache = Collections.synchronizedMap(
+        object : LinkedHashMap<String, List<MonochromeTrack>>(MAX_CACHE_ENTRIES, 0.75f, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, List<MonochromeTrack>>?): Boolean {
+                return size > MAX_CACHE_ENTRIES
+            }
+        }
+    )
 
     /**
      * Match each [SongItem] in [songs] against the Monochrome catalog.
@@ -184,7 +191,8 @@ class MonochromeSearchMatcher @Inject constructor(
     }
 
     private suspend fun cachedSearch(query: String): List<MonochromeTrack> {
-        cache[query]?.let { return it }
+        val cacheKey = normalize(query)
+        cache[cacheKey]?.let { return it }
 
         val tracks: List<MonochromeTrack> = when (val result = client.search(query)) {
             is MonochromeResult.Success -> result.data
@@ -194,11 +202,7 @@ class MonochromeSearchMatcher @Inject constructor(
             }
         }
 
-        // Evict entire cache when capacity is reached (simple strategy).
-        if (cache.size >= MAX_CACHE_ENTRIES) {
-            cache.clear()
-        }
-        cache[query] = tracks
+        cache[cacheKey] = tracks
         return tracks
     }
 
@@ -288,7 +292,8 @@ class MonochromeSearchMatcher @Inject constructor(
      * lowercase, strip non-alphanumeric (except spaces), collapse whitespace.
      */
     private fun normalize(text: String): String =
-        text.lowercase()
+        Normalizer.normalize(text, Normalizer.Form.NFKD)
+            .lowercase(Locale.ROOT)
             .replace(Regex("[^\\p{L}\\p{N}\\s]"), " ")
             .replace(Regex("\\s+"), " ")
             .trim()

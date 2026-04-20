@@ -1,6 +1,6 @@
 # プロジェクト状況概要 (MonoTune)
 
-更新日: 2026-04-15
+更新日: 2026-04-20
 
 ## 要件定義 (Requirement Definition)
 
@@ -264,3 +264,84 @@
 - 外部依存 (ffmpeg fork, AboutLibraries) の更新でライセンス表記や ABI 構成が変わる可能性に注意。
 - LyricsPlus 公開 API の応答形式差異が残る可能性があるため、例外時のフォールバック経路は継続監視。
 - トランスコードの検証は標準タグと埋め込み画像を中心に自動化済みで、歌詞タグは実装依存のため継続観測。
+
+---
+
+## 追加走査で発見された課題（2026-04-20）
+
+### A. 高優先度課題 🔴
+
+#### A.1 SyncUtils.kt - クールダウン判定の条件逆転 + 時間単位不整合
+- **問題**:
+  - 同期可否判定が `currentTime - lastSync > SYNC_CD` になっており、クールダウン経過後に同期が拒否される逆転ロジックになっている。
+  - `currentTime` / `lastSync` は epoch second だが、`SYNC_CD` は `60000 * 30`（ミリ秒想定）で定義されており単位が不一致。
+  - ログ出力で `(currentTime - lastSync) * 60000` を minutes として扱っており、表示値が実際の分ではない。
+- **影響**: 自動同期の発火タイミングが想定とずれ、長期運用で同期停止や過剰遅延の原因になる。
+- **対応**: 秒ベースに統一（例: `SYNC_CD_SECONDS = 60 * 30`）し、条件を `elapsed < cooldown` で拒否に修正。ログも秒→分変換を正規化。
+- **関連ファイル**: [SyncUtils.kt](app/src/main/java/com/nohimazin/monotune/utils/SyncUtils.kt#L105-L136), [Vars.kt](app/src/main/java/com/nohimazin/monotune/constants/Vars.kt#L46)
+- **状態**: 未対応
+
+#### A.2 BackupRestoreViewModel.kt - backup/restore の同期I/Oと runBlocking によるUIブロック
+- **問題**:
+  - `backup()` / `restore()` が非 suspend 関数のまま大きな zip I/O、DB チェックポイント、DB ファイル置換を実行している。
+  - 関数内で `runBlocking(Dispatchers.IO)` を呼び、呼び出し元が Main の場合にフリーズ/ANR リスクがある。
+  - ソース内にも non-blocking 化 TODO が残存している。
+- **影響**: バックアップ/復元中の UI 停止、長時間処理時の ANR、端末性能依存の操作不能。
+- **対応**: `viewModelScope.launch(Dispatchers.IO)` に移行し、I/O 全体を suspend 化。UI 通知は Main に切り替えて表示。
+- **関連ファイル**: [BackupRestoreViewModel.kt](app/src/main/java/com/nohimazin/monotune/viewmodels/BackupRestoreViewModel.kt#L31-L82)
+- **状態**: 未対応
+
+### B. 中優先度課題 🟡
+
+#### B.1 LyricsMenuViewModel.kt - 管理外 CoroutineScope と空 catch による可観測性低下
+- **問題**:
+  - `refetchLyrics()` が `CoroutineScope(Dispatchers.IO).launch` を直接生成しており、ViewModel lifecycle と紐づかない。
+  - `search()` 内で `catch (e: Exception) {}` が空実装になっており、失敗時にログやエラー状態が残らない。
+- **影響**: 画面破棄後もジョブが残る可能性、歌詞取得失敗時の原因追跡困難。
+- **対応**: `viewModelScope` へ統一し、`CancellationException` を除いて `reportException` などで記録。
+- **関連ファイル**: [LyricsMenuViewModel.kt](app/src/main/java/com/nohimazin/monotune/viewmodels/LyricsMenuViewModel.kt#L30-L60)
+- **状態**: 未対応
+
+#### B.2 YouTube.kt (innertube) - createPlaylist の runBlocking API
+- **問題**: `createPlaylist(title)` が `runBlocking` を内部で使用し、呼び出しスレッドを同期的に塞ぐ設計。
+- **影響**: 上位レイヤーが Main から呼び出すと UI スタールの原因になりうる。
+- **対応**: `suspend fun createPlaylist(...)` へ変更し、呼び出し元で coroutine context を管理。
+- **関連ファイル**: [YouTube.kt](innertube/src/main/java/com/zionhuang/innertube/YouTube.kt#L653)
+- **状態**: 未対応
+
+---
+
+## 追加実装修正ログ（2026-04-20）
+
+### 実施済み修正
+- [x] Sync クールダウン判定の修正。
+  - `SYNC_CD` を秒ベースへ統一（`60 * 30`）。
+  - 同期拒否条件を `elapsed < SYNC_CD` に修正。
+  - 「minutes until eligible」ログを残り時間基準へ修正。
+  - 関連: [Vars.kt](app/src/main/java/com/nohimazin/monotune/constants/Vars.kt), [SyncUtils.kt](app/src/main/java/com/nohimazin/monotune/utils/SyncUtils.kt)
+
+- [x] Backup/Restore の non-blocking 化。
+  - `viewModelScope.launch(Dispatchers.IO)` で重い I/O を実行。
+  - `runBlocking` を排除。
+  - Toast 表示と Activity 起動は Main dispatcher に明示切替。
+  - 関連: [BackupRestoreViewModel.kt](app/src/main/java/com/nohimazin/monotune/viewmodels/BackupRestoreViewModel.kt)
+
+- [x] LyricsMenu の coroutine/lifecycle 改善。
+  - 管理外 `CoroutineScope(Dispatchers.IO)` を `viewModelScope` に統一。
+  - 空 catch を廃止し、`CancellationException` は再 throw、それ以外は例外記録。
+  - `onDone` コールバックを Main dispatcher で実行。
+  - 関連: [LyricsMenuViewModel.kt](app/src/main/java/com/nohimazin/monotune/viewmodels/LyricsMenuViewModel.kt)
+
+- [x] Innertube createPlaylist の blocking API 改善。
+  - `YouTube.createPlaylist` を `suspend` 化し `runBlocking` を排除。
+  - 既存呼び出し側（IO coroutine 内）との整合を確認。
+  - 関連: [YouTube.kt](innertube/src/main/java/com/zionhuang/innertube/YouTube.kt)
+
+- [x] PlayerConnection 初期フォーマット同期修正。
+  - `player.addListener(this)` 後に `currentAudioFormat.value = player.audioFormat` を明示。
+  - 関連: [PlayerConnection.kt](app/src/main/java/com/nohimazin/monotune/playback/PlayerConnection.kt)
+
+- [x] MonochromeSearchMatcher の安定化。
+  - 全消去方式キャッシュを LRU エビクションに置換。
+  - `Normalizer.Form.NFKD` + `Locale.ROOT` による Unicode 正規化へ更新。
+  - 関連: [MonochromeSearchMatcher.kt](app/src/main/java/com/nohimazin/monotune/monochrome/MonochromeSearchMatcher.kt)
