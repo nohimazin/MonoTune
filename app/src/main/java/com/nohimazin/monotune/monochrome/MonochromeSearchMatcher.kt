@@ -30,7 +30,8 @@ import javax.inject.Singleton
  * 3. **Selection**: first candidate where
  *    - normalized title contains or equals the YTM title, AND
  *    - normalized artist string contains or equals the primary YTM artist, AND
- *    - duration is within ±[DURATION_TOLERANCE_SECS] seconds (when both are known).
+ *    - duration is within ±[DURATION_TOLERANCE_SECS] seconds (when both are known),
+ *      with a second-pass fallback of ±[RELAXED_DURATION_TOLERANCE_SECS] seconds.
  *
  * ### Caching
  * Search results are cached in memory keyed by the normalized query string.
@@ -52,6 +53,9 @@ class MonochromeSearchMatcher @Inject constructor(
 
     /** Acceptable duration difference in seconds between a YTM song and a monochrome track. */
     private val DURATION_TOLERANCE_SECS = 5
+
+    /** Fallback tolerance for slight edit/version length differences. */
+    private val RELAXED_DURATION_TOLERANCE_SECS = 20
 
     /** Maximum number of query ↁEresults entries to hold in the in-memory cache. */
     private val MAX_CACHE_ENTRIES = 200
@@ -101,24 +105,12 @@ class MonochromeSearchMatcher @Inject constructor(
             val normArtist = normalize(artistName)
             val songDuration: Int? = metadata.duration
 
-            candidates.firstOrNull { candidate ->
-                val candTitle = normalize(candidate.title)
-                val candArtist = normalize(candidate.artist)
-
-                val titleMatch = candTitle == normTitle ||
-                        candTitle.contains(normTitle) ||
-                        normTitle.contains(candTitle)
-
-                val artistMatch = normArtist.isEmpty() ||
-                        candArtist.contains(normArtist) ||
-                        normArtist.contains(candArtist)
-
-                val durationMatch = songDuration == null || songDuration < 0 ||
-                        candidate.durationSecs < 0 ||
-                        kotlin.math.abs(songDuration - candidate.durationSecs) <= DURATION_TOLERANCE_SECS
-
-                titleMatch && artistMatch && durationMatch
-            }
+            selectBestCandidate(
+                normTitle = normTitle,
+                normArtist = normArtist,
+                songDuration = songDuration,
+                candidates = candidates
+            )
         }
 
     // -------------------------------------------------------------------------
@@ -167,11 +159,46 @@ class MonochromeSearchMatcher @Inject constructor(
         song: SongItem,
         candidates: List<MonochromeTrack>,
     ): MonochromeTrack? {
-        val normTitle = normalize(song.title)
-        val normArtist = normalize(song.artists.firstOrNull()?.name.orEmpty())
-        // Capture as a local val so the compiler can smart-cast across module boundaries.
-        val songDuration: Int? = song.duration
+        return selectBestCandidate(
+            normTitle = normalize(song.title),
+            normArtist = normalize(song.artists.firstOrNull()?.name.orEmpty()),
+            songDuration = song.duration,
+            candidates = candidates
+        )
+    }
 
+    private fun selectBestCandidate(
+        normTitle: String,
+        normArtist: String,
+        songDuration: Int?,
+        candidates: List<MonochromeTrack>,
+    ): MonochromeTrack? {
+        return findCandidate(
+            normTitle = normTitle,
+            normArtist = normArtist,
+            songDuration = songDuration,
+            candidates = candidates,
+            durationToleranceSecs = DURATION_TOLERANCE_SECS
+        ) ?: findCandidate(
+            normTitle = normTitle,
+            normArtist = normArtist,
+            songDuration = songDuration,
+            candidates = candidates,
+            durationToleranceSecs = RELAXED_DURATION_TOLERANCE_SECS
+        )
+    }
+
+    private fun findCandidate(
+        normTitle: String,
+        normArtist: String,
+        songDuration: Int?,
+        candidates: List<MonochromeTrack>,
+        durationToleranceSecs: Int,
+    ): MonochromeTrack? {
+        // If both title and artist are missing after normalization, avoid random matches.
+        if (normTitle.isEmpty() && normArtist.isEmpty()) return null
+
+        // Capture as a local val so the compiler can smart-cast across module boundaries.
         return candidates.firstOrNull { candidate ->
             val candTitle = normalize(candidate.title)
             val candArtist = normalize(candidate.artist)
@@ -186,7 +213,7 @@ class MonochromeSearchMatcher @Inject constructor(
 
             val durationMatch = songDuration == null || songDuration < 0 ||
                 candidate.durationSecs < 0 ||
-                kotlin.math.abs(songDuration - candidate.durationSecs) <= DURATION_TOLERANCE_SECS
+                kotlin.math.abs(songDuration - candidate.durationSecs) <= durationToleranceSecs
 
             titleMatch && artistMatch && durationMatch
         }
@@ -198,7 +225,7 @@ class MonochromeSearchMatcher @Inject constructor(
      */
     private fun normalize(text: String): String =
         text.lowercase()
-            .replace(Regex("[^a-z0-9\\s]"), " ")
+            .replace(Regex("[^\\p{L}\\p{N}\\s]"), " ")
             .replace(Regex("\\s+"), " ")
             .trim()
 }

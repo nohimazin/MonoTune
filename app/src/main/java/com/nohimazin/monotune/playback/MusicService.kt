@@ -749,38 +749,35 @@ class MusicService : MediaLibraryService(),
             val quality = runBlocking(Dispatchers.IO) {
                 dataStore.data.first()[AudioQualityKey]?.toEnum(AudioQuality.AUTO) ?: AudioQuality.AUTO
             }
-            val qualityToken = when (quality) {
-                AudioQuality.AUTO -> "LOSSLESS"
-                AudioQuality.LOW -> "LOW"
-                AudioQuality.HIGH -> "HIGH"
-                AudioQuality.LOSSLESS -> "LOSSLESS"
-                AudioQuality.HI_RES_LOSSLESS -> "HI_RES_LOSSLESS"
-            }
+            val qualityTokens = quality.toMonochromeQualityTokens()
 
-            Log.d(TAG, "PLAYING: attempting Monochrome stream for monochromeId=$monochromeId (quality=$qualityToken)")
-            val monochromeResult = runBlocking(Dispatchers.IO) {
-                monochromeClient.resolveStreamUrl(monochromeId!!, quality = qualityToken)
-            }
-            when (monochromeResult) {
-                is MonochromeResult.Success -> {
-                    val streamUrl = monochromeResult.data
-                    Log.d(TAG, "PLAYING: Monochrome stream resolved (${if (streamUrl.startsWith("data:")) "data URI" else streamUrl})")
-                    // Cache the URL (1 hour TTL)
-                    monochromeUrlCache[mediaId] =
-                        streamUrl to System.currentTimeMillis() + 3_600_000L
-                    offloadScope.launch { recoverSong(mediaId) }
-                    return@Factory dataSpec.withUri(streamUrl.toUri())
+            var lastResolveError: String? = null
+            for (qualityToken in qualityTokens) {
+                Log.d(TAG, "PLAYING: attempting Monochrome stream for monochromeId=$monochromeId (quality=$qualityToken)")
+                val monochromeResult = runBlocking(Dispatchers.IO) {
+                    monochromeClient.resolveStreamUrl(monochromeId!!, quality = qualityToken)
                 }
-                is MonochromeResult.Error -> {
-                    Log.w(TAG, "PLAYING: Monochrome stream resolution failed: ${monochromeResult.message}")
-                    throw PlaybackException(
-                        getString(R.string.error_no_stream),
-                        null,
-                        PlaybackException.ERROR_CODE_REMOTE_ERROR
-                    )
+                when (monochromeResult) {
+                    is MonochromeResult.Success -> {
+                        val streamUrl = monochromeResult.data
+                        Log.d(TAG, "PLAYING: Monochrome stream resolved (${if (streamUrl.startsWith("data:")) "data URI" else streamUrl})")
+                        if (qualityToken != qualityTokens.first()) {
+                            Log.w(TAG, "PLAYING: quality fallback applied ${qualityTokens.first()} -> $qualityToken")
+                        }
+                        // Cache the URL (1 hour TTL)
+                        monochromeUrlCache[mediaId] =
+                            streamUrl to System.currentTimeMillis() + 3_600_000L
+                        offloadScope.launch { recoverSong(mediaId) }
+                        return@Factory dataSpec.withUri(streamUrl.toUri())
+                    }
+                    is MonochromeResult.Error -> {
+                        lastResolveError = monochromeResult.message
+                        Log.w(TAG, "PLAYING: Monochrome stream resolution failed (quality=$qualityToken): ${monochromeResult.message}")
+                    }
                 }
             }
 
+            Log.w(TAG, "PLAYING: Monochrome stream resolution failed for all qualities: $lastResolveError")
             throw PlaybackException(
                 getString(R.string.error_no_stream),
                 null,

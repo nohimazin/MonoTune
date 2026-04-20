@@ -630,13 +630,18 @@ class MonochromeClient @Inject constructor() : MonochromeClientApi {
                         )
                 }
                 "application/dash+xml" -> {
-                    // MPEG-DASH manifest: pass as a data URI so ExoPlayer can handle it.
-                    "data:application/dash+xml;base64,$manifestBase64"
+                    // MPEG-DASH playback is not supported by the current progressive source path.
+                    // Treat it as unavailable so the caller can fall back to a supported quality.
+                    return@withContext MonochromeResult.Error(
+                        "DASH manifest is not supported by this player path"
+                    )
                 }
                 else -> {
-                    // Unknown manifest type ? return as data URI and let the player decide.
+                    // Unknown manifest type; reject so the caller can try another quality.
                     Log.w(TAG, "Unknown manifest MIME type: $mimeType")
-                    "data:$mimeType;base64,$manifestBase64"
+                    return@withContext MonochromeResult.Error(
+                        "Unsupported manifest MIME type: $mimeType"
+                    )
                 }
             }
             MonochromeResult.Success(url)
