@@ -43,7 +43,7 @@ const val OOBE_VERSION = 7
 
 const val SCANNER_OWNER_DL = 32
 
-const val SYNC_CD = 60 * 30
+const val SYNC_CD = 60L * 30
 
 const val MAX_PLAYER_CONSECUTIVE_ERR = 3
 

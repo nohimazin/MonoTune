@@ -280,12 +280,12 @@
 #### A.1 SyncUtils.kt - クールダウン判定の条件逆転 + 時間単位不整合
 - **問題**:
   - 同期可否判定が `currentTime - lastSync > SYNC_CD` になっており、クールダウン経過後に同期が拒否される逆転ロジックになっている。
-  - `currentTime` / `lastSync` は epoch second だが、`SYNC_CD` は `60000 * 30`（ミリ秒想定）で定義されており単位が不一致。
+  - `currentTime` / `lastSync` は epoch second だが、`SYNC_CD` は秒ベースで定義されており単位が不一致。
   - ログ出力で `(currentTime - lastSync) * 60000` を minutes として扱っており、表示値が実際の分ではない。
 - **影響**: 自動同期の発火タイミングが想定とずれ、長期運用で同期停止や過剰遅延の原因になる。
-- **対応**: 秒ベースに統一（例: `SYNC_CD_SECONDS = 60 * 30`）し、条件を `elapsed < cooldown` で拒否に修正。ログも秒→分変換を正規化。
+- **対応**: 秒ベースに統一し、条件を `elapsed < cooldown` で拒否に修正。ログも秒→分変換を正規化。
 - **関連ファイル**: [SyncUtils.kt](app/src/main/java/com/nohimazin/monotune/utils/SyncUtils.kt#L105-L136), [Vars.kt](app/src/main/java/com/nohimazin/monotune/constants/Vars.kt#L46)
-- **状態**: 未対応
+- **状態**: 実施済み（2026-04-20対応完了）✅
 
 #### A.2 BackupRestoreViewModel.kt - backup/restore の同期I/Oと runBlocking によるUIブロック
 - **問題**:
@@ -293,9 +293,9 @@
   - 関数内で `runBlocking(Dispatchers.IO)` を呼び、呼び出し元が Main の場合にフリーズ/ANR リスクがある。
   - ソース内にも non-blocking 化 TODO が残存している。
 - **影響**: バックアップ/復元中の UI 停止、長時間処理時の ANR、端末性能依存の操作不能。
-- **対応**: `viewModelScope.launch(Dispatchers.IO)` に移行し、I/O 全体を suspend 化。UI 通知は Main に切り替えて表示。
+- **対応**: `viewModelScope.launch(Dispatchers.IO)` に移行し、I/O 全体を suspend 化。UI 通知は Main に切り替えて表示。InputStream/OutputStream null チェック強化。
 - **関連ファイル**: [BackupRestoreViewModel.kt](app/src/main/java/com/nohimazin/monotune/viewmodels/BackupRestoreViewModel.kt#L31-L82)
-- **状態**: 未対応
+- **状態**: 実施済み（2026-04-20対応完了）✅
 
 ### B. 中優先度課題 🟡
 
@@ -306,18 +306,20 @@
 - **影響**: 画面破棄後もジョブが残る可能性、歌詞取得失敗時の原因追跡困難。
 - **対応**: `viewModelScope` へ統一し、`CancellationException` を除いて `reportException` などで記録。
 - **関連ファイル**: [LyricsMenuViewModel.kt](app/src/main/java/com/nohimazin/monotune/viewmodels/LyricsMenuViewModel.kt#L30-L60)
-- **状態**: 未対応
+- **状態**: 実施済み（2026-04-20対応完了）✅
 
 #### B.2 YouTube.kt (innertube) - createPlaylist の runBlocking API
 - **問題**: `createPlaylist(title)` が `runBlocking` を内部で使用し、呼び出しスレッドを同期的に塞ぐ設計。
 - **影響**: 上位レイヤーが Main から呼び出すと UI スタールの原因になりうる。
 - **対応**: `suspend fun createPlaylist(...)` へ変更し、呼び出し元で coroutine context を管理。
 - **関連ファイル**: [YouTube.kt](innertube/src/main/java/com/zionhuang/innertube/YouTube.kt#L653)
-- **状態**: 未対応
+- **状態**: 実施済み（2026-04-20対応完了）✅
 
 ---
 
 ## 追加実装修正ログ（2026-04-20）
+
+> 注記: 本更新で記録した追加対応により、追加走査で挙がっていた A.1 / A.2 / B.1 / B.2 はすべて対応済み。
 
 ### 実施済み修正
 - [x] Sync クールダウン判定の修正。

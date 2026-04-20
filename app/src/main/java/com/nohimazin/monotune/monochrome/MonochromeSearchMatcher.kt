@@ -62,7 +62,7 @@ class MonochromeSearchMatcher @Inject constructor(
     /** Maximum number of query ↁEresults entries to hold in the in-memory cache. */
     private val MAX_CACHE_ENTRIES = 200
 
-    /** In-memory cache: normalized query string ↁElist of monochrome tracks (may be empty). */
+    /** In-memory cache: normalized query string - list of monochrome tracks (may be empty). */
     private val cache = Collections.synchronizedMap(
         object : LinkedHashMap<String, List<MonochromeTrack>>(MAX_CACHE_ENTRIES, 0.75f, true) {
             override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, List<MonochromeTrack>>?): Boolean {

@@ -38,7 +38,9 @@ class BackupRestoreViewModel @Inject constructor(
     fun backup(uri: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
-                context.applicationContext.contentResolver.openOutputStream(uri)?.use {
+                val backupOutputStream = context.applicationContext.contentResolver.openOutputStream(uri)
+                    ?: throw IllegalStateException("Unable to open backup output stream for uri: $uri")
+                backupOutputStream.use {
                     it.buffered().zipOutputStream().use { outputStream ->
                         outputStream.setLevel(Deflater.BEST_COMPRESSION)
                         (context.filesDir / "datastore" / SETTINGS_FILENAME).inputStream().buffered().use { inputStream ->
@@ -59,7 +61,11 @@ class BackupRestoreViewModel @Inject constructor(
             }.onFailure {
                 reportException(it)
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, R.string.backup_create_failed, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        it.localizedMessage ?: context.getString(R.string.backup_create_failed),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -70,7 +76,10 @@ class BackupRestoreViewModel @Inject constructor(
             runCatching {
                 var isCompatibleDatabase = true
 
-                context.applicationContext.contentResolver.openInputStream(uri)?.use {
+                val restoreInputStream = context.applicationContext.contentResolver.openInputStream(uri)
+                    ?: throw IllegalStateException("Unable to open backup input stream for uri: $uri")
+                
+                restoreInputStream.use {
                     it.zipInputStream().use { inputStream ->
                         var entry = inputStream.nextEntry
                         while (entry != null) {
@@ -85,7 +94,6 @@ class BackupRestoreViewModel @Inject constructor(
                                 InternalDatabase.DB_NAME -> {
                                     Log.i(TAG, "Starting database restore")
                                     database.checkpoint()
-                                    database.close()
 
                                     Log.i(TAG, "Testing new database for compatibility...")
                                     val destFile = context.getDatabasePath(InternalDatabase.TEST_DB_NAME)
@@ -108,6 +116,7 @@ class BackupRestoreViewModel @Inject constructor(
 
                                     if (status) {
                                         Log.i(TAG, "Found valid database, proceeding with restore")
+                                        database.close()
                                         destFile.inputStream().use { inputStream ->
                                             FileOutputStream(database.openHelper.writableDatabase.path).use { outputStream ->
                                                 inputStream.copyTo(outputStream)
