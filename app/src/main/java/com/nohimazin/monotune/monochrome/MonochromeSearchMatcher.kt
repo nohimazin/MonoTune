@@ -17,6 +17,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
+import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -97,8 +98,10 @@ class MonochromeSearchMatcher @Inject constructor(
     suspend fun matchSong(metadata: MediaMetadata): MonochromeTrack? =
         withContext(Dispatchers.IO) {
             val artistName = metadata.artists.firstOrNull()?.name ?: ""
-            val query = "${metadata.title} $artistName".trim()
-            val candidates = cachedSearch(query)
+            val candidates = searchCandidates(
+                title = metadata.title.orEmpty(),
+                artist = artistName
+            )
 
             // Adapt the selection logic for MediaMetadata
             val normTitle = normalize(metadata.title ?: "")
@@ -118,9 +121,66 @@ class MonochromeSearchMatcher @Inject constructor(
     // -------------------------------------------------------------------------
 
     private suspend fun findMatch(song: SongItem): MonochromeTrack? {
-        val query = buildQuery(song)
-        val candidates = cachedSearch(query)
+        val candidates = searchCandidates(
+            title = song.title,
+            artist = song.artists.firstOrNull()?.name.orEmpty()
+        )
         return selectBestCandidate(song, candidates)
+    }
+
+    /**
+     * Search using multiple query variants to reduce false negatives.
+     *
+     * Order matters: most precise query first, then broader fallbacks.
+     */
+    private suspend fun searchCandidates(title: String, artist: String): List<MonochromeTrack> {
+        val queries = buildQueries(title = title, artist = artist)
+        val merged = LinkedHashMap<String, MonochromeTrack>()
+        var firstHitQuery: String? = null
+
+        for (query in queries) {
+            val tracks = cachedSearch(query)
+            if (firstHitQuery == null && tracks.isNotEmpty()) {
+                firstHitQuery = query
+            }
+            for (track in tracks) {
+                // Prefer monotonic ID when available, otherwise fall back to a composite key.
+                val key = track.monochromeId.ifBlank {
+                    "${track.title.lowercase(Locale.ROOT)}|${track.artist.lowercase(Locale.ROOT)}|${track.durationSecs}"
+                }
+                merged.putIfAbsent(key, track)
+            }
+        }
+
+        if (firstHitQuery != null && firstHitQuery != queries.firstOrNull()) {
+            Log.d(TAG, "searchCandidates: fallback query used ('$firstHitQuery') for title='$title'")
+        }
+        if (merged.isEmpty()) {
+            Log.w(TAG, "searchCandidates: no candidates for queries=$queries")
+        }
+
+        return merged.values.toList()
+    }
+
+    /**
+     * Build ordered query fallbacks for Monochrome search.
+     *
+     * 1) title + artist (most specific)
+     * 2) title only
+     * 3) title with common bracketed suffixes removed (e.g. "(Live)", "[Remaster]")
+     */
+    private fun buildQueries(title: String, artist: String): List<String> {
+        val titleTrimmed = title.trim()
+        val artistTrimmed = artist.trim()
+        val titleWithoutBracketSuffix = titleTrimmed
+            .replace(Regex("\\s*[\\(\\[].*[\\)\\]]\\s*$"), "")
+            .trim()
+
+        return listOf(
+            buildQuery(titleTrimmed, artistTrimmed),
+            titleTrimmed,
+            titleWithoutBracketSuffix
+        ).filter { it.isNotBlank() }.distinct()
     }
 
     private suspend fun cachedSearch(query: String): List<MonochromeTrack> {
@@ -147,7 +207,11 @@ class MonochromeSearchMatcher @Inject constructor(
      */
     private fun buildQuery(song: SongItem): String {
         val artist = song.artists.firstOrNull()?.name.orEmpty()
-        return "${song.title} $artist".trim()
+        return buildQuery(song.title, artist)
+    }
+
+    private fun buildQuery(title: String, artist: String): String {
+        return "$title $artist".trim()
     }
 
     /**
