@@ -118,7 +118,7 @@
 - **影響**: ダウンロード失敗時に適切なエラー処理ができず、ユーザーへのフィードバック不足。
 - **対応**: ループ内に try-catch を追加し、例外ごとにログを記録＆フォールバック重試行。
 - **関連ファイル**: [DownloadUtil.kt](app/src/main/kotlin/com/nohimazin/monotune/download/DownloadUtil.kt#L144-L172)
-- **状態**: 未対応
+- **状態**: 対応済み ✅
 
 #### 1.2 MusicService.kt - Coroutine scope 管理と runBlocking() 濫用
 - **問題**: 
@@ -126,9 +126,13 @@
   - 複数の `runBlocking {}` で Main thread をブロック（ANR リスク）。
   - MusicService 破棄時に起動した coroutine が cleanup されない。
 - **影響**: UI フリーズ、メモリリーク、ANR （Application Not Responding）エラー。
-- **対応**: `scope` (viewmodel scope or service scope) に統一し、lifecycle-aware cleanup を実装。`runBlocking` を async/await で置換。
-- **関連ファイル**: [MusicService.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/MusicService.kt#L750-L791)
-- **状態**: 未対応
+- **対応**: 
+  - `playQueue()` の `runBlocking(Dispatchers.IO) { initQueue() }` を `serviceScope.launch` に変更し、非同期初期化に移行。
+  - 初期化完了を確認するため、最大 100ms のポーリング待機を追加。
+  - `deInitQueue()` の `runBlocking(Dispatchers.IO) { saveQueueToDisk() }` を `serviceScope.launch` に変更。
+  - `recoverSong()` の全呼び出しに try-catch を追加して例外処理を強化。
+- **関連ファイル**: [MusicService.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/MusicService.kt)
+- **状態**: 対応済み ✅
 
 ### 2. 中優先度課題 🟡
 
@@ -137,14 +141,14 @@
 - **影響**: プレイヤー起動直後にフォーマット情報が正しく反映されない場合がある。
 - **対応**: `init {}` ブロック内で `player.addListener()` の直後に `currentAudioFormat.value = player.audioFormat` を明示的に設定。
 - **関連ファイル**: [PlayerConnection.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/PlayerConnection.kt#L65-L183)
-- **状態**: 未対応
+- **状態**: 対応済み ✅
 
 #### 2.2 MonochromeSearchMatcher.kt - キャッシュ戦略の原始性（全キャッシュクリア）
 - **問題**: `MAX_CACHE_ENTRIES = 200` で満杯時に全キャッシュをクリアしている（全削除戦略）。メモリ効率が低く、キャッシュ率の低下につながる。
 - **影響**: 同じ曲の JIT マッチングが頻繁に再実行され、API リクエスト数増加とレイテンシ悪化。
 - **対応**: LRU（Least Recently Used）エビクション戦略を実装（例：LinkedHashMap or Google's EvictingQueue）。
 - **関連ファイル**: [MonochromeSearchMatcher.kt](app/src/main/kotlin/com/nohimazin/monotune/service/Monochrome/MonochromeSearchMatcher.kt#L44-L55)
-- **状態**: 未対応
+- **状態**: 対応済み ✅
 
 #### 2.3 MonochromeSearchMatcher.kt - Unicode 正規化の完全性不足
 - **問題**: `text.lowercase()` + `\p{L}` は言語固有の正規化（Turkishの İ/i など）や結合文字を処理していない。
@@ -153,36 +157,38 @@
   ```kotlin
   private fun normalize(text: String): String =
       Normalizer.normalize(text, Normalizer.Form.NFKD)
-          .lowercase(Locale.ENGLISH)
+          .lowercase(Locale.ROOT)
           .replace(Regex("[^\\p{L}\\p{N}\\s]"), " ")
           .replace(Regex("\\s+"), " ")
           .trim()
   ```
-- **関連ファイル**: [MonochromeSearchMatcher.kt](app/src/main/kotlin/com/nohimazin/monotune/service/Monochrome/MonochromeSearchMatcher.kt#L152-L158)
-- **状態**: 未対応
+- **関連ファイル**: [MonochromeSearchMatcher.kt](app/src/main/kotlin/com/nohimazin/monotune/service/Monochrome/MonochromeSearchMatcher.kt#L292-L298)
+- **状態**: 対応済み ✅
 
 #### 2.4 MusicService.kt - recoverSong() のネットワーク例外処理不足
-- **問題**: `YTPlayerUtils.playerResponseForMetadata()` などが NetworkException を投げた場合、捕捉されない。
-- **影響**: ネットワーク障害時に曲復旧ロジックが中断する。
-- **対応**: try-catch で NetworkException をキャッチし、リトライロジックまたはフォールバックを実装。
-- **関連ファイル**: [MusicService.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/MusicService.kt#L400-L430)
-- **状態**: 未対応
+- **問題**: `recoverSong()` 呼び出し側（`offloadScope.launch { recoverSong(mediaId) }`）で try-catch がないため、例外発生時に silent に失敗する可能性がある。
+- **影響**: ネットワーク障害時に曲復旧ロジックが中断し、メタデータが更新されない。
+- **対応**: `recoverSong()` の全呼び出し（3箇所）に try-catch を追加し、例外をログ記録して安全に処理。
+- **関連ファイル**: [MusicService.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/MusicService.kt)
+- **状態**: 対応済み ✅
 
 ### 3. 低優先度課題 🟢
 
 #### 3.1 PlayerConnection.kt - StateFlow SharingStarted 戦略の見直し
 - **問題**: `isPlaying` で `SharingStarted.Lazily` を使用しているため、最初の subscriber まで emit が遅延される。
 - **影響**: UI アタッチ前に初期値がセットされない可能性（見落としにくい）。
-- **対応**: `SharingStarted.Eagerly` への変更検討（ただしメモリとのトレードオフ）。
-- **関連ファイル**: [PlayerConnection.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/PlayerConnection.kt#L67)
-- **状態**: 検討中
+- **対応**: `SharingStarted.Eagerly` への変更を実装し、常に flow が active な状態を確保。初期値が UI 開始時点で利用可能に。
+- **関連ファイル**: [PlayerConnection.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/PlayerConnection.kt#L62)
+- **状態**: 対応済み ✅
 
 #### 3.2 PlayerMenu.kt・Dialog.kt - Recomposition 最適化
 - **問題**: 複数の `collectAsState()` が呼ばれており、各変更時に PlayerMenu 全体が recomposition される。特に `currentAudioFormat` が頻繁に変わる場合、UI パフォーマンス低下。
 - **影響**: 再生中の frame drop や UI 反応遅延。
 - **対応**: Flow.combine() で複数 state をマージし、バッチ購読を実装。Composition の構造を細粒化。
-- **関連ファイル**: [PlayerMenu.kt](app/src/main/kotlin/com/nohimazin/monotune/ui/screens/player/PlayerMenu.kt#L139-L150)
-- **状態**: 検討中
+- **実装難度**: 中～高（既存 collectAsState() の統一、データ class 定義、初期値管理が必要）。
+- **推奨実装法**: (1) Composable 分割による細粒化、または (2) combine() でバッチ処理。現状では既存パターン（個別 collectAsState）のままで問題ないレベルだが、大規模ユーザー層でのパフォーマンス問題が報告された場合に実施推奨。
+- **関連ファイル**: [PlayerMenu.kt](app/src/main/kotlin/com/nohimazin/monotune/ui/menu/PlayerMenu.kt), [Dialog.kt](app/src/main/kotlin/com/nohimazin/monotune/ui/screens/player/Dialog.kt)
+- **状態**: 検討中・将来実装予定
 
 ### 4. コード品質総合スコア
 
@@ -344,4 +350,24 @@
 - [x] MonochromeSearchMatcher の安定化。
   - 全消去方式キャッシュを LRU エビクションに置換。
   - `Normalizer.Form.NFKD` + `Locale.ROOT` による Unicode 正規化へ更新。
-  - 関連: [MonochromeSearchMatcher.kt](app/src/main/java/com/nohimazin/monotune/monochrome/MonochromeSearchMatcher.kt)
+  - 関連: [MonochromeSearchMatcher.kt](app/src/main/kotlin/com/nohimazin/monotune/service/Monochrome/MonochromeSearchMatcher.kt)
+
+- [x] DownloadUtil の例外処理強化（フォールバックループ）。
+  - `ResolvingDataSource.Factory` 内のフォールバックループに包括的な try-catch を追加。
+  - IOException, IllegalArgumentException, 予期しない例外を個別ログ記録。
+  - 最終エラーメッセージに全フォールバック完了状況を含める。
+  - 関連: [DownloadUtil.kt](app/src/main/kotlin/com/nohimazin/monotune/download/DownloadUtil.kt)
+
+- [x] MusicService の coroutine scope 管理と runBlocking 排除。
+  - `playQueue()` の `runBlocking(Dispatchers.IO) { initQueue() }` を `serviceScope.launch` に変更。
+  - 初期化完了確認のため、最大 100ms のポーリング待機を実装。
+  - `deInitQueue()` の `runBlocking(Dispatchers.IO) { saveQueueToDisk() }` を `serviceScope.launch` に変更。
+  - `recoverSong()` の全呼び出し（3箇所）に try-catch を追加（Network/Database 例外を安全に処理）。
+  - ANR リスク排除、lifecycle-aware scope 管理を達成。
+  - 関連: [MusicService.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/MusicService.kt)
+
+- [x] PlayerConnection の SharingStarted 戦略最適化。
+  - `isPlaying` の `SharingStarted.Lazily` を `SharingStarted.Eagerly` に変更。
+  - UI アタッチ前から flow が active な状態を確保。
+  - 初期値がUIの開始時点で利用可能に。
+  - 関連: [PlayerConnection.kt](app/src/main/kotlin/com/nohimazin/monotune/playback/PlayerConnection.kt)
