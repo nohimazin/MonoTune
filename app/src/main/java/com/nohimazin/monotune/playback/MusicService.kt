@@ -460,7 +460,7 @@ class MusicService : MediaLibraryService(),
     ) {
         if (!qbInit.value) {
             // Launch background initialization without blocking the main thread
-            serviceScope.launch {
+            scope.launch {
                 try {
                     initQueue()
                 } catch (e: Exception) {
@@ -608,7 +608,7 @@ class MusicService : MediaLibraryService(),
         queueBoard.value.shutdown()
         if (dataStore.get(PersistentQueueKey, true)) {
             // Use serviceScope for non-blocking save operation
-            serviceScope.launch {
+            scope.launch {
                 try {
                     saveQueueToDisk(pos)
                 } catch (e: Exception) {
