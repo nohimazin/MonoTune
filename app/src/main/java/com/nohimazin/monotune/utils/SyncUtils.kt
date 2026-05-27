@@ -105,8 +105,10 @@ class SyncUtils @Inject constructor(
         if (!bypassCd) {
             val lastSync = context.dataStore.get(LastFullSyncKey, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC))
             val currentTime = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
-            if (currentTime - lastSync > SYNC_CD) {
-                Log.d(TAG, "Aborting auto sync. ${(currentTime - lastSync) * 60000} minutes until eligible")
+            val elapsedSeconds = currentTime - lastSync
+            if (elapsedSeconds < SYNC_CD) {
+                val remainingMinutes = ((SYNC_CD - elapsedSeconds) / 60).coerceAtLeast(0)
+                Log.d(TAG, "Aborting auto sync. $remainingMinutes minutes until eligible")
                 return
             }
         }
@@ -128,8 +130,10 @@ class SyncUtils @Inject constructor(
     private fun checkPartialSyncEligibility(key: Preferences.Key<Long>): Boolean {
         val lastSync = context.dataStore.get(key, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC))
         val currentTime = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
-        if (currentTime - lastSync > SYNC_CD) {
-            Log.d(TAG, "Aborting auto sync. ${(currentTime - lastSync) * 60000} minutes until eligible")
+        val elapsedSeconds = currentTime - lastSync
+        if (elapsedSeconds < SYNC_CD) {
+            val remainingMinutes = ((SYNC_CD - elapsedSeconds) / 60).coerceAtLeast(0)
+            Log.d(TAG, "Aborting auto sync. $remainingMinutes minutes until eligible")
             return false
         }
         return true

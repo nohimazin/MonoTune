@@ -59,7 +59,7 @@ class PlayerConnection(
     private val playWhenReady = MutableStateFlow(player.playWhenReady)
     val isPlaying = combine(playbackState, playWhenReady) { playbackState, playWhenReady ->
         playWhenReady && playbackState != STATE_ENDED
-    }.stateIn(scope, SharingStarted.Lazily, player.playWhenReady && player.playbackState != STATE_ENDED)
+    }.stateIn(scope, SharingStarted.Eagerly, player.playWhenReady && player.playbackState != STATE_ENDED)
     val waitingForNetworkConnection: StateFlow<Boolean> = service.waitingForNetworkConnection.asStateFlow()
     val mediaMetadata = MutableStateFlow(player.currentMetadata)
     val currentAudioFormat = MutableStateFlow<Format?>(player.audioFormat)
@@ -91,6 +91,7 @@ class PlayerConnection(
 
     init {
         player.addListener(this)
+        currentAudioFormat.value = player.audioFormat
 
         playbackState.value = player.playbackState
         playWhenReady.value = player.playWhenReady

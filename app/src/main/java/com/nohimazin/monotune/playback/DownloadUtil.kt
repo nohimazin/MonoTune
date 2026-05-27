@@ -148,28 +148,41 @@ class DownloadUtil @Inject constructor(
         var lastResolveError: String? = null
 
         for (qualityToken in qualityTokens) {
-            val monochromeResult = runBlocking(Dispatchers.IO) {
-                monochromeClient.resolveStreamUrl(monochromeId!!, quality = qualityToken)
-            }
-            when (monochromeResult) {
-                is MonochromeResult.Success -> {
-                    if (qualityToken != qualityTokens.first()) {
-                        Log.w(TAG, "DOWNLOAD: quality fallback applied ${qualityTokens.first()} -> $qualityToken")
+            try {
+                val monochromeResult = runBlocking(Dispatchers.IO) {
+                    monochromeClient.resolveStreamUrl(monochromeId!!, quality = qualityToken)
+                }
+                when (monochromeResult) {
+                    is MonochromeResult.Success -> {
+                        if (qualityToken != qualityTokens.first()) {
+                            Log.w(TAG, "DOWNLOAD: quality fallback applied ${qualityTokens.first()} -> $qualityToken")
+                        }
+                        Log.d(TAG, "DOWNLOAD: Monochrome stream resolved for monochromeId=$monochromeId")
+                        try {
+                            return@Factory dataSpec.withUri(monochromeResult.data.toUri())
+                        } catch (e: IllegalArgumentException) {
+                            lastResolveError = "Invalid stream URI: ${e.message}"
+                            Log.w(TAG, "DOWNLOAD: URI parsing failed for stream URL: $lastResolveError", e)
+                        }
                     }
-                    Log.d(TAG, "DOWNLOAD: Monochrome stream resolved for monochromeId=$monochromeId")
-                    return@Factory dataSpec.withUri(monochromeResult.data.toUri())
+                    is MonochromeResult.Error -> {
+                        lastResolveError = monochromeResult.message
+                        Log.w(
+                            TAG,
+                            "DOWNLOAD: Monochrome stream resolution failed for monochromeId=$monochromeId (quality=$qualityToken): ${monochromeResult.message}"
+                        )
+                    }
                 }
-                is MonochromeResult.Error -> {
-                    lastResolveError = monochromeResult.message
-                    Log.w(
-                        TAG,
-                        "DOWNLOAD: Monochrome stream resolution failed for monochromeId=$monochromeId (quality=$qualityToken): ${monochromeResult.message}"
-                    )
-                }
+            } catch (e: IOException) {
+                lastResolveError = "IO error during stream resolution: ${e.message}"
+                Log.w(TAG, "DOWNLOAD: IOException in stream resolution loop (quality=$qualityToken)", e)
+            } catch (e: Exception) {
+                lastResolveError = "Unexpected error during stream resolution: ${e.message}"
+                Log.e(TAG, "DOWNLOAD: Unexpected exception in stream resolution loop (quality=$qualityToken)", e)
             }
         }
 
-        throw IOException("Monochrome stream resolution failed: $lastResolveError")
+        throw IOException("Monochrome stream resolution failed after all quality fallbacks. Last error: $lastResolveError")
     }
     val downloadNotificationHelper = DownloadNotificationHelper(context, ExoDownloadService.CHANNEL_ID)
     val downloadManager: DownloadManager =

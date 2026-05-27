@@ -179,6 +179,7 @@ android {
 
     lint {
         lintConfig = file("lint.xml")
+        checkTestSources = false
     }
 
     androidResources {

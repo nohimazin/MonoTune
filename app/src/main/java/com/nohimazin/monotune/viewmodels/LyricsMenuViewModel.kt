@@ -7,13 +7,15 @@ import com.nohimazin.monotune.db.MusicDatabase
 import com.nohimazin.monotune.lyrics.LyricsHelper
 import com.nohimazin.monotune.lyrics.LyricsResult
 import com.nohimazin.monotune.models.MediaMetadata
+import com.nohimazin.monotune.utils.reportException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.akanework.gramophone.logic.utils.SemanticLyrics
 import javax.inject.Inject
@@ -40,7 +42,10 @@ class LyricsMenuViewModel @Inject constructor(
                         }
                     }
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
+                reportException(e)
             } finally {
                 isLoading.value = false
             }
@@ -53,10 +58,13 @@ class LyricsMenuViewModel @Inject constructor(
     }
 
     fun refetchLyrics(mediaMetadata: MediaMetadata, onDone: (SemanticLyrics?) -> Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch(Dispatchers.IO) {
             database.deleteLyricById(mediaMetadata.id)
-            withTimeoutOrNull(LYRIC_FETCH_TIMEOUT) {
+            val lyrics = withTimeoutOrNull(LYRIC_FETCH_TIMEOUT) {
                 val lyrics = lyricsHelper.getLyrics(mediaMetadata)
+                lyrics
+            }
+            withContext(Dispatchers.Main) {
                 onDone(lyrics)
             }
         }

@@ -17,6 +17,9 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
+import java.text.Normalizer
+import java.util.Collections
+import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,8 +38,7 @@ import javax.inject.Singleton
  *
  * ### Caching
  * Search results are cached in memory keyed by the normalized query string.
- * The cache is bounded to [MAX_CACHE_ENTRIES]; when it is full the entire cache
- * is cleared to keep memory bounded (simple eviction strategy).
+ * The cache is bounded to [MAX_CACHE_ENTRIES] using LRU eviction.
  *
  * ### Concurrency
  * At most [MAX_CONCURRENT_REQUESTS] monochrome search calls run in parallel.
@@ -60,8 +62,14 @@ class MonochromeSearchMatcher @Inject constructor(
     /** Maximum number of query ↁEresults entries to hold in the in-memory cache. */
     private val MAX_CACHE_ENTRIES = 200
 
-    /** In-memory cache: normalized query string ↁElist of monochrome tracks (may be empty). */
-    private val cache = ConcurrentHashMap<String, List<MonochromeTrack>>()
+    /** In-memory cache: normalized query string - list of monochrome tracks (may be empty). */
+    private val cache = Collections.synchronizedMap(
+        object : LinkedHashMap<String, List<MonochromeTrack>>(MAX_CACHE_ENTRIES, 0.75f, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, List<MonochromeTrack>>?): Boolean {
+                return size > MAX_CACHE_ENTRIES
+            }
+        }
+    )
 
     /**
      * Match each [SongItem] in [songs] against the Monochrome catalog.
@@ -97,8 +105,10 @@ class MonochromeSearchMatcher @Inject constructor(
     suspend fun matchSong(metadata: MediaMetadata): MonochromeTrack? =
         withContext(Dispatchers.IO) {
             val artistName = metadata.artists.firstOrNull()?.name ?: ""
-            val query = "${metadata.title} $artistName".trim()
-            val candidates = cachedSearch(query)
+            val candidates = searchCandidates(
+                title = metadata.title.orEmpty(),
+                artist = artistName
+            )
 
             // Adapt the selection logic for MediaMetadata
             val normTitle = normalize(metadata.title ?: "")
@@ -118,13 +128,71 @@ class MonochromeSearchMatcher @Inject constructor(
     // -------------------------------------------------------------------------
 
     private suspend fun findMatch(song: SongItem): MonochromeTrack? {
-        val query = buildQuery(song)
-        val candidates = cachedSearch(query)
+        val candidates = searchCandidates(
+            title = song.title,
+            artist = song.artists.firstOrNull()?.name.orEmpty()
+        )
         return selectBestCandidate(song, candidates)
     }
 
+    /**
+     * Search using multiple query variants to reduce false negatives.
+     *
+     * Order matters: most precise query first, then broader fallbacks.
+     */
+    private suspend fun searchCandidates(title: String, artist: String): List<MonochromeTrack> {
+        val queries = buildQueries(title = title, artist = artist)
+        val merged = LinkedHashMap<String, MonochromeTrack>()
+        var firstHitQuery: String? = null
+
+        for (query in queries) {
+            val tracks = cachedSearch(query)
+            if (firstHitQuery == null && tracks.isNotEmpty()) {
+                firstHitQuery = query
+            }
+            for (track in tracks) {
+                // Prefer monotonic ID when available, otherwise fall back to a composite key.
+                val key = track.monochromeId.ifBlank {
+                    "${track.title.lowercase(Locale.ROOT)}|${track.artist.lowercase(Locale.ROOT)}|${track.durationSecs}"
+                }
+                merged.putIfAbsent(key, track)
+            }
+        }
+
+        if (firstHitQuery != null && firstHitQuery != queries.firstOrNull()) {
+            Log.d(TAG, "searchCandidates: fallback query used ('$firstHitQuery') for title='$title'")
+        }
+        if (merged.isEmpty()) {
+            Log.w(TAG, "searchCandidates: no candidates for queries=$queries")
+        }
+
+        return merged.values.toList()
+    }
+
+    /**
+     * Build ordered query fallbacks for Monochrome search.
+     *
+     * 1) title + artist (most specific)
+     * 2) title only
+     * 3) title with common bracketed suffixes removed (e.g. "(Live)", "[Remaster]")
+     */
+    private fun buildQueries(title: String, artist: String): List<String> {
+        val titleTrimmed = title.trim()
+        val artistTrimmed = artist.trim()
+        val titleWithoutBracketSuffix = titleTrimmed
+            .replace(Regex("\\s*[\\(\\[].*[\\)\\]]\\s*$"), "")
+            .trim()
+
+        return listOf(
+            buildQuery(titleTrimmed, artistTrimmed),
+            titleTrimmed,
+            titleWithoutBracketSuffix
+        ).filter { it.isNotBlank() }.distinct()
+    }
+
     private suspend fun cachedSearch(query: String): List<MonochromeTrack> {
-        cache[query]?.let { return it }
+        val cacheKey = normalize(query)
+        cache[cacheKey]?.let { return it }
 
         val tracks: List<MonochromeTrack> = when (val result = client.search(query)) {
             is MonochromeResult.Success -> result.data
@@ -134,11 +202,7 @@ class MonochromeSearchMatcher @Inject constructor(
             }
         }
 
-        // Evict entire cache when capacity is reached (simple strategy).
-        if (cache.size >= MAX_CACHE_ENTRIES) {
-            cache.clear()
-        }
-        cache[query] = tracks
+        cache[cacheKey] = tracks
         return tracks
     }
 
@@ -147,7 +211,11 @@ class MonochromeSearchMatcher @Inject constructor(
      */
     private fun buildQuery(song: SongItem): String {
         val artist = song.artists.firstOrNull()?.name.orEmpty()
-        return "${song.title} $artist".trim()
+        return buildQuery(song.title, artist)
+    }
+
+    private fun buildQuery(title: String, artist: String): String {
+        return "$title $artist".trim()
     }
 
     /**
@@ -224,7 +292,8 @@ class MonochromeSearchMatcher @Inject constructor(
      * lowercase, strip non-alphanumeric (except spaces), collapse whitespace.
      */
     private fun normalize(text: String): String =
-        text.lowercase()
+        Normalizer.normalize(text, Normalizer.Form.NFKD)
+            .lowercase(Locale.ROOT)
             .replace(Regex("[^\\p{L}\\p{N}\\s]"), " ")
             .replace(Regex("\\s+"), " ")
             .trim()

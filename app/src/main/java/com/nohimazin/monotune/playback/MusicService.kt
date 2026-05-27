@@ -459,8 +459,23 @@ class MusicService : MediaLibraryService(),
         title: String? = null
     ) {
         if (!qbInit.value) {
-            runBlocking(Dispatchers.IO) {
-                initQueue()
+            // Launch background initialization without blocking the main thread
+            scope.launch {
+                try {
+                    initQueue()
+                } catch (e: Exception) {
+                    Log.e(TAG, "playQueue: Failed to initialize queue", e)
+                }
+            }
+            // Wait briefly for initialization (non-blocking polling)
+            // If not initialized within reasonable time, proceed anyway
+            var retries = 10
+            while (!qbInit.value && retries > 0) {
+                Thread.sleep(10) // 10ms polls, 100ms total max wait
+                retries--
+            }
+            if (!qbInit.value) {
+                Log.w(TAG, "playQueue: Queue initialization timed out, proceeding anyway")
             }
         }
 
@@ -592,8 +607,13 @@ class MusicService : MediaLibraryService(),
         val pos = player.currentPosition
         queueBoard.value.shutdown()
         if (dataStore.get(PersistentQueueKey, true)) {
-            runBlocking(Dispatchers.IO) {
-                saveQueueToDisk(pos)
+            // Use serviceScope for non-blocking save operation
+            scope.launch {
+                try {
+                    saveQueueToDisk(pos)
+                } catch (e: Exception) {
+                    Log.e(TAG, "deInitQueue: Failed to save queue to disk", e)
+                }
             }
         }
         // do not replace the object. Can lead to entire queue being deleted even though it is supposed to be saved already
@@ -732,14 +752,26 @@ class MusicService : MediaLibraryService(),
             val isCache = playerCache.isCached(mediaId, dataSpec.position, CHUNK_LENGTH)
             if (isDownload || isCache) {
                 Log.d(TAG, "PLAYING: remote song (cache = ${isCache}, download = ${isDownload})")
-                offloadScope.launch { recoverSong(mediaId) }
+                offloadScope.launch {
+                    try {
+                        recoverSong(mediaId)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "PLAYING: Failed to recover song metadata for mediaId=$mediaId", e)
+                    }
+                }
                 return@Factory dataSpec
             }
 
             // 5. Check Monochrome stream URL cache for online streaming.
             monochromeUrlCache[mediaId]?.takeIf { it.second > System.currentTimeMillis() }?.let {
                 Log.d(TAG, "PLAYING: Monochrome stream (cached)")
-                offloadScope.launch { recoverSong(mediaId) }
+                offloadScope.launch {
+                    try {
+                        recoverSong(mediaId)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "PLAYING: Failed to recover song metadata for mediaId=$mediaId", e)
+                    }
+                }
                 return@Factory dataSpec.withUri(it.first.toUri())
             }
 
@@ -767,7 +799,13 @@ class MusicService : MediaLibraryService(),
                         // Cache the URL (1 hour TTL)
                         monochromeUrlCache[mediaId] =
                             streamUrl to System.currentTimeMillis() + 3_600_000L
-                        offloadScope.launch { recoverSong(mediaId) }
+                        offloadScope.launch {
+                            try {
+                                recoverSong(mediaId)
+                            } catch (e: Exception) {
+                                Log.e(TAG, "PLAYING: Failed to recover song metadata for mediaId=$mediaId", e)
+                            }
+                        }
                         return@Factory dataSpec.withUri(streamUrl.toUri())
                     }
                     is MonochromeResult.Error -> {
