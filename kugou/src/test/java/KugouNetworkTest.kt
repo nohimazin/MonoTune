@@ -15,7 +15,6 @@ class KugouNetworkTest {
         )
         assertTrue(candidates != null)
         val downloadedLyrics = KuGou.getLyrics("楊丞琳", "點水", 259)
-        println(downloadedLyrics)
         assertTrue(downloadedLyrics.isSuccess)
     }
 
@@ -37,7 +36,6 @@ class KugouNetworkTest {
         assertTrue(candidates != null)
 
         val downloadedLyrics = KuGou.getLyrics(songName, artistName, song.data.info.first().duration)
-        println(downloadedLyrics)
         assertTrue(downloadedLyrics.isSuccess)
     }
 }
