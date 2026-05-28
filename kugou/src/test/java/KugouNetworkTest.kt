@@ -2,13 +2,19 @@ import com.zionhuang.kugou.KuGou
 import com.zionhuang.kugou.KuGou.generateKeyword
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
-import org.junit.Ignore
+import org.junit.Assume.assumeTrue
 import org.junit.Test
  
-@Ignore("Requires network access")
 class KugouNetworkTest {
+    private fun assumeNetworkTestsEnabled() {
+        val enabled = (System.getenv("KUGOU_NETWORK_TESTS") ?: System.getProperty("kugouNetworkTests"))
+            ?.equals("true", ignoreCase = true) == true
+        assumeTrue("Set KUGOU_NETWORK_TESTS=true or -DkugouNetworkTests=true to run network tests.", enabled)
+    }
+
     @Test
     fun fetchLyricsForChineseSongs() = runBlocking {
+        assumeNetworkTestsEnabled()
         val candidates = KuGou.getLyricsCandidate(
             generateKeyword("千年以後 (After A Thousand Years)", "陳零九"),
             285
@@ -20,6 +26,7 @@ class KugouNetworkTest {
 
     @Test
     fun searchAlanWalkerSong() = runBlocking {
+        assumeNetworkTestsEnabled()
         val songName = "Faded"
         val artistName = "Alan Walker"
 
