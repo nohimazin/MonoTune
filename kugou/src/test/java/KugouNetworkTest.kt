@@ -8,7 +8,7 @@ import org.junit.Test
 @Ignore("Requires network access")
 class KugouNetworkTest {
     @Test
-    fun test() = runBlocking {
+    fun fetchLyricsForChineseSongs() = runBlocking {
         val candidates = KuGou.getLyricsCandidate(
             generateKeyword("千年以後 (After A Thousand Years)", "陳零九"),
             285
