@@ -6,7 +6,7 @@ import org.junit.Ignore
 import org.junit.Test
  
 @Ignore("Requires network access")
-class Test {
+class KugouNetworkTest {
     @Test
     fun test() = runBlocking {
         val candidates = KuGou.getLyricsCandidate(
