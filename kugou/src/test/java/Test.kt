@@ -2,8 +2,10 @@ import com.zionhuang.kugou.KuGou
 import com.zionhuang.kugou.KuGou.generateKeyword
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
+import org.junit.Ignore
 import org.junit.Test
-
+ 
+@Ignore("Requires network access")
 class Test {
     @Test
     fun test() = runBlocking {
