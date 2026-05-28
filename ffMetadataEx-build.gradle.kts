@@ -5,6 +5,9 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val ffMetadataCmakeFile = file("src/main/cpp/CMakeLists.txt")
+val hasFfMetadataCmake = ffMetadataCmakeFile.exists()
+
 kotlin {
 	jvmToolchain(17)
     compilerOptions {
@@ -19,9 +22,11 @@ android {
 	defaultConfig {
 		minSdk = 24
 
-		externalNativeBuild {
-			cmake {
-				arguments += listOf("-DCMAKE_SHARED_LINKER_FLAGS=-Wl,--build-id=none")
+		if (hasFfMetadataCmake) {
+			externalNativeBuild {
+				cmake {
+					arguments += listOf("-DCMAKE_SHARED_LINKER_FLAGS=-Wl,--build-id=none")
+				}
 			}
 		}
 	}
@@ -32,10 +37,12 @@ android {
 		}
 	}
 
-	externalNativeBuild {
-		cmake {
-			path = file("src/main/cpp/CMakeLists.txt")
-			version = "3.31.6"
+	if (hasFfMetadataCmake) {
+		externalNativeBuild {
+			cmake {
+				path = ffMetadataCmakeFile
+				version = "3.31.6"
+			}
 		}
 	}
 
