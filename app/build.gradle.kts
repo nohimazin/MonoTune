@@ -133,12 +133,20 @@ android {
     }
 
     tasks.withType<KotlinCompile> {
-        if (!name.substringAfter("compile").lowercase().startsWith("full")) {
-            exclude("**/*FFmpegScanner.kt")
-            exclude("**/*NextRendersFactory.kt")
-        } else if (hasFullNativeDeps) {
-            exclude("**/*FFmpegScannerDud.kt")
-            exclude("**/*ffdecoderDud.kt")
+        val isFullVariant = name.substringAfter("compile").lowercase().startsWith("full")
+        when {
+            !isFullVariant -> {
+                exclude("**/*FFmpegScanner.kt")
+                exclude("**/*NextRendersFactory.kt")
+            }
+            hasFullNativeDeps -> {
+                exclude("**/*FFmpegScannerDud.kt")
+                exclude("**/*ffdecoderDud.kt")
+            }
+            else -> {
+                exclude("**/*FFmpegScanner.kt")
+                exclude("**/*NextRendersFactory.kt")
+            }
         }
     }
 
