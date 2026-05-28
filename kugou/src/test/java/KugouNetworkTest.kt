@@ -7,9 +7,9 @@ import org.junit.Test
  
 class KugouNetworkTest {
     private fun assumeNetworkTestsEnabled() {
-        val enabled = (System.getenv("KUGOU_NETWORK_TESTS") ?: System.getProperty("kugouNetworkTests"))
+        val enabled = (System.getenv("KUGOU_NETWORK_TESTS") ?: System.getProperty("kugou.network.tests"))
             ?.equals("true", ignoreCase = true) == true
-        assumeTrue("Set KUGOU_NETWORK_TESTS=true or -DkugouNetworkTests=true to run network tests.", enabled)
+        assumeTrue("Set KUGOU_NETWORK_TESTS=true or -Dkugou.network.tests=true to run network tests.", enabled)
     }
 
     @Test
