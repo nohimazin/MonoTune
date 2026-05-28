@@ -71,7 +71,7 @@
 | 画像読み込み | Coil |
 | YouTube API | InnerTube プロトコル（独自実装）+ NewPipe Extractor |
 | 歌詞プロバイダ | Monochrome（優先） / LRCLib / KuGou / YouTube |
-| ビルド | Gradle (Kotlin DSL)、Java 21 |
+| ビルド | Gradle (Kotlin DSL)、Java 17 |
 
 ---
 
@@ -80,7 +80,7 @@
 ### 必要環境
 
 - Android Studio (最新安定版推奨)
-- JDK 21
+- JDK 17
 - Android SDK (compileSdk 36)
 
 ### クローン

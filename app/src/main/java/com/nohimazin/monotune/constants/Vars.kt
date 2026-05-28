@@ -7,7 +7,7 @@ import com.nohimazin.monotune.BuildConfig
  * Feature flags
  */
 
-const val ENABLE_FFMETADATAEX = BuildConfig.FLAVOR == "full"
+const val ENABLE_FFMETADATAEX = BuildConfig.FLAVOR == "full" && BuildConfig.HAS_FFMETADATAEX
 
 
 /**

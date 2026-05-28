@@ -27,6 +27,8 @@ val keystoreProperties = Properties()
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
+val hasReleaseKeystore = keystorePropertiesFile.exists() && !keystoreProperties.isEmpty
+val hasFullNativeDeps = rootProject.file("ffMetadataEx/src/main/cpp/CMakeLists.txt").exists()
 
 android {
     // namespace matches the source package so that the generated R and BuildConfig classes
@@ -42,10 +44,11 @@ android {
         versionCode = 71
         versionName = "0.10.2-b1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("boolean", "HAS_FFMETADATAEX", hasFullNativeDeps.toString())
     }
 
     signingConfigs {
-        if (!keystoreProperties.isEmpty) {
+        if (hasReleaseKeystore) {
             create("mt_release") {
                 storeFile = file(keystoreProperties["storeFile"] as String)
                 (keystoreProperties["keyAlias"] as? String)?.let {
@@ -64,12 +67,17 @@ android {
     }
 
     buildTypes {
+        val releaseSigningConfig = if (hasReleaseKeystore) {
+            signingConfigs.getByName("mt_release")
+        } else {
+            signingConfigs.getByName("debug")
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             isCrunchPngs = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("mt_release")
+            signingConfig = releaseSigningConfig
         }
         debug {
             applicationIdSuffix = ".debug"
@@ -82,6 +90,7 @@ android {
             isShrinkResources = false
 //            isDebuggable = true
             isProfileable = true
+            signingConfig = releaseSigningConfig
             matchingFallbacks += listOf("release")
         }
     }
@@ -127,7 +136,7 @@ android {
         if (!name.substringAfter("compile").lowercase().startsWith("full")) {
             exclude("**/*FFmpegScanner.kt")
             exclude("**/*NextRendersFactory.kt")
-        } else {
+        } else if (hasFullNativeDeps) {
             exclude("**/*FFmpegScannerDud.kt")
             exclude("**/*ffdecoderDud.kt")
         }
