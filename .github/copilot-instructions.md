@@ -27,7 +27,7 @@ applyTo: *
 - Hilt
 - Ktor
 - Coil
-- JDK 21
+- JDK 17
 
 ## PROJECT-SPECIFIC STANDARDS
 - OuterTune's code standards should be followed unless explicitly overridden by project-specific rules.

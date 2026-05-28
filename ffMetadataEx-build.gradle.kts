@@ -5,10 +5,13 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val ffMetadataCmakeFile = file("src/main/cpp/CMakeLists.txt")
+val hasFfMetadataCmake = ffMetadataCmakeFile.exists()
+
 kotlin {
-	jvmToolchain(21)
+	jvmToolchain(17)
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
@@ -19,9 +22,11 @@ android {
 	defaultConfig {
 		minSdk = 24
 
-		externalNativeBuild {
-			cmake {
-				arguments += listOf("-DCMAKE_SHARED_LINKER_FLAGS=-Wl,--build-id=none")
+		if (hasFfMetadataCmake) {
+			externalNativeBuild {
+				cmake {
+					arguments += listOf("-DCMAKE_SHARED_LINKER_FLAGS=-Wl,--build-id=none")
+				}
 			}
 		}
 	}
@@ -32,18 +37,20 @@ android {
 		}
 	}
 
-	externalNativeBuild {
-		cmake {
-			path = file("src/main/cpp/CMakeLists.txt")
-			version = "3.31.6"
+	if (hasFfMetadataCmake) {
+		externalNativeBuild {
+			cmake {
+				path = ffMetadataCmakeFile
+				version = "3.31.6"
+			}
 		}
 	}
 
 	ndkVersion = "29.0.13113456"
 
 	compileOptions {
-		sourceCompatibility = JavaVersion.VERSION_21
-		targetCompatibility = JavaVersion.VERSION_21
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
 	}
 }
 

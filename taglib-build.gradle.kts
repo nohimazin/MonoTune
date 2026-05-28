@@ -5,8 +5,11 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val taglibCmakeFile = file("src/main/cpp/CMakeLists.txt")
+val hasTaglibCmake = taglibCmakeFile.exists()
+
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(17)
     explicitApi()
 }
 
@@ -22,23 +25,27 @@ android {
             abiFilters += arrayOf("arm64-v8a", "armeabi-v7a", "x86_64", "x86")
         }
 
-        externalNativeBuild {
-            cmake {
-                arguments += listOf("-DCMAKE_SHARED_LINKER_FLAGS=-Wl,--build-id=none")
+        if (hasTaglibCmake) {
+            externalNativeBuild {
+                cmake {
+                    arguments += listOf("-DCMAKE_SHARED_LINKER_FLAGS=-Wl,--build-id=none")
+                }
             }
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    externalNativeBuild {
-        cmake {
-            path("src/main/cpp/CMakeLists.txt")
-            version = "4.1.2"
+    if (hasTaglibCmake) {
+        externalNativeBuild {
+            cmake {
+                path(taglibCmakeFile)
+                version = "4.1.2"
+            }
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     lint {
         checkReleaseBuilds = false
